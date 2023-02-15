@@ -72,6 +72,18 @@ namespace prjChessForms
             SetupSquare();
         }
 
+        public Piece PieceInSquare
+        {
+            get
+            {
+                return _piece;
+            }
+            set
+            {
+                _piece = value;
+            }
+        }
+
         private void SetupSquare()
         {
             _panel = new Panel()
@@ -81,6 +93,12 @@ namespace prjChessForms
                 Dock = DockStyle.Fill
             };
             _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_x, _y));
+        }
+
+
+        private void UpdateSquare()
+        {
+            _panel.BackColor = _panelColour;
         }
     }
 
