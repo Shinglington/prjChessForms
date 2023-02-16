@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 
 namespace prjChessForms
 {
@@ -16,7 +17,9 @@ namespace prjChessForms
         {
             _colour = colour;
             _square = square;
-            _image = Image.FromFile("Images\\" + _colour.ToString() + "\\" + this.GetType().Name + ".png");
+
+            string imagePath = "Images\\" + _colour.ToString() + "\\" + this.GetType().Name + ".png";
+            _image = File.Exists(imagePath) ? Image.FromFile(imagePath) : null;
         }
 
         public PieceColour Colour
@@ -62,10 +65,6 @@ namespace prjChessForms
             get
             {
                 return _image;
-            }
-            protected set
-            {
-                _image = value;
             }
         }
     }

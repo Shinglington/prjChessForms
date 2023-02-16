@@ -146,6 +146,7 @@ namespace prjChessForms
             set
             {
                 _piece = value;
+                UpdateSquare();
             }
         }
 
@@ -187,17 +188,17 @@ namespace prjChessForms
         private void UpdateSquare()
         {
             _panel.BackColor = _panelColour;
-            if (_piece == null)
-            {
-                _pieceImage.Image = null;
-            }
-            else
+            if (_piece != null && _piece.Image != null)
             {
                 _pieceImage.Image = _piece.Image;
                 Padding p = new Padding();
                 p.Left = (_pieceImage.Width - _pieceImage.Image.Width) / 2;
                 p.Top = (_pieceImage.Height - _pieceImage.Image.Height) / 2;
                 _pieceImage.Padding = p;
+            }
+            else
+            {
+                _pieceImage.Image = null;
             }
         }
     }
