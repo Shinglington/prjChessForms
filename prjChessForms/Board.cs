@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.Remoting.Channels;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -57,11 +55,13 @@ namespace prjChessForms
     class Square
     {
         private Color _panelColour;
-        private TableLayoutPanel _layoutPanel;
-        private Panel _panel;
         private Piece _piece;
         private int _x;
         private int _y;
+
+        private TableLayoutPanel _layoutPanel;
+        private Panel _panel;
+        private PictureBox _pieceImage;
         public Square(TableLayoutPanel table, int x, int y)
         {
             _layoutPanel = table;
@@ -92,16 +92,32 @@ namespace prjChessForms
                 BackColor = _panelColour,
                 Dock = DockStyle.Fill
             };
+            _pieceImage = new PictureBox()
+            {
+                Parent = _panel,
+                Dock = DockStyle.Fill,
+                Image = null
+            };
             _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_x, _y));
+            UpdateSquare();
         }
 
 
         private void UpdateSquare()
         {
             _panel.BackColor = _panelColour;
+            if (_piece == null)
+            {
+                _pieceImage.Image = null;
+            }
+            else
+            {
+                _pieceImage.Image = _piece.Image;
+                Padding p = new Padding();
+                p.Left = (_pieceImage.Width - _pieceImage.Image.Width) / 2;
+                p.Top = (_pieceImage.Height - _pieceImage.Image.Height) / 2;
+                _pieceImage.Padding = p;
+            }
         }
     }
-
-
-
 }
