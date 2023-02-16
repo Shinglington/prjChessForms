@@ -54,9 +54,16 @@ namespace prjChessForms
             }
             set
             {
-                _square.PieceInSquare = null;
-                _square = value;
-                _square.PieceInSquare = this;
+                if (value != null)
+                {
+                    _square.PieceInSquare = null;
+                    _square = value;
+                    _square.PieceInSquare = this;
+                }
+                else
+                {
+                    _square = value;
+                }
             }
         }
 

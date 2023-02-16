@@ -21,6 +21,8 @@ namespace prjChessForms
             InitializeComponent();
             CreatePlayers();
             CreateBoard();
+
+            _board.MakeMove((0, 0), (5, 5));
         }
 
 

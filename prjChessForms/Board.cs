@@ -20,6 +20,19 @@ namespace prjChessForms
             _players = players;
             SetupBoard();
         }
+        public void MakeMove((int, int) StartCoords, (int, int) EndCoords)
+        {
+            var (startX, startY) = StartCoords;
+            var (endX, endY) = EndCoords;
+
+            Piece p = _squares[startX, startY].PieceInSquare;
+            if (p != null)
+            {
+                p.Square = _squares[endX, endY];
+            }
+
+        }
+
         private void SetupBoard()
         {
             // Format TableLayoutPanel
@@ -145,6 +158,10 @@ namespace prjChessForms
             }
             set
             {
+                if (value == null && _piece != null)
+                {
+                    _piece.Square = null;
+                }
                 _piece = value;
                 UpdateSquare();
             }
