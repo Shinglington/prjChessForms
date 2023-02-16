@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -10,6 +12,8 @@ namespace prjChessForms
         private TableLayoutPanel _layoutPanel;
         private Player[] _players;
         private Square[,] _squares;
+
+        private King[] _kings;
         public Board(TableLayoutPanel boardPanel, Player[] players)
         {
             _layoutPanel = boardPanel;
@@ -43,11 +47,72 @@ namespace prjChessForms
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-
                     _squares[x, y] = new Square(_layoutPanel, x, y);
-
                 }
             }
+
+            // Add pieces
+            AddDefaultPieces();
+        }
+
+        private void AddDefaultPieces()
+        {
+            char[,] defaultPieces =
+           {
+                { 'P','P','P','P','P','P','P','P'},
+                { 'R','N','B','Q','K','B','N','R'}
+            };
+
+            // Pieces
+            _kings = new King[2];
+            PieceColour colour;
+            for (int i = 0; i < 2; i++)
+            {
+                colour = (PieceColour)i;
+                for (int y = 0; y < 2; y++)
+                {
+                    for (int x = 0; x < COL_COUNT; x++)
+                    {
+                        if (colour == PieceColour.White)
+                        {
+                            AddPiece(defaultPieces[y, x], colour, _squares[x, 1 - y]);
+                        }
+                        else
+                        {
+                            AddPiece(defaultPieces[y, x], colour, _squares[x, ROW_COUNT - 2 + y]);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddPiece(char pieceType, PieceColour colour, Square square)
+        {
+            Piece p = null;
+            switch (pieceType) 
+            {
+                case 'P':
+                    p = new Pawn(colour, square);
+                    break;
+                case 'N':
+                    p = new Knight(colour, square);
+                    break;
+                case 'B':
+                    p = new Bishop(colour, square);
+                    break;
+                case 'R':
+                    p = new Rook(colour, square);   
+                    break;
+                case 'Q':
+                    p = new Queen(colour, square);
+                    break;
+                case 'K':
+                    p = new King(colour, square);
+                    break;
+                default:
+                    throw new ArgumentException("Unrecognised pieceType");
+            }
+            p.Square = square;
         }
     }
 
@@ -81,6 +146,22 @@ namespace prjChessForms
             set
             {
                 _piece = value;
+            }
+        }
+
+        public int X
+        {
+            get
+            {
+                return _x;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return _y;
             }
         }
 
