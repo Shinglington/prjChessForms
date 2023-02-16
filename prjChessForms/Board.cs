@@ -184,7 +184,6 @@ namespace prjChessForms
             UpdateSquare();
         }
 
-
         private void UpdateSquare()
         {
             _panel.BackColor = _panelColour;

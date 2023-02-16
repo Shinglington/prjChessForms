@@ -18,8 +18,8 @@ namespace prjChessForms
             _colour = colour;
             _square = square;
 
-            string imagePath = "Images\\" + _colour.ToString() + "\\" + this.GetType().Name + ".png";
-            _image = File.Exists(imagePath) ? Image.FromFile(imagePath) : null;
+            string imageName = _colour.ToString() + "_" + this.GetType().Name;
+            _image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
         }
 
         public PieceColour Colour
