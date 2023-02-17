@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
@@ -38,8 +39,7 @@ namespace prjChessForms
         private TableLayoutPanel _layoutPanel;
         private Player[] _players;
         private Square[,] _squares;
-
-        private King[] _kings;
+        private Dictionary<PieceColour, List<Piece>> _pieces;
         public Board(TableLayoutPanel boardPanel, Player[] players)
         {
             _layoutPanel = boardPanel;
@@ -56,6 +56,20 @@ namespace prjChessForms
             {
                 p.Square = _squares[endX, endY];
             }
+        }
+
+        public King GetKing(PieceColour colour)
+        {
+            King king = null;
+            foreach(Piece p in _pieces[colour])
+            {
+                if (p.GetType() == typeof(King))
+                {
+                    king = (King) p;
+                    break;
+                }
+            }
+            return king;
         }
 
         private void SetupBoard()
@@ -96,14 +110,17 @@ namespace prjChessForms
         private void AddDefaultPieces()
         {
             char[,] defaultPieces =
-           {
+            {
                 { 'P','P','P','P','P','P','P','P'},
                 { 'R','N','B','Q','K','B','N','R'}
             };
+            _pieces.Add(PieceColour.White, new List<Piece>());
+            _pieces.Add(PieceColour.Black, new List<Piece>()); 
 
             // Pieces
-            _kings = new King[2];
             PieceColour colour;
+            Piece piece;
+            Square square;
             for (int i = 0; i < 2; i++)
             {
                 colour = (PieceColour)i;
@@ -113,18 +130,20 @@ namespace prjChessForms
                     {
                         if (colour == PieceColour.White)
                         {
-                            AddPiece(defaultPieces[y, x], colour, _squares[x, 1 - y]);
+                            square = _squares[x, 1 - y];
                         }
                         else
                         {
-                            AddPiece(defaultPieces[y, x], colour, _squares[x, ROW_COUNT - 2 + y]);
+                            square = _squares[x, ROW_COUNT - 2 + y];
                         }
+                        piece = MakePiece(defaultPieces[y, x], colour, square);
+                        _pieces[colour].Add(piece);
                     }
                 }
             }
         }
 
-        private void AddPiece(char pieceType, PieceColour colour, Square square)
+        private Piece MakePiece(char pieceType, PieceColour colour, Square square)
         {
             Piece p = null;
             switch (pieceType) 
@@ -151,6 +170,7 @@ namespace prjChessForms
                     throw new ArgumentException("Unrecognised pieceType");
             }
             p.Square = square;
+            return p;
         }
     }
 

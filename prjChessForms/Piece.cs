@@ -16,7 +16,7 @@ namespace prjChessForms
         public Piece(PieceColour colour, Square square)
         {
             _colour = colour;
-            _square = square;
+            Square = square;
 
             string imageName = _colour.ToString() + "_" + this.GetType().Name;
             _image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
