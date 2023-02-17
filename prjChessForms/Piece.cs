@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 
 namespace prjChessForms
@@ -56,13 +57,16 @@ namespace prjChessForms
             {
                 if (value != null)
                 {
+                    // Set the original square's PieceInSquare to null
                     _square.PieceInSquare = null;
+                    // Update piece's square to new piece
                     _square = value;
+                    // Make new square's PieceInSquare to this piece
                     _square.PieceInSquare = this;
                 }
                 else
                 {
-                    _square = value;
+                    _square = null;
                 }
             }
         }

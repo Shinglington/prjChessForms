@@ -39,7 +39,6 @@ namespace prjChessForms
         private TableLayoutPanel _layoutPanel;
         private Player[] _players;
         private Square[,] _squares;
-        private Dictionary<PieceColour, List<Piece>> _pieces;
         public Board(TableLayoutPanel boardPanel, Player[] players)
         {
             _layoutPanel = boardPanel;
@@ -114,12 +113,8 @@ namespace prjChessForms
                 { 'P','P','P','P','P','P','P','P'},
                 { 'R','N','B','Q','K','B','N','R'}
             };
-            _pieces.Add(PieceColour.White, new List<Piece>());
-            _pieces.Add(PieceColour.Black, new List<Piece>()); 
-
             // Pieces
             PieceColour colour;
-            Piece piece;
             Square square;
             for (int i = 0; i < 2; i++)
             {
@@ -136,14 +131,13 @@ namespace prjChessForms
                         {
                             square = _squares[x, ROW_COUNT - 2 + y];
                         }
-                        piece = MakePiece(defaultPieces[y, x], colour, square);
-                        _pieces[colour].Add(piece);
+                        AddPiece(defaultPieces[y, x], colour, square);
                     }
                 }
             }
         }
 
-        private Piece MakePiece(char pieceType, PieceColour colour, Square square)
+        private void AddPiece(char pieceType, PieceColour colour, Square square)
         {
             Piece p = null;
             switch (pieceType) 
@@ -170,7 +164,6 @@ namespace prjChessForms
                     throw new ArgumentException("Unrecognised pieceType");
             }
             p.Square = square;
-            return p;
         }
     }
 
@@ -203,8 +196,9 @@ namespace prjChessForms
             }
             set
             {
-                if (value == null && _piece != null)
+                if (value != null && _piece != null)
                 {
+                    // update original piece in current square to null
                     _piece.Square = null;
                 }
                 _piece = value;
