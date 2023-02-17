@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace prjChessForms
@@ -49,7 +50,6 @@ namespace prjChessForms
                 return _colour; 
             }
         }
-
         public abstract Move GetMove(Board board);
     }
 
@@ -57,14 +57,36 @@ namespace prjChessForms
     {
         public HumanPlayer(PieceColour colour) : base(colour) { }
 
-        public override Move GetMove(Board board) { }
+        public override Move GetMove(Board board) 
+        {
+            // Get start move
+            Coords Start = new Coords();
+            board.AddClickEvents(OnPanelClick);
+
+            Coords End = new Coords();
+
+
+            return new Move(Start, End);
+        }
+        
+        private void OnPanelClick(object sender, EventArgs e)
+        {
+
+        }
     }
 
     class ComputerPlayer : Player 
     { 
         public ComputerPlayer(PieceColour colour) : base(colour) { }
 
-        public override Move GetMove(Board board) { }
+        public override Move GetMove(Board board) 
+        {
+            Coords Start = new Coords();
+            Coords End = new Coords();
+
+
+            return new Move(Start, End);
+        }
     }
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.NetworkInformation;
+using System.Runtime.Remoting.Channels;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -89,6 +90,10 @@ namespace prjChessForms
             return pieces;
         }
 
+        public void AddClickEvents(Action<object, EventArgs> OnClick)
+        {
+
+        }
         private void SetupBoard()
         {
             // Format TableLayoutPanel
@@ -123,7 +128,6 @@ namespace prjChessForms
             // Add pieces
             AddDefaultPieces();
         }
-
         private void AddDefaultPieces()
         {
             char[,] defaultPieces =
@@ -183,16 +187,18 @@ namespace prjChessForms
             }
             p.Square = square;
         }
+
+
     }
 
 
     class Square
     {
-        private Color _panelColour;
         private Piece _piece;
         private int _x;
         private int _y;
 
+        private Color _panelColour;
         private TableLayoutPanel _layoutPanel;
         private Panel _panel;
         private PictureBox _pieceImage;
@@ -240,6 +246,14 @@ namespace prjChessForms
             }
         }
 
+        public Panel Panel
+        {
+            get
+            {
+                return _panel;
+            }
+        }
+
         private void SetupSquare()
         {
             _panel = new Panel()
@@ -273,11 +287,6 @@ namespace prjChessForms
             {
                 _pieceImage.Image = null;
             }
-        }
-
-        private void OnClick(object sender, EventArgs e)
-        {
-             
         }
     }
 }

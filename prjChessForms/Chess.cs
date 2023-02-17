@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,14 +26,11 @@ namespace prjChessForms
 
             _board.MakeMove((0, 0), (5, 5));
         }
-
         public void Play()
         {
             _currentPlayer = _players[0];
             _currentTurn = 1;
-
         }
-
 
         private void CreatePlayers()
         {
