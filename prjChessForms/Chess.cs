@@ -15,7 +15,8 @@ namespace prjChessForms
     {
         private Board _board;
         private Player[] _players;
-        private int _currentTurn;
+        private Player _currentPlayer;
+        private int _currentTurn; 
         public Chess()
         {
             InitializeComponent();
@@ -23,6 +24,13 @@ namespace prjChessForms
             CreateBoard();
 
             _board.MakeMove((0, 0), (5, 5));
+        }
+
+        public void Play()
+        {
+            _currentPlayer = _players[0];
+            _currentTurn = 1;
+
         }
 
 

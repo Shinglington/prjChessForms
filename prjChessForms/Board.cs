@@ -5,6 +5,32 @@ using System.Windows.Forms;
 
 namespace prjChessForms
 {
+
+    public struct Coords 
+    {
+        private int _x;
+        private int _y;
+
+        public Coords(int x, int  y)
+        {
+            _x = x;
+            _y = y;
+        }
+        public int X
+        {
+            get
+            {
+                return _x;
+            }
+        }
+        public int Y
+        {
+            get
+            {
+                return _y;
+            }
+        }
+    }
     class Board
     {
         private const int ROW_COUNT = 8;
@@ -30,7 +56,6 @@ namespace prjChessForms
             {
                 p.Square = _squares[endX, endY];
             }
-
         }
 
         private void SetupBoard()
@@ -216,6 +241,11 @@ namespace prjChessForms
             {
                 _pieceImage.Image = null;
             }
+        }
+
+        private void OnClick(object sender, EventArgs e)
+        {
+             
         }
     }
 }

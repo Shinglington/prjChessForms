@@ -8,9 +8,20 @@ namespace prjChessForms
 {
     class Player
     {
-        public Player()
+        private PieceColour _colour;
+        public Player(PieceColour colour)
         {
-
+            _colour = colour;
         }
+
+        public PieceColour Colour 
+        {
+            get 
+            { 
+                return _colour; 
+            }
+        }
+
+
     }
 }
