@@ -37,8 +37,8 @@ namespace prjChessForms
         private void CreatePlayers()
         {
             _players = new Player[2];
-            _players[0] = new Player();
-            _players[1] = new Player();
+            _players[0] = new HumanPlayer(PieceColour.White);
+            _players[1] = new HumanPlayer(PieceColour.Black);
         }
 
         private void CreateBoard()

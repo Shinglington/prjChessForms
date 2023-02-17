@@ -18,11 +18,21 @@ namespace prjChessForms
             _endCoords = endCoords;
         }
 
-        public Coords StartCoords { get { return _startCoords; } }
-        public Coords EndCoords { get { return _endCoords; } }
+        public Coords StartCoords 
+        { 
+            get 
+            { 
+                return _startCoords; 
+            } 
+        }
+        public Coords EndCoords 
+        { 
+            get 
+            { 
+                return _endCoords; 
+            } 
+        }
     }
-
-
 
     abstract class Player
     {
@@ -40,17 +50,21 @@ namespace prjChessForms
             }
         }
 
-        public 
+        public abstract Move GetMove(Board board);
     }
 
     class HumanPlayer : Player
     {
         public HumanPlayer(PieceColour colour) : base(colour) { }
+
+        public override Move GetMove(Board board) { }
     }
 
     class ComputerPlayer : Player 
     { 
         public ComputerPlayer(PieceColour colour) : base(colour) { }
+
+        public override Move GetMove(Board board) { }
     }
 
 
