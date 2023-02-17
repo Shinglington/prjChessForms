@@ -60,7 +60,7 @@ namespace prjChessForms
         public King GetKing(PieceColour colour)
         {
             King king = null;
-            foreach(Piece p in _pieces[colour])
+            foreach(Piece p in GetPieces(colour))
             {
                 if (p.GetType() == typeof(King))
                 {
@@ -69,6 +69,24 @@ namespace prjChessForms
                 }
             }
             return king;
+        }
+
+        public List<Piece> GetPieces(PieceColour colour)
+        {
+            List<Piece> pieces = new List<Piece>();
+            Piece p;
+            for (int y = 0; y < ROW_COUNT; y++)
+            {
+                for (int x = 0; x < COL_COUNT; x++)
+                {
+                    p = _squares[x, y].PieceInSquare;
+                    if (p != null && p.Colour == colour)
+                    {
+                        pieces.Add(p);
+                    }
+                }
+            }
+            return pieces;
         }
 
         private void SetupBoard()
