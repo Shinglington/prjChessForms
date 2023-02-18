@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace prjChessForms
 {
 
-    public struct ChessMove 
+    public struct ChessMove
     {
         private Coords _startCoords;
         private Coords _endCoords;
@@ -38,11 +38,9 @@ namespace prjChessForms
     abstract class Player
     {
         private PieceColour _colour;
-        protected System.Windows.Forms.Timer moveTimer;
-        public Player(PieceColour colour, System.Windows.Forms.Timer timer)
+        public Player(PieceColour colour)
         {
             _colour = colour;
-            moveTimer = timer;
         }
 
         public PieceColour Colour 
@@ -52,56 +50,63 @@ namespace prjChessForms
                 return _colour; 
             }
         }
-        public abstract ChessMove GetMove(Board board);
+        public abstract Task<ChessMove> GetMoveAsync(Board board);
     }
 
     class HumanPlayer : Player
     {
-        private AutoResetEvent startSquareClicked = new AutoResetEvent(false);
-        private AutoResetEvent endSquareClicked = new AutoResetEvent(false);
-
-        private Coords _selected;
-        public HumanPlayer(PieceColour colour, System.Windows.Forms.Timer timer) : base(colour, timer) 
+        private Coords? _selected;
+        public HumanPlayer(PieceColour colour) : base(colour) 
         {
             _selected = new Coords();
         }
 
-        public override ChessMove GetMove(Board board) 
+        public override async Task<ChessMove> GetMoveAsync(Board board) 
         {
-            // Get start move
             Coords Start = new Coords();
+            _selected = null;
             board.RaiseSquareClicked += ReceiveStartSquareClickInfo;
-            moveTimer.Start();
-            Start = _selected;
+            while(_selected == null)
+            {
+                await TaskDelay();
+            }
+            Start = (Coords)_selected;
             board.RaiseSquareClicked -= ReceiveStartSquareClickInfo;
 
             Coords End = new Coords();
+            _selected = null;
             board.RaiseSquareClicked += ReceiveEndSquareClickInfo;
-            moveTimer.Start();
-            End = _selected;
+            // Wait for other event to be triggered?
+            while (_selected == null)
+            {
+                await TaskDelay();
+            }
+            End = (Coords) _selected;
             board.RaiseSquareClicked -= ReceiveEndSquareClickInfo;
-            moveTimer.Stop();
             return new ChessMove(Start, End);
         }
 
         public void ReceiveStartSquareClickInfo(object sender, SquareClickedEventArgs e)
         {
             _selected = e.Square.Coords;
-            moveTimer.Stop();
         }
 
         public void ReceiveEndSquareClickInfo(object sender, SquareClickedEventArgs e)
         {
             _selected = e.Square.Coords;
-            moveTimer.Stop();
+        }
+
+        async Task TaskDelay()
+        {
+            await Task.Delay(100);
         }
     }
 
     class ComputerPlayer : Player 
     { 
-        public ComputerPlayer(PieceColour colour, System.Windows.Forms.Timer timer) : base(colour, timer) { }
+        public ComputerPlayer(PieceColour colour) : base(colour) { }
 
-        public override ChessMove GetMove(Board board) 
+        public override async Task<ChessMove> GetMoveAsync(Board board) 
         {
             Coords Start = new Coords();
             Coords End = new Coords();

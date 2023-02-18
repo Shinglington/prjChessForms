@@ -33,7 +33,8 @@ namespace prjChessForms
             _currentTurn = 1;
             while (!GameOver())
             {
-                ChessMove move = _currentPlayer.GetMove(_board);
+                Task<ChessMove> task = _currentPlayer.GetMoveAsync(_board);
+                ChessMove move = task.Result;
                 Console.WriteLine(move.StartCoords.ToString());
                 Console.WriteLine(move.EndCoords.ToString());
                 if (_currentPlayer == _players[1])
@@ -51,8 +52,8 @@ namespace prjChessForms
         private void CreatePlayers()
         {
             _players = new Player[2];
-            _players[0] = new HumanPlayer(PieceColour.White, new Timer());
-            _players[1] = new HumanPlayer(PieceColour.Black, new Timer());
+            _players[0] = new HumanPlayer(PieceColour.White);
+            _players[1] = new HumanPlayer(PieceColour.Black);
         }
 
         private void CreateBoard()
