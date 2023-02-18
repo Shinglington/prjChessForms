@@ -32,9 +32,17 @@ namespace prjChessForms
                 return _y;
             }
         }
+
+        public override string ToString()
+        {
+            return Convert.ToString(Convert.ToChar(Convert.ToInt32('a') + _x)) + Convert.ToString(_y + 1);
+        }
+
     }
     class Board
     {
+        public event EventHandler<SquareClickedEventArgs> RaiseSquareClicked;
+
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private TableLayoutPanel _layoutPanel;
@@ -90,9 +98,18 @@ namespace prjChessForms
             return pieces;
         }
 
-        public void AddClickEvents(Action<object, EventArgs> OnClick)
+        public void TriggerSquareClicked(Square square)
         {
-
+            OnSquareClickedEvent(new SquareClickedEventArgs(square));
+        }
+ 
+        private void OnSquareClickedEvent(SquareClickedEventArgs e)
+        {
+            EventHandler<SquareClickedEventArgs> raiseEvent = RaiseSquareClicked;
+            if (raiseEvent != null)
+            {
+                raiseEvent(this, e);
+            }
         }
         private void SetupBoard()
         {
@@ -121,7 +138,7 @@ namespace prjChessForms
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    _squares[x, y] = new Square(_layoutPanel, x, y);
+                    _squares[x, y] = new Square(this, _layoutPanel, x, y);
                 }
             }
 
@@ -191,22 +208,38 @@ namespace prjChessForms
 
     }
 
+    class SquareClickedEventArgs : EventArgs
+    {
+        private Square _square;
+        public SquareClickedEventArgs(Square square)
+        {
+            _square = square;
+        }
+
+        public Square Square 
+        { 
+            get 
+            { 
+                return _square; 
+            } 
+        }
+    }
 
     class Square
     {
+        private Board _board;
         private Piece _piece;
-        private int _x;
-        private int _y;
+        private Coords _coords;
 
         private Color _panelColour;
         private TableLayoutPanel _layoutPanel;
         private Panel _panel;
         private PictureBox _pieceImage;
-        public Square(TableLayoutPanel table, int x, int y)
+
+        public Square(Board board, TableLayoutPanel table, int x, int y)
         {
             _layoutPanel = table;
-            _x = x;
-            _y = y;
+            _coords = new Coords(x, y);
             _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             _piece = null;
             SetupSquare();
@@ -230,22 +263,13 @@ namespace prjChessForms
             }
         }
 
-        public int X
+        public Coords Coords 
         {
             get
             {
-                return _x;
+                return _coords;
             }
         }
-
-        public int Y
-        {
-            get
-            {
-                return _y;
-            }
-        }
-
         public Panel Panel
         {
             get
@@ -268,7 +292,8 @@ namespace prjChessForms
                 Dock = DockStyle.Fill,
                 Image = null
             };
-            _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_x, _y));
+            _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
+            _panel.Click += OnPanelClick;
             UpdateSquare();
         }
 
@@ -288,5 +313,11 @@ namespace prjChessForms
                 _pieceImage.Image = null;
             }
         }
+
+        private void OnPanelClick(object sender, EventArgs e)
+        {
+            _board.TriggerSquareClicked(this);
+        }
     }
+
 }

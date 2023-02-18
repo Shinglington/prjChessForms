@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 namespace prjChessForms
 {
 
-    public struct Move 
+    public struct ChessMove 
     {
         private Coords _startCoords;
         private Coords _endCoords;
 
-        public Move(Coords startCoords, Coords endCoords)
+        public ChessMove(Coords startCoords, Coords endCoords)
         {
             _startCoords = startCoords;
             _endCoords = endCoords;
@@ -38,9 +38,11 @@ namespace prjChessForms
     abstract class Player
     {
         private PieceColour _colour;
-        public Player(PieceColour colour)
+        protected System.Windows.Forms.Timer moveTimer;
+        public Player(PieceColour colour, System.Windows.Forms.Timer timer)
         {
             _colour = colour;
+            moveTimer = timer;
         }
 
         public PieceColour Colour 
@@ -50,42 +52,62 @@ namespace prjChessForms
                 return _colour; 
             }
         }
-        public abstract Move GetMove(Board board);
+        public abstract ChessMove GetMove(Board board);
     }
 
     class HumanPlayer : Player
     {
-        public HumanPlayer(PieceColour colour) : base(colour) { }
+        private AutoResetEvent startSquareClicked = new AutoResetEvent(false);
+        private AutoResetEvent endSquareClicked = new AutoResetEvent(false);
 
-        public override Move GetMove(Board board) 
+        private Coords _selected;
+        public HumanPlayer(PieceColour colour, System.Windows.Forms.Timer timer) : base(colour, timer) 
+        {
+            _selected = new Coords();
+        }
+
+        public override ChessMove GetMove(Board board) 
         {
             // Get start move
             Coords Start = new Coords();
-            board.AddClickEvents(OnPanelClick);
+            board.RaiseSquareClicked += ReceiveStartSquareClickInfo;
+            moveTimer.Start();
+            Start = _selected;
+            board.RaiseSquareClicked -= ReceiveStartSquareClickInfo;
 
             Coords End = new Coords();
-
-
-            return new Move(Start, End);
+            board.RaiseSquareClicked += ReceiveEndSquareClickInfo;
+            moveTimer.Start();
+            End = _selected;
+            board.RaiseSquareClicked -= ReceiveEndSquareClickInfo;
+            moveTimer.Stop();
+            return new ChessMove(Start, End);
         }
-        
-        private void OnPanelClick(object sender, EventArgs e)
-        {
 
+        public void ReceiveStartSquareClickInfo(object sender, SquareClickedEventArgs e)
+        {
+            _selected = e.Square.Coords;
+            moveTimer.Stop();
+        }
+
+        public void ReceiveEndSquareClickInfo(object sender, SquareClickedEventArgs e)
+        {
+            _selected = e.Square.Coords;
+            moveTimer.Stop();
         }
     }
 
     class ComputerPlayer : Player 
     { 
-        public ComputerPlayer(PieceColour colour) : base(colour) { }
+        public ComputerPlayer(PieceColour colour, System.Windows.Forms.Timer timer) : base(colour, timer) { }
 
-        public override Move GetMove(Board board) 
+        public override ChessMove GetMove(Board board) 
         {
             Coords Start = new Coords();
             Coords End = new Coords();
 
 
-            return new Move(Start, End);
+            return new ChessMove(Start, End);
         }
     }
 

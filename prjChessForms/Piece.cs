@@ -31,19 +31,11 @@ namespace prjChessForms
             }
         }
 
-        public int X
+        public Coords Coords
         {
             get
             {
-                return _square.X;
-            }
-        }
-
-        public int Y
-        {
-            get
-            {
-                return _square.Y;
+                return _square.Coords;
             }
         }
 
@@ -55,19 +47,13 @@ namespace prjChessForms
             }
             set
             {
-                if (value != null)
+                if (_square != null && value != null)
                 {
                     // Set the original square's PieceInSquare to null
                     _square.PieceInSquare = null;
-                    // Update piece's square to new piece
-                    _square = value;
-                    // Make new square's PieceInSquare to this piece
-                    _square.PieceInSquare = this;
                 }
-                else
-                {
-                    _square = null;
-                }
+                _square = value;
+                _square.PieceInSquare = this;
             }
         }
 
