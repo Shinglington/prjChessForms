@@ -33,7 +33,7 @@ namespace prjChessForms
             _currentTurn = 1;
             while (!GameOver())
             {
-                Task<ChessMove> task = _currentPlayer.GetMoveAsync(_board);
+                Task<ChessMove> task = _currentPlayer.GetMove(_board);
                 ChessMove move = task.Result;
                 Console.WriteLine(move.StartCoords.ToString());
                 Console.WriteLine(move.EndCoords.ToString());
