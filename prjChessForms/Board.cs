@@ -98,6 +98,11 @@ namespace prjChessForms
             return pieces;
         }
 
+        public Piece GetPieceAt(Coords coords)
+        {
+            return (_squares[coords.X, coords.Y].PieceInSquare);
+        }
+
         public void TriggerSquareClicked(Square square)
         {
             OnSquareClickedEvent(new SquareClickedEventArgs(square));
@@ -233,8 +238,7 @@ namespace prjChessForms
 
         private Color _panelColour;
         private TableLayoutPanel _layoutPanel;
-        private Button _panel;
-        private PictureBox _pieceImage;
+        private Button _tile;
 
         public Square(Board board, TableLayoutPanel table, int x, int y)
         {
@@ -275,27 +279,27 @@ namespace prjChessForms
         {
             get
             {
-                return _panel;
+                return _tile;
             }
         }
 
         private void SetupSquare()
         {
-            _panel = new Button()
+            _tile = new Button()
             {
                 Parent = _layoutPanel,
                 BackColor = _panelColour,
                 Dock = DockStyle.Fill
             };
-            _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
-            _panel.Click += OnPanelClick;
+            _layoutPanel.SetCellPosition(_tile, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
+            _tile.Click += OnPanelClick;
             UpdateSquare();
         }
 
         private void UpdateSquare()
         {
-            _panel.BackColor = _panelColour;
-            _panel.Image = _piece != null ? _piece.Image : null;
+            _tile.BackColor = _panelColour;
+            _tile.Image = _piece != null ? _piece.Image : null;
         }
 
         private void OnPanelClick(object sender, EventArgs e)

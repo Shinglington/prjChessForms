@@ -57,6 +57,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rulebook.cs" />
     <EmbeddedResource Include="Chess.resx">
       <DependentUpon>Chess.cs</DependentUpon>
     </EmbeddedResource>

@@ -60,7 +60,17 @@ namespace prjChessForms
 
         public override async Task<ChessMove> GetMove(Board board) 
         {
-            Coords Start = await GetCoordsOfClickedSquare(board);
+            bool validStart = false;
+            Coords Start = new Coords();
+            do
+            {
+                Start = await GetCoordsOfClickedSquare(board);
+                if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Colour == Colour)
+                {
+                    validStart = true;
+                }
+            }
+            while (validStart);
             Coords End = await GetCoordsOfClickedSquare(board);
             return new ChessMove(Start, End);
         }
