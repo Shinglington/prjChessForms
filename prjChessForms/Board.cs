@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace prjChessForms
 {
 
-    public struct Coords 
+    public struct Coords
     {
         private int _x;
         private int _y;
@@ -38,6 +38,26 @@ namespace prjChessForms
             return Convert.ToString(Convert.ToChar(Convert.ToInt32('a') + _x)) + Convert.ToString(_y + 1);
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != typeof(Coords))
+            {
+                return false;
+            }
+            else 
+            {
+                Coords other = (Coords)obj;
+                return other.X == X && other.Y == Y;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 367829482;
+            hashCode = hashCode * -1521134295 + _x.GetHashCode();
+            hashCode = hashCode * -1521134295 + _y.GetHashCode();
+            return hashCode;
+        }
     }
     class Board
     {
@@ -54,15 +74,14 @@ namespace prjChessForms
             _players = players;
             SetupBoard();
         }
-        public void MakeMove((int, int) StartCoords, (int, int) EndCoords)
+        public void MakeMove(ChessMove Move)
         {
-            var (startX, startY) = StartCoords;
-            var (endX, endY) = EndCoords;
-
-            Piece p = _squares[startX, startY].PieceInSquare;
+            Coords StartCoords = Move.StartCoords;
+            Coords EndCoords = Move.EndCoords;
+            Piece p = GetPieceAt(StartCoords);
             if (p != null)
             {
-                p.Square = _squares[endX, endY];
+                p.Square = _squares[EndCoords.X, EndCoords.Y];
             }
         }
 

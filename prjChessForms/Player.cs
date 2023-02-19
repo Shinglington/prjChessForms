@@ -33,6 +33,11 @@ namespace prjChessForms
                 return _endCoords; 
             } 
         }
+
+        public override string ToString()
+        {
+            return StartCoords.ToString() + " -> " + EndCoords.ToString();
+        }
     }
 
     abstract class Player

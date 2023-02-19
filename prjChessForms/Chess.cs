@@ -15,7 +15,7 @@ namespace prjChessForms
             CreatePlayers();
             CreateBoard();
 
-            _board.MakeMove((0, 0), (5, 5));
+            _board.MakeMove(new ChessMove(new Coords(0, 0), new Coords(5, 5)));
             Play();
         }
         public async void Play()
@@ -24,7 +24,10 @@ namespace prjChessForms
             _currentTurn = 1;
             while (!GameOver())
             {
+
                 ChessMove move = await _currentPlayer.GetMove(_board);
+                _board.MakeMove(move);
+                Console.WriteLine(move);
                 if (_currentPlayer == _players[1])
                 {
                     _currentTurn += 1;
