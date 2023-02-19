@@ -60,18 +60,32 @@ namespace prjChessForms
 
         public override async Task<ChessMove> GetMove(Board board) 
         {
-            bool validStart = false;
+            bool validMove = false;
             Coords Start = new Coords();
+            Coords End = new Coords();
+            bool validStart = false;
             do
             {
-                Start = await GetCoordsOfClickedSquare(board);
-                if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Colour == Colour)
+                while (!validStart)
                 {
-                    validStart = true;
+                    Start = await GetCoordsOfClickedSquare(board);
+                    if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Colour == Colour)
+                    {
+                        validStart = true;
+                    }
                 }
-            }
-            while (validStart);
-            Coords End = await GetCoordsOfClickedSquare(board);
+                End = await GetCoordsOfClickedSquare(board);
+                // If second selected square is of own player's piece, swap that to start square
+                if (board.GetPieceAt(End) != null && board.GetPieceAt(Start).Colour == Colour)
+                {
+                    Start = End;
+                }
+                else if (Rulebook.CheckLegalMove(board, this, Start, End))
+                {
+                    validMove = true;
+                }
+            } while (!validMove);
+
             return new ChessMove(Start, End);
         }
 

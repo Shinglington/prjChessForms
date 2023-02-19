@@ -25,8 +25,6 @@ namespace prjChessForms
             while (!GameOver())
             {
                 ChessMove move = await _currentPlayer.GetMove(_board);
-                Console.WriteLine(move.StartCoords.ToString());
-                Console.WriteLine(move.EndCoords.ToString());
                 if (_currentPlayer == _players[1])
                 {
                     _currentTurn += 1;
