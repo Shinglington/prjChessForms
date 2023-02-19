@@ -55,40 +55,32 @@ namespace prjChessForms
 
     class HumanPlayer : Player
     {
-        private Coords _selected;
-        private TaskCompletionSource<bool> _squareClicked;
+        private TaskCompletionSource<Coords> _squareClickedSource;
         public HumanPlayer(PieceColour colour) : base(colour) 
         {
-            _selected = new Coords();
         }
 
         public override async Task<ChessMove> GetMove(Board board) 
         {
-            Coords Start = new Coords();
-            _squareClicked = new TaskCompletionSource<bool>();
-            board.RaiseSquareClicked += ReceiveStartSquareClickInfo;
-            _squareClicked.Task.Wait();
-            Start = _selected;
-            board.RaiseSquareClicked -= ReceiveStartSquareClickInfo;
+            _squareClickedSource = new TaskCompletionSource<Coords>();
+            board.RaiseSquareClicked += ReceiveSquareClickInfo;
+            var Start = await _squareClickedSource.Task;
+            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
 
-            Coords End = new Coords();
-            _squareClicked = new TaskCompletionSource<bool>();
-            board.RaiseSquareClicked += ReceiveEndSquareClickInfo;
-            _squareClicked.Task.Wait();
-            End =  _selected;
-            board.RaiseSquareClicked -= ReceiveEndSquareClickInfo;
+            Console.WriteLine("Start received");
+
+            _squareClickedSource = new TaskCompletionSource<Coords>();
+            board.RaiseSquareClicked += ReceiveSquareClickInfo;
+            var End = await _squareClickedSource.Task;
+            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
+
+            Console.WriteLine("End received");
+
             return new ChessMove(Start, End);
         }
-        public async void ReceiveStartSquareClickInfo(object sender, SquareClickedEventArgs e)
+        public void ReceiveSquareClickInfo(object sender, SquareClickedEventArgs e)
         {
-            _squareClicked.SetResult(true);
-            _selected = e.Square.Coords;
-        }
-
-        public async void ReceiveEndSquareClickInfo(object sender, SquareClickedEventArgs e)
-        {
-            _squareClicked.SetResult(true);
-            _selected = e.Square.Coords;
+            _squareClickedSource.SetResult(e.Square.Coords);
         }
     }
 

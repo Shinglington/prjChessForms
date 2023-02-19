@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Media;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -17,7 +8,7 @@ namespace prjChessForms
         private Board _board;
         private Player[] _players;
         private Player _currentPlayer;
-        private int _currentTurn; 
+        private int _currentTurn;
         public Chess()
         {
             InitializeComponent();
@@ -27,14 +18,13 @@ namespace prjChessForms
             _board.MakeMove((0, 0), (5, 5));
             Play();
         }
-        public void Play()
+        public async void Play()
         {
             _currentPlayer = _players[0];
             _currentTurn = 1;
             while (!GameOver())
             {
-                Task<ChessMove> task = _currentPlayer.GetMove(_board);
-                ChessMove move = task.Result;
+                ChessMove move = await _currentPlayer.GetMove(_board);
                 Console.WriteLine(move.StartCoords.ToString());
                 Console.WriteLine(move.EndCoords.ToString());
                 if (_currentPlayer == _players[1])

@@ -233,11 +233,12 @@ namespace prjChessForms
 
         private Color _panelColour;
         private TableLayoutPanel _layoutPanel;
-        private Panel _panel;
+        private Button _panel;
         private PictureBox _pieceImage;
 
         public Square(Board board, TableLayoutPanel table, int x, int y)
         {
+            _board = board;
             _layoutPanel = table;
             _coords = new Coords(x, y);
             _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
@@ -270,7 +271,7 @@ namespace prjChessForms
                 return _coords;
             }
         }
-        public Panel Panel
+        public Button Panel
         {
             get
             {
@@ -280,18 +281,20 @@ namespace prjChessForms
 
         private void SetupSquare()
         {
-            _panel = new Panel()
+            _panel = new Button()
             {
                 Parent = _layoutPanel,
                 BackColor = _panelColour,
                 Dock = DockStyle.Fill
             };
+            /*
             _pieceImage = new PictureBox()
             {
                 Parent = _panel,
                 Dock = DockStyle.Fill,
                 Image = null
             };
+            */
             _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
             _panel.Click += OnPanelClick;
             UpdateSquare();
@@ -300,6 +303,8 @@ namespace prjChessForms
         private void UpdateSquare()
         {
             _panel.BackColor = _panelColour;
+            _panel.Image = _piece != null ? _piece.Image : null;
+            /*
             if (_piece != null && _piece.Image != null)
             {
                 _pieceImage.Image = _piece.Image;
@@ -312,11 +317,13 @@ namespace prjChessForms
             {
                 _pieceImage.Image = null;
             }
+            */
         }
 
         private void OnPanelClick(object sender, EventArgs e)
         {
             _board.TriggerSquareClicked(this);
+            Console.WriteLine(Coords.ToString());
         }
     }
 
