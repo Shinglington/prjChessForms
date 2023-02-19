@@ -56,31 +56,27 @@ namespace prjChessForms
     class HumanPlayer : Player
     {
         private TaskCompletionSource<Coords> _squareClickedSource;
-        public HumanPlayer(PieceColour colour) : base(colour) 
-        {
-        }
+        public HumanPlayer(PieceColour colour) : base(colour) { }
 
         public override async Task<ChessMove> GetMove(Board board) 
         {
-            _squareClickedSource = new TaskCompletionSource<Coords>();
-            board.RaiseSquareClicked += ReceiveSquareClickInfo;
-            var Start = await _squareClickedSource.Task;
-            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
-
-            Console.WriteLine("Start received");
-
-            _squareClickedSource = new TaskCompletionSource<Coords>();
-            board.RaiseSquareClicked += ReceiveSquareClickInfo;
-            var End = await _squareClickedSource.Task;
-            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
-
-            Console.WriteLine("End received");
-
+            Coords Start = await GetCoordsOfClickedSquare(board);
+            Coords End = await GetCoordsOfClickedSquare(board);
             return new ChessMove(Start, End);
         }
-        public void ReceiveSquareClickInfo(object sender, SquareClickedEventArgs e)
+
+        private void ReceiveSquareClickInfo(object sender, SquareClickedEventArgs e)
         {
             _squareClickedSource.SetResult(e.Square.Coords);
+        }
+
+        private async Task<Coords> GetCoordsOfClickedSquare(Board board)
+        {
+            _squareClickedSource = new TaskCompletionSource<Coords>();
+            board.RaiseSquareClicked += ReceiveSquareClickInfo;
+            Coords coords = await _squareClickedSource.Task;
+            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
+            return coords;
         }
     }
 

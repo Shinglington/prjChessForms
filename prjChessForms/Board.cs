@@ -287,14 +287,6 @@ namespace prjChessForms
                 BackColor = _panelColour,
                 Dock = DockStyle.Fill
             };
-            /*
-            _pieceImage = new PictureBox()
-            {
-                Parent = _panel,
-                Dock = DockStyle.Fill,
-                Image = null
-            };
-            */
             _layoutPanel.SetCellPosition(_panel, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
             _panel.Click += OnPanelClick;
             UpdateSquare();
@@ -304,26 +296,11 @@ namespace prjChessForms
         {
             _panel.BackColor = _panelColour;
             _panel.Image = _piece != null ? _piece.Image : null;
-            /*
-            if (_piece != null && _piece.Image != null)
-            {
-                _pieceImage.Image = _piece.Image;
-                Padding p = new Padding();
-                p.Left = (_pieceImage.Width - _pieceImage.Image.Width) / 2;
-                p.Top = (_pieceImage.Height - _pieceImage.Image.Height) / 2;
-                _pieceImage.Padding = p;
-            }
-            else
-            {
-                _pieceImage.Image = null;
-            }
-            */
         }
 
         private void OnPanelClick(object sender, EventArgs e)
         {
             _board.TriggerSquareClicked(this);
-            Console.WriteLine(Coords.ToString());
         }
     }
 
