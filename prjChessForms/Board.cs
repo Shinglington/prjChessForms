@@ -8,32 +8,17 @@ namespace prjChessForms
 
     public struct Coords
     {
-        private int _x;
-        private int _y;
-
         public Coords(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
-        public int X
-        {
-            get
-            {
-                return _x;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return _y;
-            }
-        }
+        public int X { get; }
+        public int Y { get; }
 
         public override string ToString()
         {
-            return Convert.ToString(Convert.ToChar(Convert.ToInt32('a') + _x)) + Convert.ToString(_y + 1);
+            return Convert.ToString(Convert.ToChar(Convert.ToInt32('a') + X)) + Convert.ToString(Y + 1);
         }
 
         public override bool Equals(object obj)
@@ -52,8 +37,8 @@ namespace prjChessForms
         public override int GetHashCode()
         {
             int hashCode = 367829482;
-            hashCode = hashCode * -1521134295 + _x.GetHashCode();
-            hashCode = hashCode * -1521134295 + _y.GetHashCode();
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
             return hashCode;
         }
     }
@@ -252,15 +237,11 @@ namespace prjChessForms
     {
         private Board _board;
         private Piece _piece;
-        private Coords _coords;
-
         private Color _panelColour;
-        private TableLayoutPanel _layoutPanel;
-
         public Square(Board board, int x, int y)
         {
             _board = board;
-            _coords = new Coords(x, y);
+            Coords = new Coords(x, y);
             _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             _piece = null;
             SetupSquare();
@@ -284,13 +265,7 @@ namespace prjChessForms
             }
         }
 
-        public Coords Coords
-        {
-            get
-            {
-                return _coords;
-            }
-        }
+        public Coords Coords { get; }
         private void SetupSquare()
         {
             BackColor = _panelColour;
