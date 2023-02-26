@@ -16,7 +16,7 @@ namespace prjChessForms
             Piece capturedPiece = board.GetPieceAt(end);
             if (movedPiece != null && movedPiece.Colour == player.Colour && !start.Equals(end))
             {
-                if (movedPiece.CanMoveTo(board, end))
+                if (movedPiece.CanMove(board, start, end))
                 {
                     if (capturedPiece == null || (capturedPiece.Colour != player.Colour))
                     {

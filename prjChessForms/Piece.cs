@@ -37,6 +37,7 @@ namespace prjChessForms
             return false;
         }
     }
+
     class Knight : Piece
     {
         public Knight(PieceColour colour) : base(colour) { }
@@ -53,6 +54,7 @@ namespace prjChessForms
             return allowed;
         }
     }
+
     class Bishop : Piece
     {
         public Bishop(PieceColour colour) : base(colour) { }
@@ -79,6 +81,7 @@ namespace prjChessForms
             return allowed;
         }
     }
+
     class Rook : Piece
     {
         public Rook(PieceColour colour) : base(colour) { }
@@ -119,6 +122,7 @@ namespace prjChessForms
             return allowed;
         }
     }
+
     class Queen : Piece
     {
         public Queen(PieceColour colour) : base(colour) { }

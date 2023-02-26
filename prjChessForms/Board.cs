@@ -63,6 +63,7 @@ namespace prjChessForms
             if (p != null)
             {
                 GetSquareAt(EndCoords).Piece = p;
+                GetSquareAt(StartCoords).Piece = null;
             }
         }
 
@@ -114,8 +115,6 @@ namespace prjChessForms
                     squares[col, row] = (Square)GetControlFromPosition(col, row);
                 }
             }
-
-
             return squares;
         }
 
@@ -140,6 +139,7 @@ namespace prjChessForms
         private void SetupBoard()
         {
             // Format
+            Dock = DockStyle.Fill;
             Padding = new Padding(0);
             Margin = new Padding(0);
 
@@ -165,6 +165,7 @@ namespace prjChessForms
                 for (int x = 0; x < COL_COUNT; x++)
                 {
                     s = new Square(this, x, y);
+                    SetCellPosition(s, new TableLayoutPanelCellPosition(x, y));
                 }
             }
 
@@ -190,7 +191,7 @@ namespace prjChessForms
                     {
                         if (colour == PieceColour.White)
                         {
-                            square = GetSquareAt(new Coords(x, y));
+                            square = GetSquareAt(new Coords(x, 1 - y));
                         }
                         else
                         {
@@ -235,19 +236,29 @@ namespace prjChessForms
     }
     class Square : Button
     {
-        private Board _board;
         private Color _panelColour;
+        private Piece _piece;
         public Square(Board board, int x, int y)
         {
-            _board = board;
+            Parent = board;
             Coords = new Coords(x, y);
-            _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
+            _panelColour =  (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             Piece = null;
             SetupSquare();
         }
 
-        public Piece Piece { get; set; }
-
+        public Piece Piece
+        {
+            get
+            {
+                return _piece;
+            }
+            set
+            {
+                _piece = value;
+                UpdateSquare();
+            }
+        }
         public Coords Coords { get; }
         private void SetupSquare()
         {
@@ -265,7 +276,8 @@ namespace prjChessForms
 
         private void OnPanelClick(object sender, EventArgs e)
         {
-            _board.TriggerSquareClicked(this);
+            Board board = (Board)Parent;
+            board.TriggerSquareClicked(this);
         }
     }
 
