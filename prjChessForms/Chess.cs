@@ -49,13 +49,8 @@ namespace prjChessForms
 
         private void CreateBoard()
         {
-            TableLayoutPanel boardTable = new TableLayoutPanel()
-            {
-                Parent = this,
-                Dock = DockStyle.Fill
-            };
-
-            _board = new Board(boardTable, _players);
+            _board = new Board(_players);
+            _board.Parent = this;
         }
 
         private bool GameOver()

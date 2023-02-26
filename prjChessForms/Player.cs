@@ -94,9 +94,9 @@ namespace prjChessForms
             return new ChessMove(Start, End);
         }
 
-        private void ReceiveSquareClickInfo(object sender, SquareClickedEventArgs e)
+        private void ReceiveSquareClickInfo(object sender, EventArgs e)
         {
-            _squareClickedSource.SetResult(e.Square.Coords);
+            _squareClickedSource.SetResult(((Square) sender).Coords);
         }
 
         private async Task<Coords> GetCoordsOfClickedSquare(Board board)
