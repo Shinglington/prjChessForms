@@ -11,22 +11,24 @@ namespace prjChessForms
     }
     abstract class Piece
     {
-        public Piece(PieceColour colour)
+        public Piece(Player player)
         {
-            Colour = colour;
+            Owner = player;
             string imageName = Colour.ToString() + "_" + this.GetType().Name;
             Image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
         }
 
+        public Player Owner { get; }
+
         public Image Image { get; }
 
-        public PieceColour Colour { get; }
+        public PieceColour Colour { get { return Owner.Colour; } }
 
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }
     class Pawn : Piece
     {
-        public Pawn(PieceColour colour) : base(colour) { }
+        public Pawn(Player player) : base(player) { }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
@@ -40,7 +42,7 @@ namespace prjChessForms
 
     class Knight : Piece
     {
-        public Knight(PieceColour colour) : base(colour) { }
+        public Knight(Player player) : base(player) { }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
@@ -57,7 +59,7 @@ namespace prjChessForms
 
     class Bishop : Piece
     {
-        public Bishop(PieceColour colour) : base(colour) { }
+        public Bishop(Player player) : base(player) { }
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
@@ -84,7 +86,7 @@ namespace prjChessForms
 
     class Rook : Piece
     {
-        public Rook(PieceColour colour) : base(colour) { }
+        public Rook(Player player) : base(player) { }
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
@@ -125,7 +127,7 @@ namespace prjChessForms
 
     class Queen : Piece
     {
-        public Queen(PieceColour colour) : base(colour) { }
+        public Queen(Player player) : base(player) { }
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             return BishopMove(board, startCoords, endCoords) || RookMove(board, startCoords, endCoords);
@@ -194,7 +196,7 @@ namespace prjChessForms
     
     class King : Piece 
     {
-        public King(PieceColour colour) : base(colour) { }
+        public King(Player player) : base(player) { }
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;

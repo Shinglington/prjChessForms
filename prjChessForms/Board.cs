@@ -180,16 +180,16 @@ namespace prjChessForms
                 { 'R','N','B','Q','K','B','N','R'}
             };
             // Pieces
-            PieceColour colour;
+            Player player;
             Square square;
             for (int i = 0; i < 2; i++)
             {
-                colour = (PieceColour)i;
+                player = _players[i];
                 for (int y = 0; y < 2; y++)
                 {
                     for (int x = 0; x < COL_COUNT; x++)
                     {
-                        if (colour == PieceColour.White)
+                        if (player.Colour == PieceColour.White)
                         {
                             square = GetSquareAt(new Coords(x, 1 - y));
                         }
@@ -197,34 +197,34 @@ namespace prjChessForms
                         {
                             square = GetSquareAt(new Coords(x, ROW_COUNT - 2 + y));
                         }
-                        AddPiece(defaultPieces[y, x], colour, square);
+                        AddPiece(defaultPieces[y, x], player, square);
                     }
                 }
             }
         }
 
-        private void AddPiece(char pieceType, PieceColour colour, Square square)
+        private void AddPiece(char pieceType, Player player, Square square)
         {
             Piece p = null;
             switch (pieceType)
             {
                 case 'P':
-                    p = new Pawn(colour);
+                    p = new Pawn(player);
                     break;
                 case 'N':
-                    p = new Knight(colour);
+                    p = new Knight(player);
                     break;
                 case 'B':
-                    p = new Bishop(colour);
+                    p = new Bishop(player);
                     break;
                 case 'R':
-                    p = new Rook(colour);
+                    p = new Rook(player);
                     break;
                 case 'Q':
-                    p = new Queen(colour);
+                    p = new Queen(player);
                     break;
                 case 'K':
-                    p = new King(colour);
+                    p = new King(player);
                     break;
                 default:
                     throw new ArgumentException("Unrecognised pieceType");
