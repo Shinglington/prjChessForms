@@ -84,7 +84,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="bin\Debug\Images\Black\Bishop.png" />
     <Content Include="bin\Debug\Images\Black\King.png" />

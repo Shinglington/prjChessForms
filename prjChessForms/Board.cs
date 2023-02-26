@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Net.NetworkInformation;
-using System.Runtime.Remoting.Channels;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -13,7 +11,7 @@ namespace prjChessForms
         private int _x;
         private int _y;
 
-        public Coords(int x, int  y)
+        public Coords(int x, int y)
         {
             _x = x;
             _y = y;
@@ -44,7 +42,7 @@ namespace prjChessForms
             {
                 return false;
             }
-            else 
+            else
             {
                 Coords other = (Coords)obj;
                 return other.X == X && other.Y == Y;
@@ -59,21 +57,19 @@ namespace prjChessForms
             return hashCode;
         }
     }
-    class Board
+    class Board : TableLayoutPanel
     {
-        public event EventHandler<SquareClickedEventArgs> RaiseSquareClicked;
+        public event EventHandler<EventArgs> RaiseSquareClicked;
 
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
-        private TableLayoutPanel _layoutPanel;
         private Player[] _players;
-        private Square[,] _squares;
-        public Board(TableLayoutPanel boardPanel, Player[] players)
+        public Board(Player[] players)
         {
-            _layoutPanel = boardPanel;
             _players = players;
             SetupBoard();
         }
+
         public void MakeMove(ChessMove Move)
         {
             Coords StartCoords = Move.StartCoords;
@@ -81,18 +77,18 @@ namespace prjChessForms
             Piece p = GetPieceAt(StartCoords);
             if (p != null)
             {
-                p.Square = _squares[EndCoords.X, EndCoords.Y];
+                p.Square = GetSquareAt(EndCoords);
             }
         }
 
         public King GetKing(PieceColour colour)
         {
             King king = null;
-            foreach(Piece p in GetPieces(colour))
+            foreach (Piece p in GetPieces(colour))
             {
                 if (p.GetType() == typeof(King))
                 {
-                    king = (King) p;
+                    king = (King)p;
                     break;
                 }
             }
@@ -107,7 +103,7 @@ namespace prjChessForms
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    p = _squares[x, y].PieceInSquare;
+                    p = GetPieceAt(new Coords(x, y));
                     if (p != null && p.Colour == colour)
                     {
                         pieces.Add(p);
@@ -117,52 +113,73 @@ namespace prjChessForms
             return pieces;
         }
 
+
         public Piece GetPieceAt(Coords coords)
         {
-            return (_squares[coords.X, coords.Y].PieceInSquare);
+            return (GetSquareAt(coords).PieceInSquare);
+        }
+
+        public Square[,] GetSquares()
+        {
+            Square[,] squares = new Square[ColumnCount, RowCount];
+            for (int col = 0; col < ColumnCount; col++)
+            {
+                for (int row = 0; row < RowCount; row++)
+                {
+                    squares[col, row] = (Square)GetControlFromPosition(col, row);
+                }
+            }
+
+
+            return squares;
+        }
+
+        public Square GetSquareAt(Coords coords)
+        {
+            return (Square) GetControlFromPosition(coords.X, coords.Y);
         }
 
         public void TriggerSquareClicked(Square square)
         {
-            OnSquareClickedEvent(new SquareClickedEventArgs(square));
+            OnSquareClickedEvent(square, new EventArgs());
         }
- 
-        private void OnSquareClickedEvent(SquareClickedEventArgs e)
+
+        private void OnSquareClickedEvent(object sender, EventArgs e)
         {
-            EventHandler<SquareClickedEventArgs> raiseEvent = RaiseSquareClicked;
-            if (raiseEvent != null)
+            EventHandler<EventArgs> raiseEvent = RaiseSquareClicked;
+            if (raiseEvent != null && sender is Square)
             {
-                raiseEvent(this, e);
+                raiseEvent(sender, e);
             }
         }
         private void SetupBoard()
         {
-            // Format TableLayoutPanel
-            _layoutPanel.Padding = new Padding(0);
-            _layoutPanel.Margin = new Padding(0);
+            // Format
+            Padding = new Padding(0);
+            Margin = new Padding(0);
 
-            _layoutPanel.ColumnCount = COL_COUNT;
-            _layoutPanel.ColumnStyles.Clear();
-            _layoutPanel.RowCount = ROW_COUNT;
-            _layoutPanel.ColumnStyles.Clear();
+            ColumnCount = COL_COUNT;
+            ColumnStyles.Clear();
+            RowCount = ROW_COUNT;
+            ColumnStyles.Clear();
 
             for (int c = 0; c < COL_COUNT; c++)
             {
-                _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / COL_COUNT));
+                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / COL_COUNT));
             }
 
             for (int r = 0; r < ROW_COUNT; r++)
             {
-                _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / ROW_COUNT));
+                RowStyles.Add(new RowStyle(SizeType.Percent, 100 / ROW_COUNT));
             }
 
             // Add squares
-            _squares = new Square[COL_COUNT, ROW_COUNT];
+            Square s;
             for (int y = 0; y < ROW_COUNT; y++)
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    _squares[x, y] = new Square(this, _layoutPanel, x, y);
+                    s = new Square(this, x, y);
                 }
             }
 
@@ -188,11 +205,11 @@ namespace prjChessForms
                     {
                         if (colour == PieceColour.White)
                         {
-                            square = _squares[x, 1 - y];
+                            square = GetSquareAt(new Coords(x, y));
                         }
                         else
                         {
-                            square = _squares[x, ROW_COUNT - 2 + y];
+                            square = GetSquareAt(new Coords(x, ROW_COUNT - 2 + y));
                         }
                         AddPiece(defaultPieces[y, x], colour, square);
                     }
@@ -203,7 +220,7 @@ namespace prjChessForms
         private void AddPiece(char pieceType, PieceColour colour, Square square)
         {
             Piece p = null;
-            switch (pieceType) 
+            switch (pieceType)
             {
                 case 'P':
                     p = new Pawn(colour, square);
@@ -215,7 +232,7 @@ namespace prjChessForms
                     p = new Bishop(colour, square);
                     break;
                 case 'R':
-                    p = new Rook(colour, square);   
+                    p = new Rook(colour, square);
                     break;
                 case 'Q':
                     p = new Queen(colour, square);
@@ -231,25 +248,7 @@ namespace prjChessForms
 
 
     }
-
-    class SquareClickedEventArgs : EventArgs
-    {
-        private Square _square;
-        public SquareClickedEventArgs(Square square)
-        {
-            _square = square;
-        }
-
-        public Square Square 
-        { 
-            get 
-            { 
-                return _square; 
-            } 
-        }
-    }
-
-    class Square
+    class Square : Button
     {
         private Board _board;
         private Piece _piece;
@@ -257,12 +256,10 @@ namespace prjChessForms
 
         private Color _panelColour;
         private TableLayoutPanel _layoutPanel;
-        private Button _tile;
 
-        public Square(Board board, TableLayoutPanel table, int x, int y)
+        public Square(Board board, int x, int y)
         {
             _board = board;
-            _layoutPanel = table;
             _coords = new Coords(x, y);
             _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             _piece = null;
@@ -287,38 +284,25 @@ namespace prjChessForms
             }
         }
 
-        public Coords Coords 
+        public Coords Coords
         {
             get
             {
                 return _coords;
             }
         }
-        public Button Panel
-        {
-            get
-            {
-                return _tile;
-            }
-        }
-
         private void SetupSquare()
         {
-            _tile = new Button()
-            {
-                Parent = _layoutPanel,
-                BackColor = _panelColour,
-                Dock = DockStyle.Fill
-            };
-            _layoutPanel.SetCellPosition(_tile, new TableLayoutPanelCellPosition(_coords.X, _coords.Y));
-            _tile.Click += OnPanelClick;
+            BackColor = _panelColour;
+            Dock = DockStyle.Fill;
+            Click += OnPanelClick;
             UpdateSquare();
         }
 
         private void UpdateSquare()
         {
-            _tile.BackColor = _panelColour;
-            _tile.Image = _piece != null ? _piece.Image : null;
+            BackColor = _panelColour;
+            Image = _piece != null ? _piece.Image : null;
         }
 
         private void OnPanelClick(object sender, EventArgs e)
