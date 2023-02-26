@@ -62,7 +62,7 @@ namespace prjChessForms
             Piece p = GetPieceAt(StartCoords);
             if (p != null)
             {
-                p.Square = GetSquareAt(EndCoords);
+                GetSquareAt(EndCoords).Piece = p;
             }
         }
 
@@ -101,7 +101,7 @@ namespace prjChessForms
 
         public Piece GetPieceAt(Coords coords)
         {
-            return (GetSquareAt(coords).PieceInSquare);
+            return (GetSquareAt(coords).Piece);
         }
 
         public Square[,] GetSquares()
@@ -208,27 +208,27 @@ namespace prjChessForms
             switch (pieceType)
             {
                 case 'P':
-                    p = new Pawn(colour, square);
+                    p = new Pawn(colour);
                     break;
                 case 'N':
-                    p = new Knight(colour, square);
+                    p = new Knight(colour);
                     break;
                 case 'B':
-                    p = new Bishop(colour, square);
+                    p = new Bishop(colour);
                     break;
                 case 'R':
-                    p = new Rook(colour, square);
+                    p = new Rook(colour);
                     break;
                 case 'Q':
-                    p = new Queen(colour, square);
+                    p = new Queen(colour);
                     break;
                 case 'K':
-                    p = new King(colour, square);
+                    p = new King(colour);
                     break;
                 default:
                     throw new ArgumentException("Unrecognised pieceType");
             }
-            p.Square = square;
+            square.Piece = p;
         }
 
 
@@ -236,34 +236,17 @@ namespace prjChessForms
     class Square : Button
     {
         private Board _board;
-        private Piece _piece;
         private Color _panelColour;
         public Square(Board board, int x, int y)
         {
             _board = board;
             Coords = new Coords(x, y);
             _panelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
-            _piece = null;
+            Piece = null;
             SetupSquare();
         }
 
-        public Piece PieceInSquare
-        {
-            get
-            {
-                return _piece;
-            }
-            set
-            {
-                if (value != null && _piece != null)
-                {
-                    // update original piece in current square to null
-                    _piece.Square = null;
-                }
-                _piece = value;
-                UpdateSquare();
-            }
-        }
+        public Piece Piece { get; set; }
 
         public Coords Coords { get; }
         private void SetupSquare()
@@ -277,7 +260,7 @@ namespace prjChessForms
         private void UpdateSquare()
         {
             BackColor = _panelColour;
-            Image = _piece != null ? _piece.Image : null;
+            Image = Piece != null ? Piece.Image : null;
         }
 
         private void OnPanelClick(object sender, EventArgs e)
