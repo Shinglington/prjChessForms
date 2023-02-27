@@ -61,7 +61,7 @@ namespace prjChessForms
                 }
             }
 
-            if (Math.Abs(xChange) == 1)
+            if (Math.Abs(xChange) == 1 && Math.Abs(yChange) == 1)
             {
                 if (board.GetPieceAt(endCoords) != null)
                 {
