@@ -63,6 +63,10 @@ namespace prjChessForms
                     _toCoords = new Coords();
                     _board.ClearHighlights();
                     _board.HighlightAt(_fromCoords, System.Drawing.Color.AliceBlue);
+                    foreach(Coords end in Rulebook.GetPossibleMoves(_board, _fromCoords))
+                    {
+                        _board.HighlightAt(end, System.Drawing.Color.Green);
+                    }
                 }
                 else if (!_fromCoords.Equals(new Coords()))
                 {

@@ -18,18 +18,13 @@ namespace prjChessForms
             Image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
         }
 
-        public bool HasMoved { get; private set; }
+        public bool HasMoved { get; set; }
 
         public Player Owner { get; }
 
         public Image Image { get; }
 
         public PieceColour Colour { get { return Owner.Colour; } }
-
-        public void SetMoved()
-        {
-            HasMoved = true;
-        }
 
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }

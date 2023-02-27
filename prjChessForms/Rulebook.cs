@@ -1,17 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prjChessForms
 {
+    public struct ChessMove
+    {
+        public ChessMove(Coords startCoords, Coords endCoords)
+        {
+            StartCoords = startCoords;
+            EndCoords = endCoords;
+        }
+
+        public Coords StartCoords { get; }
+        public Coords EndCoords { get; }
+        public override string ToString()
+        {
+            return StartCoords.ToString() + " -> " + EndCoords.ToString();
+        }
+    }
     class Rulebook
     {
 
-        public static bool CheckLegalMove(Board board, Player player, Coords start, Coords end)
+        public static bool CheckLegalMove(Board board, Player player, ChessMove move)
         {
+            Coords start = move.StartCoords;
+            Coords end = move.EndCoords;
+
             bool legal = false;
             Piece movedPiece = board.GetPieceAt(start);
             Piece capturedPiece = board.GetPieceAt(end);
@@ -27,14 +41,17 @@ namespace prjChessForms
                     }
                 }
             }
+            Console.Write(move.ToString() + " is ");
+
             if (legal)
             {
-                Console.WriteLine(start.ToString() + "->" + end.ToString() + "is legal");
+                Console.Write("legal");
             }
             else
             {
-                Console.WriteLine(start.ToString() + "->" + end.ToString() + "is illegal");
+                Console.Write("illegal");
             }
+            Console.WriteLine();
             return legal;
         }
 
@@ -51,12 +68,12 @@ namespace prjChessForms
             {
                 Piece piece = board.GetPieceAt(pieceCoords);
                 Coords checkingCoords;
-                for(int y = 0; y < board.RowCount; y++)
+                for (int y = 0; y < board.RowCount; y++)
                 {
                     for (int x = 0; x < board.ColumnCount; x++)
                     {
                         checkingCoords = new Coords(x, y);
-                        if (CheckLegalMove(board, piece.Owner, pieceCoords, checkingCoords)) 
+                        if (CheckLegalMove(board, piece.Owner, pieceCoords, checkingCoords))
                         {
                             possibleMoves.Add(checkingCoords);
                         }
@@ -65,6 +82,8 @@ namespace prjChessForms
             }
             return possibleMoves;
         }
+
+
 
 
     }

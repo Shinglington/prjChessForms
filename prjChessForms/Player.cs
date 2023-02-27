@@ -7,39 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace prjChessForms
 {
-
-    public struct ChessMove
-    {
-        private Coords _startCoords;
-        private Coords _endCoords;
-
-        public ChessMove(Coords startCoords, Coords endCoords)
-        {
-            _startCoords = startCoords;
-            _endCoords = endCoords;
-        }
-
-        public Coords StartCoords 
-        { 
-            get 
-            { 
-                return _startCoords; 
-            } 
-        }
-        public Coords EndCoords 
-        { 
-            get 
-            { 
-                return _endCoords; 
-            } 
-        }
-
-        public override string ToString()
-        {
-            return StartCoords.ToString() + " -> " + EndCoords.ToString();
-        }
-    }
-
     abstract class Player
     {
         private PieceColour _colour;

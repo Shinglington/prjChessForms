@@ -44,8 +44,6 @@ namespace prjChessForms
     }
     class Board : TableLayoutPanel
     {
-        public event EventHandler<EventArgs> RaiseSquareClicked;
-
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private Player[] _players;
@@ -64,7 +62,7 @@ namespace prjChessForms
             {
                 GetSquareAt(EndCoords).Piece = p;
                 GetSquareAt(StartCoords).Piece = null;
-                p.SetMoved();
+                p.HasMoved = true;
             }
         }
 
@@ -258,10 +256,6 @@ namespace prjChessForms
             {
                 _piece = value;
                 UpdateSquare();
-                if (Piece != null)
-                    Console.WriteLine(Coords.ToString() + " has now got piece " + Piece.ToString());
-                else
-                    Console.WriteLine("Removed piece from " + Coords.ToString());
             }
         }
         public Coords Coords { get; }
