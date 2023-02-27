@@ -26,8 +26,6 @@ namespace prjChessForms
                     }
                 }
             }
-
-
             if (legal)
             {
                 Console.WriteLine(start.ToString() + "->" + end.ToString() + "is legal");
@@ -43,5 +41,7 @@ namespace prjChessForms
         {
             return false;
         }
+
+
     }
 }

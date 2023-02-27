@@ -49,13 +49,14 @@ namespace prjChessForms
                 return false;
             }
 
-            if (xChange == 0)
+            if (xChange == 0 && board.GetPieceAt(endCoords) == null)
             {
                 if (Math.Abs(yChange) == 1)
                 {
                     allowed = true;
                 }
-                else if (Math.Abs(yChange) == 2 && !HasMoved)
+                else if (Math.Abs(yChange) == 2 && !HasMoved
+                    && board.GetPieceAt(new Coords(startCoords.X, startCoords.Y + direction)) == null)
                 {
                     allowed = true;
                 }
