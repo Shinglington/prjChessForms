@@ -20,6 +20,12 @@ namespace prjChessForms
     }
     class Rulebook
     {
+        public enum GameResult
+        {
+            Checkmate,
+            Stalemate,
+            Time
+        }
 
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)
         {
@@ -54,11 +60,6 @@ namespace prjChessForms
             Console.WriteLine();
             return legal;
         }
-
-        public static bool CheckIfGameOver(Board board, Player playerTurn)
-        {
-            return false;
-        }
         public static List<Coords> GetPossibleMoves(Board board, Coords pieceCoords)
         {
             List<Coords> possibleMoves = new List<Coords>();
@@ -81,8 +82,42 @@ namespace prjChessForms
             return possibleMoves;
         }
 
+        public static bool CheckIfGameOver(Board board, Player currentPlayer)
+        {
+            return false;
+        }
+
+        public static bool IsCheck(Board board, Player currentPlayer)
+        {
+            bool check = false;
+            Coords kingCoords = board.GetCoordsOfPiece(board.GetKing(currentPlayer.Colour));
+            foreach (Square square in board.GetSquares())
+            {
+                if (square.Piece != null && square.Piece.Owner != currentPlayer)
+                {
+                    if (CheckLegalMove(board, square.Piece.Owner, new ChessMove(square.Coords, kingCoords)))
+                    {
+                        check = true;
+                        break;
+                    }
+                }
+            }
+            return check;
+        }
+
+        private static bool IsCheckmate(Board board, Player currentPlayer)
+        {
+            if (!IsCheck(board, currentPlayer))
+            {
+                return false;
+            }
+            else
+            {
+
+            }
 
 
+        }
 
     }
 }

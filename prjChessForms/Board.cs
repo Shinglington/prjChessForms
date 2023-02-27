@@ -104,6 +104,24 @@ namespace prjChessForms
             return (GetSquareAt(coords).Piece);
         }
 
+        public Coords GetCoordsOfPiece(Piece piece)
+        {
+            if (piece == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            foreach(Square s in GetSquares())
+            {
+                if (s.Piece == piece)
+                {
+                    return s.Coords;
+                }
+            }
+
+            throw new Exception("Piece could not be located");
+        }
+
         public Square[,] GetSquares()
         {
             Square[,] squares = new Square[ColumnCount, RowCount];

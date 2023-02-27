@@ -55,7 +55,6 @@ namespace prjChessForms
             _fromCoords = new Coords();
             _toCoords = new Coords();
             ChessMove move = new ChessMove();
-
             bool validMove = false;
             while (!validMove)
             {
@@ -66,7 +65,7 @@ namespace prjChessForms
                     _toCoords = new Coords();
                     _board.ClearHighlights();
                     _board.HighlightAt(_fromCoords, System.Drawing.Color.AliceBlue);
-                    foreach(Coords end in Rulebook.GetPossibleMoves(_board, _fromCoords))
+                    foreach (Coords end in Rulebook.GetPossibleMoves(_board, _fromCoords))
                     {
                         _board.HighlightAt(end, System.Drawing.Color.Green);
                     }
@@ -121,7 +120,7 @@ namespace prjChessForms
                 Parent = _layoutPanel
             };
             _layoutPanel.SetCellPosition(_board, new TableLayoutPanelCellPosition(0, 1));
-            foreach(Square square in _board.GetSquares())
+            foreach (Square square in _board.GetSquares())
             {
                 square.Click += OnSquareClicked;
             }
