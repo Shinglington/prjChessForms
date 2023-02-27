@@ -59,8 +59,6 @@ namespace prjChessForms
         {
             return false;
         }
-
-
         public static List<Coords> GetPossibleMoves(Board board, Coords pieceCoords)
         {
             List<Coords> possibleMoves = new List<Coords>();
@@ -73,7 +71,7 @@ namespace prjChessForms
                     for (int x = 0; x < board.ColumnCount; x++)
                     {
                         checkingCoords = new Coords(x, y);
-                        if (CheckLegalMove(board, piece.Owner, pieceCoords, checkingCoords))
+                        if (CheckLegalMove(board, piece.Owner, new ChessMove(pieceCoords, checkingCoords)))
                         {
                             possibleMoves.Add(checkingCoords);
                         }

@@ -51,8 +51,11 @@ namespace prjChessForms
 
         private async Task<ChessMove> GetPlayerMove()
         {
+
             _fromCoords = new Coords();
             _toCoords = new Coords();
+            ChessMove move = new ChessMove();
+
             bool validMove = false;
             while (!validMove)
             {
@@ -74,13 +77,13 @@ namespace prjChessForms
                 }
 
                 // Check if move is valid now
+
                 if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
                 {
-                    validMove = Rulebook.CheckLegalMove(_board, _currentPlayer, _fromCoords, _toCoords);
-                    Console.WriteLine(validMove);
+                    move = new ChessMove(_fromCoords, _toCoords);
+                    validMove = Rulebook.CheckLegalMove(_board, _currentPlayer, move);
                 }
             }
-            ChessMove move = new ChessMove(_fromCoords, _toCoords);
             _board.ClearHighlights();
             return move;
         }
