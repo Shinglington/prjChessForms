@@ -74,14 +74,14 @@ namespace prjChessForms
                 while (!validStart)
                 {
                     Start = await GetCoordsOfClickedSquare(board);
-                    if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Colour == Colour)
+                    if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Owner == this)
                     {
                         validStart = true;
                     }
                 }
                 End = await GetCoordsOfClickedSquare(board);
                 // If second selected square is of own player's piece, swap that to start square
-                if (board.GetPieceAt(End) != null && board.GetPieceAt(Start).Colour == Colour)
+                if (board.GetPieceAt(End) != null && board.GetPieceAt(Start).Owner == this)
                 {
                     Start = End;
                 }

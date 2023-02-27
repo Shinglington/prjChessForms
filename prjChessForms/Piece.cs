@@ -18,11 +18,18 @@ namespace prjChessForms
             Image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
         }
 
+        public bool HasMoved { get; private set; }
+
         public Player Owner { get; }
 
         public Image Image { get; }
 
         public PieceColour Colour { get { return Owner.Colour; } }
+
+        public void SetMoved()
+        {
+            HasMoved = true;
+        }
 
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }
@@ -32,11 +39,36 @@ namespace prjChessForms
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
+            bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
 
+            int direction = yChange > 0 ? 1 : -1;
+            if (direction != (Owner.Colour == PieceColour.White ? 1 : -1))
+            {
+                return false;
+            }
 
-            return false;
+            if (xChange == 0)
+            {
+                if (Math.Abs(yChange) == 1)
+                {
+                    allowed = true;
+                }
+                else if (Math.Abs(yChange) == 2 && !HasMoved)
+                {
+                    allowed = true;
+                }
+            }
+
+            if (Math.Abs(xChange) == 1)
+            {
+                if (board.GetPieceAt(endCoords) != null)
+                {
+                    allowed = true;
+                }
+            }
+            return allowed;
         }
     }
 

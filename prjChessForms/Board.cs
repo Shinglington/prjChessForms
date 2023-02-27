@@ -64,6 +64,7 @@ namespace prjChessForms
             {
                 GetSquareAt(EndCoords).Piece = p;
                 GetSquareAt(StartCoords).Piece = null;
+                p.SetMoved();
             }
         }
 
@@ -123,19 +124,19 @@ namespace prjChessForms
             return (Square) GetControlFromPosition(coords.X, coords.Y);
         }
 
-        public void TriggerSquareClicked(Square square)
+        public void ClearHighlights()
         {
-            OnSquareClickedEvent(square, new EventArgs());
-        }
-
-        private void OnSquareClickedEvent(object sender, EventArgs e)
-        {
-            EventHandler<EventArgs> raiseEvent = RaiseSquareClicked;
-            if (raiseEvent != null && sender is Square)
+            foreach (Square s in GetSquares())
             {
-                raiseEvent(sender, e);
+                s.ResetPanelColour();
             }
         }
+
+        public void HighlightAt(Coords coords, Color highlightColour)
+        {
+            GetSquareAt(coords).BackColor = highlightColour;
+        }
+
         private void SetupBoard()
         {
             // Format
@@ -236,13 +237,13 @@ namespace prjChessForms
     }
     class Square : Button
     {
-        private Color _panelColour;
+        private Color _defaultPanelColour;
         private Piece _piece;
         public Square(Board board, int x, int y)
         {
             Parent = board;
             Coords = new Coords(x, y);
-            _panelColour =  (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
+            _defaultPanelColour =  (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             Piece = null;
             SetupSquare();
         }
@@ -257,28 +258,30 @@ namespace prjChessForms
             {
                 _piece = value;
                 UpdateSquare();
+                if (Piece != null)
+                    Console.WriteLine(Coords.ToString() + " has now got piece " + Piece.ToString());
+                else
+                    Console.WriteLine("Removed piece from " + Coords.ToString());
             }
         }
         public Coords Coords { get; }
+
+        public void ResetPanelColour()
+        {
+            BackColor = _defaultPanelColour;
+        }
         private void SetupSquare()
         {
-            BackColor = _panelColour;
+            BackColor = _defaultPanelColour;
             Dock = DockStyle.Fill;
-            Click += OnPanelClick;
             UpdateSquare();
         }
 
         private void UpdateSquare()
         {
-            BackColor = _panelColour;
             Image = Piece != null ? Piece.Image : null;
         }
 
-        private void OnPanelClick(object sender, EventArgs e)
-        {
-            Board board = (Board)Parent;
-            board.TriggerSquareClicked(this);
-        }
     }
 
 }

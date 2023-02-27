@@ -16,14 +16,18 @@ namespace prjChessForms
             Piece capturedPiece = board.GetPieceAt(end);
             if (movedPiece != null && movedPiece.Colour == player.Colour && !start.Equals(end))
             {
+                Console.WriteLine("passes first checks");
                 if (movedPiece.CanMove(board, start, end))
                 {
+                    Console.WriteLine("Movable");
                     if (capturedPiece == null || (capturedPiece.Colour != player.Colour))
                     {
                         legal = true;
                     }
                 }
             }
+
+
             if (legal)
             {
                 Console.WriteLine(start.ToString() + "->" + end.ToString() + "is legal");
