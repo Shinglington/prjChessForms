@@ -55,72 +55,17 @@ namespace prjChessForms
                 return _colour; 
             }
         }
-        public abstract Task<ChessMove> GetMove(Board board);
     }
 
     class HumanPlayer : Player
     {
-        private TaskCompletionSource<Coords> _squareClickedSource;
         public HumanPlayer(PieceColour colour) : base(colour) { }
-
-        public override async Task<ChessMove> GetMove(Board board) 
-        {
-            bool validMove = false;
-            Coords Start = new Coords();
-            Coords End = new Coords();
-            bool validStart = false;
-            do
-            {
-                while (!validStart)
-                {
-                    Start = await GetCoordsOfClickedSquare(board);
-                    if (board.GetPieceAt(Start) != null && board.GetPieceAt(Start).Owner == this)
-                    {
-                        validStart = true;
-                    }
-                }
-                End = await GetCoordsOfClickedSquare(board);
-                // If second selected square is of own player's piece, swap that to start square
-                if (board.GetPieceAt(End) != null && board.GetPieceAt(Start).Owner == this)
-                {
-                    Start = End;
-                }
-                else if (Rulebook.CheckLegalMove(board, this, Start, End))
-                {
-                    validMove = true;
-                }
-            } while (!validMove);
-
-            return new ChessMove(Start, End);
-        }
-
-        private void ReceiveSquareClickInfo(object sender, EventArgs e)
-        {
-            _squareClickedSource.SetResult(((Square) sender).Coords);
-        }
-
-        private async Task<Coords> GetCoordsOfClickedSquare(Board board)
-        {
-            _squareClickedSource = new TaskCompletionSource<Coords>();
-            board.RaiseSquareClicked += ReceiveSquareClickInfo;
-            Coords coords = await _squareClickedSource.Task;
-            board.RaiseSquareClicked -= ReceiveSquareClickInfo;
-            return coords;
-        }
     }
 
     class ComputerPlayer : Player 
     { 
         public ComputerPlayer(PieceColour colour) : base(colour) { }
 
-        public override async Task<ChessMove> GetMove(Board board) 
-        {
-            Coords Start = new Coords();
-            Coords End = new Coords();
-
-
-            return new ChessMove(Start, End);
-        }
     }
 
 

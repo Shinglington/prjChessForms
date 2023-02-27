@@ -38,5 +38,10 @@ namespace prjChessForms
             }
             return legal;
         }
+
+        public static bool CheckIfGameOver(Board board, Player playerTurn)
+        {
+            return false;
+        }
     }
 }

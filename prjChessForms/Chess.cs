@@ -61,7 +61,8 @@ namespace prjChessForms
                 {
                     _fromCoords = _clickedCoords;
                     _toCoords = new Coords();
-                    UpdateSquareHighlihts();
+                    _board.ClearHighlights();
+                    _board.HighlightAt(_fromCoords, System.Drawing.Color.AliceBlue);
                 }
                 else if (!_fromCoords.Equals(new Coords()))
                 {
@@ -75,7 +76,9 @@ namespace prjChessForms
                     Console.WriteLine(validMove);
                 }
             }
-            return new ChessMove(_fromCoords, _toCoords);
+            ChessMove move = new ChessMove(_fromCoords, _toCoords);
+            _board.ClearHighlights();
+            return move;
         }
 
 
@@ -135,8 +138,6 @@ namespace prjChessForms
                 _semaphoreClick.Release();
             }
         }
-
-        private void 
     }
 
 
