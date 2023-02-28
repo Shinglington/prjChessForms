@@ -47,10 +47,21 @@ namespace prjChessForms
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private Player[] _players;
+        private Square[,] _squares;
         public Board(Player[] players)
         {
             _players = players;
             SetupBoard();
+            Display();
+        }
+
+        public void Display()
+        {
+            foreach(Square s in _squares)
+            {
+                s.Parent = this;
+                SetCellPosition(s, new TableLayoutPanelCellPosition(ColumnCount - 1 - s.Coords.X, RowCount - 1 - s.Coords.Y));
+            }
         }
 
         public void MakeMove(ChessMove Move)
@@ -124,20 +135,12 @@ namespace prjChessForms
 
         public Square[,] GetSquares()
         {
-            Square[,] squares = new Square[ColumnCount, RowCount];
-            for (int col = 0; col < ColumnCount; col++)
-            {
-                for (int row = 0; row < RowCount; row++)
-                {
-                    squares[col, row] = (Square)GetControlFromPosition(col, row);
-                }
-            }
-            return squares;
+            return _squares;
         }
 
         public Square GetSquareAt(Coords coords)
         {
-            return (Square) GetControlFromPosition(coords.X, coords.Y);
+            return _squares[coords.X, coords.Y];
         }
 
         public void ClearHighlights()
@@ -176,16 +179,14 @@ namespace prjChessForms
             }
 
             // Add squares
-            Square s;
+            _squares = new Square[ColumnCount, RowCount];
             for (int y = 0; y < ROW_COUNT; y++)
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    s = new Square(this, x, y);
-                    SetCellPosition(s, new TableLayoutPanelCellPosition(x, y));
+                    _squares[x, y] = new Square(this, x, y);
                 }
             }
-
             // Add pieces
             AddDefaultPieces();
         }

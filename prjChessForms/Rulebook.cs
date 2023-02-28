@@ -111,11 +111,12 @@ namespace prjChessForms
             {
                 return false;
             }
-            else
-            {
 
-            }
+            bool checkmate = false;
 
+
+
+            return checkmate;
 
         }
 

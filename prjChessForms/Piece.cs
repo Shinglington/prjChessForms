@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
 
 namespace prjChessForms
 {
@@ -15,7 +14,7 @@ namespace prjChessForms
         {
             Owner = player;
             string imageName = Colour.ToString() + "_" + this.GetType().Name;
-            Image = (Image) Properties.Resources.ResourceManager.GetObject(imageName);
+            Image = (Image)Properties.Resources.ResourceManager.GetObject(imageName);
         }
 
         public bool HasMoved { get; set; }
@@ -101,7 +100,7 @@ namespace prjChessForms
                 for (int delta = 1; delta < Math.Abs(xChange); delta += 1)
                 {
                     Coords checkCoords = new Coords(startCoords.X + delta * xDirection, startCoords.Y + delta * yDirection);
-                    if (board.GetPieceAt(checkCoords) != null) 
+                    if (board.GetPieceAt(checkCoords) != null)
                     {
                         allowed = false;
                         break;
@@ -188,7 +187,7 @@ namespace prjChessForms
         {
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
-            int yChange = endCoords.Y -  startCoords.Y;
+            int yChange = endCoords.Y - startCoords.Y;
             if (xChange == 0 && yChange != 0)
             {
                 allowed = true;
@@ -221,8 +220,8 @@ namespace prjChessForms
             return allowed;
         }
     }
-    
-    class King : Piece 
+
+    class King : Piece
     {
         public King(Player player) : base(player) { }
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
