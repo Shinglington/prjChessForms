@@ -34,6 +34,11 @@ namespace prjChessForms
             while (!Rulebook.CheckIfGameOver(_board, _currentPlayer))
             {
                 _currentPlayerLabel.Text = _currentPlayer.Colour.ToString();
+                if (Rulebook.IsInCheck(_board, _currentPlayer))
+                {
+                    _currentPlayerLabel.Text += " - Check";
+                }
+
                 ChessMove move = await GetPlayerMove();
                 _board.MakeMove(move);
                 Console.WriteLine(move);
@@ -65,16 +70,15 @@ namespace prjChessForms
                     _toCoords = new Coords();
                     _board.ClearHighlights();
                     _board.HighlightAt(_fromCoords, System.Drawing.Color.AliceBlue);
-                    foreach (Coords end in Rulebook.GetPossibleMoves(_board, _fromCoords))
+                    foreach (ChessMove m in Rulebook.GetPossibleMoves(_board, _board.GetPieceAt(_fromCoords)))
                     {
-                        _board.HighlightAt(end, System.Drawing.Color.Green);
+                        _board.HighlightAt(m.EndCoords, System.Drawing.Color.Green);
                     }
                 }
                 else if (!_fromCoords.Equals(new Coords()))
                 {
                     _toCoords = _clickedCoords;
                 }
-
                 // Check if move is valid now
 
                 if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
@@ -97,7 +101,6 @@ namespace prjChessForms
 
         private void SetupControls()
         {
-
             // Layout
             _layoutPanel = new TableLayoutPanel()
             {
@@ -107,12 +110,11 @@ namespace prjChessForms
             _layoutPanel.ColumnStyles.Clear();
             _layoutPanel.RowStyles.Clear();
 
-            _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
             _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90));
+            _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
 
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
-
 
             // Board
             _board = new Board(_players)
@@ -124,7 +126,6 @@ namespace prjChessForms
             {
                 square.Click += OnSquareClicked;
             }
-
 
             // Current player 
             _currentPlayerLabel = new Label()

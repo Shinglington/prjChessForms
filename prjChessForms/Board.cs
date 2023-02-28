@@ -156,6 +156,23 @@ namespace prjChessForms
             GetSquareAt(coords).BackColor = highlightColour;
         }
 
+        public bool CheckMoveInCheck(Player player, ChessMove move)
+        {
+
+            Coords start = move.StartCoords;
+            Coords end = move.EndCoords;
+            Piece originalEndPiece = GetPieceAt(end);
+
+            MakeMove(move);
+            bool SelfCheck = Rulebook.IsInCheck(this, player);
+            MakeMove(new ChessMove(end, start));
+
+            GetSquareAt(start).Piece.HasMoved = false;
+            GetSquareAt(end).Piece = originalEndPiece;
+
+            return SelfCheck;
+        }
+
         private void SetupBoard()
         {
             // Format

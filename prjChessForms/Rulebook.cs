@@ -37,13 +37,14 @@ namespace prjChessForms
             Piece capturedPiece = board.GetPieceAt(end);
             if (movedPiece != null && movedPiece.Colour == player.Colour && !start.Equals(end))
             {
-                Console.WriteLine("passes first checks");
                 if (movedPiece.CanMove(board, start, end))
                 {
-                    Console.WriteLine("Movable");
                     if (capturedPiece == null || (capturedPiece.Colour != player.Colour))
                     {
-                        legal = true;
+                        if (!board.CheckMoveInCheck(player, move))
+                        {
+                            legal = true;
+                        }
                     }
                 }
             }
@@ -60,21 +61,22 @@ namespace prjChessForms
             Console.WriteLine();
             return legal;
         }
-        public static List<Coords> GetPossibleMoves(Board board, Coords pieceCoords)
+        public static List<ChessMove> GetPossibleMoves(Board board, Piece p)
         {
-            List<Coords> possibleMoves = new List<Coords>();
+            List<ChessMove> possibleMoves = new List<ChessMove>();
+            Coords pieceCoords = board.GetCoordsOfPiece(p);
             if (board.GetPieceAt(pieceCoords) != null)
             {
                 Piece piece = board.GetPieceAt(pieceCoords);
-                Coords checkingCoords;
+                ChessMove move;
                 for (int y = 0; y < board.RowCount; y++)
                 {
                     for (int x = 0; x < board.ColumnCount; x++)
                     {
-                        checkingCoords = new Coords(x, y);
-                        if (CheckLegalMove(board, piece.Owner, new ChessMove(pieceCoords, checkingCoords)))
+                        move = new ChessMove(pieceCoords, new Coords(x, y));
+                        if (CheckLegalMove(board, piece.Owner, move))
                         {
-                            possibleMoves.Add(checkingCoords);
+                            possibleMoves.Add(move);
                         }
                     }
                 }
@@ -84,10 +86,10 @@ namespace prjChessForms
 
         public static bool CheckIfGameOver(Board board, Player currentPlayer)
         {
-            return false;
+            return IsInStalemate(board, currentPlayer) || IsInCheckmate(board, currentPlayer);
         }
 
-        public static bool IsCheck(Board board, Player currentPlayer)
+        public static bool IsInCheck(Board board, Player currentPlayer)
         {
             bool check = false;
             Coords kingCoords = board.GetCoordsOfPiece(board.GetKing(currentPlayer.Colour));
@@ -105,20 +107,36 @@ namespace prjChessForms
             return check;
         }
 
-        private static bool IsCheckmate(Board board, Player currentPlayer)
+        private static bool IsInCheckmate(Board board, Player currentPlayer)
         {
-            if (!IsCheck(board, currentPlayer))
+            if (!IsInCheck(board, currentPlayer))
             {
                 return false;
             }
-
-            bool checkmate = false;
-
-
-
-            return checkmate;
-
+            return !CheckIfThereAreRemainingLegalMoves(board, currentPlayer);
         }
 
+        private static bool IsInStalemate(Board board, Player currentPlayer)
+        {
+            if (IsInCheck(board, currentPlayer))
+            {
+                return false;
+            }
+            return !CheckIfThereAreRemainingLegalMoves(board, currentPlayer);
+        }
+        private static bool CheckIfThereAreRemainingLegalMoves(Board board, Player currentPlayer)
+        {
+            bool anyLegalMoves = false;
+            foreach (Piece p in board.GetPieces(currentPlayer.Colour))
+            {
+                List<ChessMove> moves = GetPossibleMoves(board, p);
+                if (moves.Count > 0) 
+                {
+                    anyLegalMoves = true;
+                    break; 
+                }
+            }
+            return anyLegalMoves;
+        }
     }
 }
