@@ -52,6 +52,8 @@ namespace prjChessForms
                     _currentPlayer = _players[1];
                 }
             }
+
+            MessageBox.Show("Game over");
         }
 
         private async Task<ChessMove> GetPlayerMove()
