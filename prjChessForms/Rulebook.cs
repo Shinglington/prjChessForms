@@ -3,6 +3,14 @@ using System.Collections.Generic;
 
 namespace prjChessForms
 {
+    public enum GameResult 
+    { 
+        Unfinished,
+        Checkmate,
+        Stalemate,
+        Time
+    }
+
     public struct ChessMove
     {
         public ChessMove(Coords startCoords, Coords endCoords)
@@ -20,13 +28,6 @@ namespace prjChessForms
     }
     class Rulebook
     {
-        public enum GameResult
-        {
-            Checkmate,
-            Stalemate,
-            Time
-        }
-
         public static void MakeMove(Board board, Player player, ChessMove move)
         {
             if (!CheckLegalMove(board, player, move))
@@ -118,15 +119,33 @@ namespace prjChessForms
             return possibleMoves;
         }
 
-        public static bool CheckIfGameOver(Board board, Player currentPlayer)
+
+        public static GameResult GetGameResult(Board board, Player currentPlayer)
         {
-            return IsInStalemate(board, currentPlayer) || IsInCheckmate(board, currentPlayer);
+            if (IsInStalemate(board, currentPlayer))
+            {
+                return GameResult.Stalemate;
+            }
+            else if (IsInCheckmate(board, currentPlayer))
+            {
+                return GameResult.Checkmate;
+            }
+            else
+            {
+                return GameResult.Unfinished;
+            }
+
         }
 
         public static bool IsInCheck(Board board, Player currentPlayer)
         {
             bool check = false;
-            Coords kingCoords = board.GetCoordsOfPiece(board.GetKing(currentPlayer.Colour));
+            King king = board.GetKing(currentPlayer.Colour);
+            if (king == null)
+            {
+                return true;
+            }
+            Coords kingCoords = board.GetCoordsOfPiece(king);
             foreach (Square square in board.GetSquares())
             {
                 if (square.Piece != null && square.Piece.Owner != currentPlayer)

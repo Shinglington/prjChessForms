@@ -16,7 +16,7 @@ namespace prjChessForms
         private Coords _fromCoords = new Coords();
         private Coords _toCoords = new Coords();
 
-
+        private GameResult _result;
         private Player[] _players;
         private Player _currentPlayer;
         private int _currentTurn;
@@ -31,7 +31,8 @@ namespace prjChessForms
         {
             _currentPlayer = _players[0];
             _currentTurn = 1;
-            while (!Rulebook.CheckIfGameOver(_board, _currentPlayer))
+            _result = GameResult.Unfinished;
+            while (_result == GameResult.Unfinished)
             {
                 _currentPlayerLabel.Text = _currentPlayer.Colour.ToString();
                 if (Rulebook.IsInCheck(_board, _currentPlayer))
@@ -51,9 +52,10 @@ namespace prjChessForms
                 {
                     _currentPlayer = _players[1];
                 }
-            }
 
-            MessageBox.Show("Game over");
+                _result = Rulebook.GetGameResult(_board, _currentPlayer);
+            }
+            OnGameOver();
         }
 
         private async Task<ChessMove> GetPlayerMove()
@@ -145,6 +147,22 @@ namespace prjChessForms
                 Console.WriteLine(_clickedCoords);
                 _semaphoreClick.Release();
             }
+        }
+
+        private void OnGameOver()
+        {
+            foreach(Square s in _board.GetSquares())
+            {
+                s.Click -= OnSquareClicked;
+            }
+
+            Player winner = null;
+            if (_result ==  GameResult.Checkmate)
+            {
+                winner = _currentPlayer == _players[0] ? _players[1] : _players[0];
+            }
+
+            MessageBox.Show(_result.ToString() + " ," + (winner != null ? winner.Colour.ToString() : "Nobody") + " Wins");
         }
     }
 
