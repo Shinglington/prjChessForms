@@ -55,6 +55,10 @@ namespace prjChessForms
                 board.MakeMove(new ChessMove(rookCoords, new Coords(move.EndCoords.X + direction * -1, move.EndCoords.Y)));
             }
             board.MakeMove(move);
+            Promotions(board, move.EndCoords);
+
+
+
         }
 
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)
@@ -240,5 +244,19 @@ namespace prjChessForms
             }
             return false;
         }
+
+
+        private static void Promotions(Board board, Coords endCoords)
+        {
+            Piece p = board.GetPieceAt(endCoords);
+            if (p.GetType() == typeof(Pawn)) 
+            {
+                if (endCoords.Y == 0 || endCoords.Y == board.RowCount - 1)
+                {
+                    board.GetSquareAt(endCoords).Piece = new Queen(p.Owner);
+                }
+            }
+        }
+
     }
 }
