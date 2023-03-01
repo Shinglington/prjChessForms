@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -12,6 +13,7 @@ namespace prjChessForms
         private Label _currentPlayerLabel;
 
         private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
+        private CancellationTokenSource cts = new CancellationTokenSource();
         private Coords _clickedCoords;
         private Coords _fromCoords = new Coords();
         private Coords _toCoords = new Coords();
@@ -19,15 +21,16 @@ namespace prjChessForms
         private GameResult _result;
         private Player[] _players;
         private Player _currentPlayer;
-        private int _currentTurn;
         public Chess()
         {
             InitializeComponent();
             CreatePlayers();
             SetupControls();
-            Play();
+
+            Play(cts.Token).Wait();
+            OnGameOver();
         }
-        public async void Play()
+        public async Task Play(CancellationToken cToken)
         {
             _currentPlayer = _players[0];
             _currentTurn = 1;
@@ -39,27 +42,31 @@ namespace prjChessForms
                 {
                     _currentPlayerLabel.Text += " - Check";
                 }
-
-                ChessMove move = await GetPlayerMove();
-                Console.WriteLine("Hi");
-                Rulebook.MakeMove(_board, _currentPlayer, move);
-                Console.WriteLine(move);
-                if (_currentPlayer == _players[1])
+                try
                 {
-                    _currentTurn += 1;
-                    _currentPlayer = _players[0];
+                    _currentPlayer.StartTimer();
+                    ChessMove move = await GetPlayerMove(cToken);
+                    _currentPlayer.StopTimer();
+                    Rulebook.MakeMove(_board, _currentPlayer, move);
+                    if (_currentPlayer == _players[1])
+                    {
+                        _currentTurn += 1;
+                        _currentPlayer = _players[0];
+                    }
+                    else
+                    {
+                        _currentPlayer = _players[1];
+                    }
+                    _result = Rulebook.GetGameResult(_board, _currentPlayer);
                 }
-                else
+                catch when (cToken.IsCancellationRequested)
                 {
-                    _currentPlayer = _players[1];
+                    _result = GameResult.Time;
                 }
-
-                _result = Rulebook.GetGameResult(_board, _currentPlayer);
             }
-            OnGameOver();
         }
 
-        private async Task<ChessMove> GetPlayerMove()
+        private async Task<ChessMove> GetPlayerMove(CancellationToken cToken)
         {
 
             _fromCoords = new Coords();
@@ -68,7 +75,7 @@ namespace prjChessForms
             bool validMove = false;
             while (!validMove)
             {
-                await _semaphoreClick.WaitAsync();
+                await _semaphoreClick.WaitAsync(cToken);
                 if (_board.GetPieceAt(_clickedCoords) != null && _board.GetPieceAt(_clickedCoords).Owner == _currentPlayer)
                 {
                     _fromCoords = _clickedCoords;
@@ -100,8 +107,11 @@ namespace prjChessForms
         private void CreatePlayers()
         {
             _players = new Player[2];
-            _players[0] = new HumanPlayer(PieceColour.White);
-            _players[1] = new HumanPlayer(PieceColour.Black);
+            _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
+            _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
+
+            _players[0].TimeExpired += OnPlayerTimeExpired;
+            _players[1].TimeExpired += OnPlayerTimeExpired;
         }
 
         private void SetupControls()
@@ -150,19 +160,24 @@ namespace prjChessForms
             }
         }
 
+        private void OnPlayerTimeExpired(object sender, ElapsedEventArgs e)
+        {
+            cts.Cancel();
+        } 
+
+
         private void OnGameOver()
         {
+            cts.Cancel();
             foreach(Square s in _board.GetSquares())
             {
                 s.Click -= OnSquareClicked;
             }
-
             Player winner = null;
-            if (_result ==  GameResult.Checkmate)
+            if (_result ==  GameResult.Checkmate || _result == GameResult.Time)
             {
                 winner = _currentPlayer == _players[0] ? _players[1] : _players[0];
             }
-
             MessageBox.Show(_result.ToString() + " ," + (winner != null ? winner.Colour.ToString() : "Nobody") + " Wins");
         }
     }
