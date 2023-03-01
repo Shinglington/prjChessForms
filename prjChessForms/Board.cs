@@ -172,13 +172,14 @@ namespace prjChessForms
 
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
+            bool startPieceHasMoved = GetPieceAt(start).HasMoved;
             Piece originalEndPiece = GetPieceAt(end);
 
             MakeMove(move);
             bool SelfCheck = Rulebook.IsInCheck(this, player);
             MakeMove(new ChessMove(end, start));
 
-            GetSquareAt(start).Piece.HasMoved = false;
+            GetSquareAt(start).Piece.HasMoved = startPieceHasMoved;
             GetSquareAt(end).Piece = originalEndPiece;
 
             return SelfCheck;
