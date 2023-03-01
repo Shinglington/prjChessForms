@@ -41,6 +41,7 @@ namespace prjChessForms
                 }
 
                 ChessMove move = await GetPlayerMove();
+                Console.WriteLine("Hi");
                 Rulebook.MakeMove(_board, _currentPlayer, move);
                 Console.WriteLine(move);
                 if (_currentPlayer == _players[1])

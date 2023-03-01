@@ -82,17 +82,6 @@ namespace prjChessForms
                     }
                 }
             }
-            Console.Write(move.ToString() + " is ");
-
-            if (legal)
-            {
-                Console.Write("legal");
-            }
-            else
-            {
-                Console.Write("illegal");
-            }
-            Console.WriteLine();
             return legal;
         }
 
