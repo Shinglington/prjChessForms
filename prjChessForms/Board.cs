@@ -286,6 +286,10 @@ namespace prjChessForms
         {
             get
             {
+                if (Piece != null && Piece.GetType() == typeof(GhostPawn))
+                {
+                    return null;
+                }
                 return _piece;
             }
             set

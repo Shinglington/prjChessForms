@@ -27,6 +27,19 @@ namespace prjChessForms
             Time
         }
 
+        public static void MakeMove(Board board, Player player, ChessMove move)
+        {
+            if (!CheckLegalMove(board, player, move))
+            {
+                throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
+            }
+
+            board.MakeMove(move);
+
+
+
+        }
+
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)
         {
             Coords start = move.StartCoords;

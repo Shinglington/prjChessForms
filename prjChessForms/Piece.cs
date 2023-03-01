@@ -67,6 +67,20 @@ namespace prjChessForms
         }
     }
 
+    class GhostPawn : Piece
+    {
+        private Pawn _referencedPawn;
+        public GhostPawn(Player player, Pawn referencedPawn) : base(player)
+        {
+            _referencedPawn = referencedPawn;
+        }
+
+        public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
+        {
+            return false;
+        }
+    }
+
     class Knight : Piece
     {
         public Knight(Player player) : base(player) { }

@@ -40,7 +40,7 @@ namespace prjChessForms
                 }
 
                 ChessMove move = await GetPlayerMove();
-                _board.MakeMove(move);
+                Rulebook.MakeMove(_board, _currentPlayer, move);
                 Console.WriteLine(move);
                 if (_currentPlayer == _players[1])
                 {
@@ -135,7 +135,6 @@ namespace prjChessForms
                 Parent = _layoutPanel
             };
             _layoutPanel.SetCellPosition(_currentPlayerLabel, new TableLayoutPanelCellPosition(0, 0));
-
         }
 
         private void OnSquareClicked(object sender, EventArgs e)
