@@ -41,9 +41,7 @@ namespace prjChessForms
                 board.GetSquareAt(linkedPawnCoords).Piece = null;
             }
             // Remove ghost pawns
-
-
-
+            board.RemoveGhostPawns();
             if (IsDoublePawnMove(board, move))
             {
                 Coords ghostPawnCoords = new Coords(move.StartCoords.X, move.StartCoords.Y + (move.EndCoords.Y - move.StartCoords.Y) / 2);
@@ -51,7 +49,9 @@ namespace prjChessForms
             }
             else if (IsCastle(board, move))
             {
-
+                int direction = move.EndCoords.X - move.StartCoords.X > 0 ? 1 : -1;
+                Coords rookCoords = direction > 0 ? new Coords(board.ColumnCount - 1, move.StartCoords.Y) : new Coords(0, move.StartCoords.Y);
+                board.MakeMove(new ChessMove(rookCoords, new Coords(move.EndCoords.X + direction * -1, move.EndCoords.Y)));
             }
             board.MakeMove(move);
         }
@@ -188,15 +188,31 @@ namespace prjChessForms
 
         private static bool IsCastle(Board board, ChessMove move)
         {
-            if (board.GetPieceAt(move.StartCoords).GetType() == typeof(King))
+            bool isCastleMove = false;
+            if (board.GetPieceAt(move.StartCoords).GetType() == typeof(King) && !board.GetPieceAt(move.StartCoords).HasMoved)
             {
-                if (Math.Abs(move.EndCoords.Y - move.StartCoords.Y) == 0 && Math.Abs(move.EndCoords.X - move.EndCoords.Y) == 2)
+                if (Math.Abs(move.EndCoords.Y - move.StartCoords.Y) == 0 && Math.Abs(move.EndCoords.X - move.StartCoords.X) == 2)
                 {
-                    return true;
+                    int direction = move.EndCoords.X - move.StartCoords.X > 0 ? 1 : -1;
+                    Coords rookCoords = direction > 0 ? new Coords(board.ColumnCount - 1, move.StartCoords.Y) : new Coords(0, move.StartCoords.Y);
+                    Piece p = board.GetPieceAt(rookCoords);
+                    if (p != null && p.GetType() == typeof(Rook) && !p.HasMoved)
+                    {
+                        isCastleMove = true;
+                        Coords currCoords = new Coords(move.StartCoords.X + direction, move.StartCoords.Y);
+                        while (!currCoords.Equals(rookCoords))
+                        {
+                            if (board.GetPieceAt(currCoords) != null)
+                            {
+                                isCastleMove = false;
+                                break;
+                            }
+                            currCoords = new Coords(currCoords.X + direction, currCoords.Y);
+                        }
+                    }
                 }
             }
-
-            return false;
+            return isCastleMove;
         }
 
         private static bool IsEnPassant(Board board, ChessMove move)

@@ -60,7 +60,7 @@ namespace prjChessForms
             foreach(Square s in _squares)
             {
                 s.Parent = this;
-                SetCellPosition(s, new TableLayoutPanelCellPosition(ColumnCount - 1 - s.Coords.X, RowCount - 1 - s.Coords.Y));
+                SetCellPosition(s, new TableLayoutPanelCellPosition(s.Coords.X, RowCount - 1 - s.Coords.Y));
             }
         }
 
@@ -297,7 +297,7 @@ namespace prjChessForms
         {
             get
             {
-                if (Piece != null && Piece.GetType() == typeof(GhostPawn))
+                if (_piece != null && _piece.GetType() == typeof(GhostPawn))
                 {
                     return null;
                 }
