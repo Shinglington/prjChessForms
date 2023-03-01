@@ -34,8 +34,19 @@ namespace prjChessForms
                 throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
             }
 
-            board.MakeMove(move);
+            if (IsDoublePawnMove(board, move))
+            {
 
+            }
+            else if (IsEnPassant(board, move))
+            {
+
+            }
+            else if (IsCastle(board, move))
+            {
+
+            }
+            board.MakeMove(move);
 
 
         }
@@ -50,7 +61,11 @@ namespace prjChessForms
             Piece capturedPiece = board.GetPieceAt(end);
             if (movedPiece != null && movedPiece.Colour == player.Colour && !start.Equals(end))
             {
-                if (movedPiece.CanMove(board, start, end))
+                if (IsEnPassant(board, move) || IsCastle(board, move))
+                {
+                    legal = true;
+                }
+                else if (movedPiece.CanMove(board, start, end))
                 {
                     if (capturedPiece == null || (capturedPiece.Colour != player.Colour))
                     {
@@ -74,6 +89,7 @@ namespace prjChessForms
             Console.WriteLine();
             return legal;
         }
+
         public static List<ChessMove> GetPossibleMoves(Board board, Piece p)
         {
             List<ChessMove> possibleMoves = new List<ChessMove>();
@@ -150,6 +166,50 @@ namespace prjChessForms
                 }
             }
             return anyLegalMoves;
+        }
+
+        private static bool IsDoublePawnMove(Board board, ChessMove move)
+        {
+            if (board.GetPieceAt(move.StartCoords).GetType() == typeof(Pawn))
+            {
+                if (Math.Abs(move.EndCoords.Y - move.StartCoords.Y) == 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsCastle(Board board, ChessMove move)
+        {
+            if (board.GetPieceAt(move.StartCoords).GetType() == typeof(King))
+            {
+                if (Math.Abs(move.EndCoords.Y - move.StartCoords.Y) == 0 && Math.Abs(move.EndCoords.X - move.EndCoords.Y) == 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsEnPassant(Board board, ChessMove move)
+        {
+            if (board.GetPieceAt(move.StartCoords).GetType() == typeof(Pawn))
+            {
+                Pawn piece = (Pawn)board.GetPieceAt(move.StartCoords);
+                int legalDirection = (piece.Colour == PieceColour.White ? 1 : -1);
+                if (Math.Abs(move.EndCoords.X - move.StartCoords.X) == 1 && move.EndCoords.Y - move.StartCoords.Y == legalDirection)
+                {
+                    GhostPawn ghostPawn = board.GetSquareAt(move.EndCoords).GetGhostPawn();
+                    if (ghostPawn != null && ghostPawn.Colour != piece.Colour)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

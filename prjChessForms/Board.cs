@@ -304,6 +304,11 @@ namespace prjChessForms
         {
             BackColor = _defaultPanelColour;
         }
+
+        public GhostPawn GetGhostPawn()
+        {
+            return (_piece != null && _piece.GetType() == typeof(GhostPawn)) ? (GhostPawn) _piece : null;
+        }
         private void SetupSquare()
         {
             BackColor = _defaultPanelColour;
