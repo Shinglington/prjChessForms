@@ -10,7 +10,8 @@ namespace prjChessForms
     {
         private Board _board;
         private TableLayoutPanel _layoutPanel;
-        private Label _currentPlayerLabel;
+        private Label[] _timerLabels;
+        private System.Timers.Timer _timer;
 
         private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -26,31 +27,33 @@ namespace prjChessForms
             InitializeComponent();
             CreatePlayers();
             SetupControls();
+            StartGame();
 
-            Play(cts.Token).Wait();
+        }
+
+        public async Task StartGame()
+        {
+            await Play(cts.Token);
             OnGameOver();
         }
+        
+
         public async Task Play(CancellationToken cToken)
         {
             _currentPlayer = _players[0];
-            _currentTurn = 1;
             _result = GameResult.Unfinished;
             while (_result == GameResult.Unfinished)
             {
-                _currentPlayerLabel.Text = _currentPlayer.Colour.ToString();
-                if (Rulebook.IsInCheck(_board, _currentPlayer))
-                {
-                    _currentPlayerLabel.Text += " - Check";
-                }
                 try
                 {
-                    _currentPlayer.StartTimer();
+                    _timer.Elapsed += OnPlayerTimerTick;
+                    _timer.Start();
                     ChessMove move = await GetPlayerMove(cToken);
-                    _currentPlayer.StopTimer();
+                    _timer.Stop();
+                    _timer.Elapsed -= OnPlayerTimerTick;
                     Rulebook.MakeMove(_board, _currentPlayer, move);
                     if (_currentPlayer == _players[1])
                     {
-                        _currentTurn += 1;
                         _currentPlayer = _players[0];
                     }
                     else
@@ -109,13 +112,15 @@ namespace prjChessForms
             _players = new Player[2];
             _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
             _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
-
-            _players[0].TimeExpired += OnPlayerTimeExpired;
-            _players[1].TimeExpired += OnPlayerTimeExpired;
         }
 
         private void SetupControls()
         {
+
+            // Timer
+            _timer = new System.Timers.Timer(1000);
+            _timerLabels = new Label[2];
+
             // Layout
             _layoutPanel = new TableLayoutPanel()
             {
@@ -128,8 +133,9 @@ namespace prjChessForms
             _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90));
             _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
 
-            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
+            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
 
             // Board
             _board = new Board(_players)
@@ -142,12 +148,58 @@ namespace prjChessForms
                 square.Click += OnSquareClicked;
             }
 
-            // Current player 
-            _currentPlayerLabel = new Label()
+            // White player label
+            TableLayoutPanel whiteTable = new TableLayoutPanel() 
             {
-                Parent = _layoutPanel
+                Parent = _layoutPanel,
+                Dock = DockStyle.Fill,
+                ColumnStyles = {new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50)},
+                RowStyles = {new RowStyle(SizeType.Percent, 100)},
             };
-            _layoutPanel.SetCellPosition(_currentPlayerLabel, new TableLayoutPanelCellPosition(0, 0));
+            _layoutPanel.SetCellPosition(whiteTable, new TableLayoutPanelCellPosition(0, 2));
+            Label whiteLabel = new Label()
+            {
+                Parent = whiteTable,
+                Dock = DockStyle.Fill,
+                Text = _players[0].Colour.ToString(),
+            };
+            whiteTable.SetCellPosition(whiteLabel, new TableLayoutPanelCellPosition(0, 0));
+            _timerLabels[0] = new Label()
+            {
+                Parent = whiteTable,
+                Dock = DockStyle.Fill,
+                Text = _players[0].RemainingTime.ToString(),
+            };
+            whiteTable.SetCellPosition(_timerLabels[0], new TableLayoutPanelCellPosition(1, 0));
+
+
+
+
+
+            // Black player label
+            TableLayoutPanel blackTable = new TableLayoutPanel()
+            {
+                Parent = _layoutPanel,
+                Dock = DockStyle.Fill,
+                ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
+                RowStyles = { new RowStyle(SizeType.Percent, 100) },
+            };
+            _layoutPanel.SetCellPosition(blackTable, new TableLayoutPanelCellPosition(0, 0));
+            Label blackLabel = new Label()
+            {
+                Parent = blackTable,
+                Dock = DockStyle.Fill,
+                Text = _players[1].Colour.ToString(),
+            };
+            blackTable.SetCellPosition(blackLabel, new TableLayoutPanelCellPosition(0, 0));
+
+            _timerLabels[1] = new Label()
+            {
+                Parent = blackTable,
+                Dock = DockStyle.Fill,
+                Text = _players[1].RemainingTime.ToString(),
+            };
+            whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
 
         private void OnSquareClicked(object sender, EventArgs e)
@@ -160,9 +212,20 @@ namespace prjChessForms
             }
         }
 
-        private void OnPlayerTimeExpired(object sender, ElapsedEventArgs e)
+        private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
-            cts.Cancel();
+            _currentPlayer.TickTime(new TimeSpan(0, 0, 1));
+            Label timeLabel = _currentPlayer == _players[0] ? _timerLabels[0] : _timerLabels[1];
+            timeLabel.Invoke((MethodInvoker)delegate
+            {
+                timeLabel.Text = _currentPlayer.RemainingTime.ToString();
+            });
+
+            if (TimeSpan.Compare(_currentPlayer.RemainingTime, new TimeSpan(0, 0, 0)) < 1)
+            {
+                _timer.Elapsed -= OnPlayerTimerTick;
+                cts.Cancel();
+            }
         } 
 
 
