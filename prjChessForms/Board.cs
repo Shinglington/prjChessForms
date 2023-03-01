@@ -156,6 +156,17 @@ namespace prjChessForms
             GetSquareAt(coords).BackColor = highlightColour;
         }
 
+        public void RemoveGhostPawns()
+        {
+            foreach (Square s in GetSquares())
+            {
+                if (s.GetGhostPawn() != null)
+                {
+                    s.Piece = null;
+                }
+            }
+        }
+
         public bool CheckMoveInCheck(Player player, ChessMove move)
         {
 

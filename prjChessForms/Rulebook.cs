@@ -34,21 +34,26 @@ namespace prjChessForms
                 throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
             }
 
+            if (IsEnPassant(board, move))
+            {
+                GhostPawn ghostPawn = board.GetSquareAt(move.EndCoords).GetGhostPawn();
+                Coords linkedPawnCoords = board.GetCoordsOfPiece(ghostPawn.LinkedPawn);
+                board.GetSquareAt(linkedPawnCoords).Piece = null;
+            }
+            // Remove ghost pawns
+
+
+
             if (IsDoublePawnMove(board, move))
             {
-
-            }
-            else if (IsEnPassant(board, move))
-            {
-
+                Coords ghostPawnCoords = new Coords(move.StartCoords.X, move.StartCoords.Y + (move.EndCoords.Y - move.StartCoords.Y) / 2);
+                board.GetSquareAt(ghostPawnCoords).Piece = new GhostPawn(player, (Pawn)board.GetPieceAt(move.StartCoords));
             }
             else if (IsCastle(board, move))
             {
 
             }
             board.MakeMove(move);
-
-
         }
 
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)

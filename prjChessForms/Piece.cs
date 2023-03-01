@@ -14,7 +14,14 @@ namespace prjChessForms
         {
             Owner = player;
             string imageName = Colour.ToString() + "_" + this.GetType().Name;
-            Image = (Image)Properties.Resources.ResourceManager.GetObject(imageName);
+            try
+            {
+                Image = (Image)Properties.Resources.ResourceManager.GetObject(imageName);
+            }
+            catch
+            {
+                Image = null;
+            }
         }
 
         public bool HasMoved { get; set; }
@@ -69,11 +76,11 @@ namespace prjChessForms
 
     class GhostPawn : Piece
     {
-        private Pawn _referencedPawn;
         public GhostPawn(Player player, Pawn referencedPawn) : base(player)
         {
-            _referencedPawn = referencedPawn;
+            LinkedPawn = referencedPawn;
         }
+        public Pawn LinkedPawn { get; }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
