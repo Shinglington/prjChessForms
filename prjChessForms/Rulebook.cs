@@ -214,7 +214,7 @@ namespace prjChessForms
                         Coords currCoords = new Coords(move.StartCoords.X + direction, move.StartCoords.Y);
                         while (!currCoords.Equals(rookCoords))
                         {
-                            if (board.GetPieceAt(currCoords) != null)
+                            if (board.GetPieceAt(currCoords) != null || board.CheckMoveInCheck(p.Owner, new ChessMove(move.StartCoords, currCoords)))
                             {
                                 isCastleMove = false;
                                 break;

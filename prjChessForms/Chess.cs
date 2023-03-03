@@ -244,7 +244,4 @@ namespace prjChessForms
             MessageBox.Show(_result.ToString() + " ," + (winner != null ? winner.Colour.ToString() : "Nobody") + " Wins");
         }
     }
-
-
-
 }
