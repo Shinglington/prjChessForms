@@ -36,7 +36,7 @@ namespace prjChessForms
             await Play(cts.Token);
             OnGameOver();
         }
-        
+
 
         public async Task Play(CancellationToken cToken)
         {
@@ -149,12 +149,12 @@ namespace prjChessForms
             }
 
             // White player label
-            TableLayoutPanel whiteTable = new TableLayoutPanel() 
+            TableLayoutPanel whiteTable = new TableLayoutPanel()
             {
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
-                ColumnStyles = {new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50)},
-                RowStyles = {new RowStyle(SizeType.Percent, 100)},
+                ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
+                RowStyles = { new RowStyle(SizeType.Percent, 100) },
             };
             _layoutPanel.SetCellPosition(whiteTable, new TableLayoutPanelCellPosition(0, 2));
             Label whiteLabel = new Label()
@@ -226,18 +226,18 @@ namespace prjChessForms
                 _timer.Elapsed -= OnPlayerTimerTick;
                 cts.Cancel();
             }
-        } 
+        }
 
 
         private void OnGameOver()
         {
             cts.Cancel();
-            foreach(Square s in _board.GetSquares())
+            foreach (Square s in _board.GetSquares())
             {
                 s.Click -= OnSquareClicked;
             }
             Player winner = null;
-            if (_result ==  GameResult.Checkmate || _result == GameResult.Time)
+            if (_result == GameResult.Checkmate || _result == GameResult.Time)
             {
                 winner = _currentPlayer == _players[0] ? _players[1] : _players[0];
             }

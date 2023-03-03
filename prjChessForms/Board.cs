@@ -57,7 +57,7 @@ namespace prjChessForms
 
         public void Display()
         {
-            foreach(Square s in _squares)
+            foreach (Square s in _squares)
             {
                 s.Parent = this;
                 SetCellPosition(s, new TableLayoutPanelCellPosition(s.Coords.X, RowCount - 1 - s.Coords.Y));
@@ -122,7 +122,7 @@ namespace prjChessForms
                 throw new ArgumentNullException();
             }
 
-            foreach(Square s in GetSquares())
+            foreach (Square s in GetSquares())
             {
                 if (s.Piece == piece)
                 {
@@ -289,7 +289,7 @@ namespace prjChessForms
         {
             Parent = board;
             Coords = new Coords(x, y);
-            _defaultPanelColour =  (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
+            _defaultPanelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             Piece = null;
             SetupSquare();
         }
@@ -319,7 +319,7 @@ namespace prjChessForms
 
         public GhostPawn GetGhostPawn()
         {
-            return (_piece != null && _piece.GetType() == typeof(GhostPawn)) ? (GhostPawn) _piece : null;
+            return (_piece != null && _piece.GetType() == typeof(GhostPawn)) ? (GhostPawn)_piece : null;
         }
         private void SetupSquare()
         {
