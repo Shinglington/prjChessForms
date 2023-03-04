@@ -16,10 +16,7 @@ namespace prjChessForms
         public int X { get; }
         public int Y { get; }
 
-        public override string ToString()
-        {
-            return Convert.ToString(Convert.ToChar(Convert.ToInt32('a') + X)) + Convert.ToString(Y + 1);
-        }
+        public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
 
         public override bool Equals(object obj)
         {
