@@ -11,8 +11,12 @@ namespace prjChessForms.PresentationUI
     public partial class ChessForm : Form
     {
         private Chess _game;
+
+
+        private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
 
+        private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
         private Coords _clickedCoords;
         private Coords _fromCoords = new Coords();
         private Coords _toCoords = new Coords();
@@ -20,49 +24,10 @@ namespace prjChessForms.PresentationUI
         public ChessForm()
         {
             InitializeComponent();
-
-            CreateGame();
-
+            _game = new Chess();
+            SetupControls();
+            _game.StartGame();
         }
-
-        public async Task StartGame()
-        {
-            await _game.Play();
-            OnGameOver();
-        }
-
-
-        public async Task Play(CancellationToken cToken)
-        {
-            _currentPlayer = _players[0];
-            _result = GameResult.Unfinished;
-            while (_result == GameResult.Unfinished)
-            {
-                try
-                {
-                    _timer.Elapsed += OnPlayerTimerTick;
-                    _timer.Start();
-                    ChessMove move = await GetPlayerMove(cToken);
-                    _timer.Stop();
-                    _timer.Elapsed -= OnPlayerTimerTick;
-                    Rulebook.MakeMove(_board, _currentPlayer, move);
-                    if (_currentPlayer == _players[1])
-                    {
-                        _currentPlayer = _players[0];
-                    }
-                    else
-                    {
-                        _currentPlayer = _players[1];
-                    }
-                    _result = Rulebook.GetGameResult(_board, _currentPlayer);
-                }
-                catch when (cToken.IsCancellationRequested)
-                {
-                    _result = GameResult.Time;
-                }
-            }
-        }
-
         private async Task<ChessMove> GetPlayerMove(CancellationToken cToken)
         {
 
@@ -104,15 +69,16 @@ namespace prjChessForms.PresentationUI
         {
             _game = new Chess();
         }
-        private void CreatePlayers()
-        {
-            _players = new Player[2];
-            _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
-            _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
-        }
-
         private void SetupControls()
         {
+
+            _boardPanel = new BoardTableLayoutPanel(_game.BoardSquares) 
+            { 
+                Parent = this,
+                Dock = DockStyle.Fill,
+            };
+
+
 
             // Timer
             _timer = new System.Timers.Timer(1000);
@@ -209,36 +175,9 @@ namespace prjChessForms.PresentationUI
             }
         }
 
-        private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
+        private void OnGameOver(object sender, GameOverEventArgs e)
         {
-            _currentPlayer.TickTime(new TimeSpan(0, 0, 1));
-            Label timeLabel = _currentPlayer == _players[0] ? _timerLabels[0] : _timerLabels[1];
-            timeLabel.Invoke((MethodInvoker)delegate
-            {
-                timeLabel.Text = _currentPlayer.RemainingTime.ToString();
-            });
-
-            if (_currentPlayer.RemainingTime > TimeSpan.Zero)
-            {
-                _timer.Elapsed -= OnPlayerTimerTick;
-                cts.Cancel();
-            }
-        }
-
-
-        private void OnGameOver()
-        {
-            cts.Cancel();
-            foreach (Square s in _board.GetSquares())
-            {
-                s.Click -= OnSquareClicked;
-            }
-            Player winner = null;
-            if (_result == GameResult.Checkmate || _result == GameResult.Time)
-            {
-                winner = _currentPlayer == _players[0] ? _players[1] : _players[0];
-            }
-            MessageBox.Show(_result.ToString() + " ," + (winner != null ? winner.Colour.ToString() : "Nobody") + " Wins");
+            MessageBox.Show(e.Result.ToString() + " ," + (e.Winner != null ? e.Winner.Colour.ToString() : "Nobody") + " Wins");
         }
     }
 }

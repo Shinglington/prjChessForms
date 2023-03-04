@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="MyChessLibrary\Piece.cs" />
     <Compile Include="MyChessLibrary\Player.cs" />
+    <Compile Include="PresentationUI\BoardTableLayoutPanel.cs" />
     <Compile Include="PresentationUI\ChessForm.cs">
       <SubType>Form</SubType>
     </Compile>

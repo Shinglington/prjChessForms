@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace prjChessForms
+namespace prjChessForms.MyChessLibrary
 {
     public enum PieceColour
     {

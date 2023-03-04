@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace prjChessForms
+namespace prjChessForms.MyChessLibrary
 {
     public enum GameResult 
     { 

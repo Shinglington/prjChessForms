@@ -34,6 +34,9 @@ namespace prjChessForms.MyChessLibrary
 
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
 
+        public Square[,] BoardSquares { get { return _board.GetSquares(); } }
+
+
         public async Task StartGame()
         {
             await Play(cts.Token);
@@ -65,6 +68,7 @@ namespace prjChessForms.MyChessLibrary
                     _result = GameResult.Time;
                 }
             }
+            cts.Cancel();
             _timer.Elapsed -= OnPlayerTimerTick;
         }
         private void CreatePlayers()

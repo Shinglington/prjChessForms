@@ -233,6 +233,8 @@ namespace prjChessForms.MyChessLibrary
 
     class Square
     {
+        public EventHandler PieceChanged;
+
         private Piece _piece;
         public Square(int x, int y)
         {
@@ -253,6 +255,7 @@ namespace prjChessForms.MyChessLibrary
             set
             {
                 _piece = value;
+                PieceChanged.Invoke(this, EventArgs.Empty);
             }
         }
         public Coords Coords { get; }
