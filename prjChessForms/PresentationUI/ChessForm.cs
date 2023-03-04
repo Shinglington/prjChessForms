@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
-namespace prjChessForms
+using prjChessForms.MyChessLibrary;
+
+namespace prjChessForms.PresentationUI
 {
     public partial class ChessForm : Form
     {
