@@ -1,25 +1,15 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class MakeMoveEventArgs : EventArgs 
-    { 
-        public MakeMoveEventArgs(ChessMove move)
-        {
-            Move = move;
-        }
-
-        public ChessMove Move { get; set; }
-    }
-
-
-
     abstract class Player
     {
-        public event EventHandler<MakeMoveEventArgs> SendMoveRequest;
+        private SemaphoreSlim _semaphoreMoveSend = new SemaphoreSlim(0, 1);
+        private ChessMove _selectedMove;
         public Player(PieceColour colour, TimeSpan initialTime)
         {
             Colour = colour;
@@ -32,9 +22,16 @@ namespace prjChessForms.MyChessLibrary
         {
             RemainingTime = RemainingTime.Subtract(time);
         }
-        public async Task<ChessMove> GetMove()
+        public async Task<ChessMove> GetMove(CancellationToken cToken)
         {
-            return new ChessMove();
+            await _semaphoreMoveSend.WaitAsync(cToken);
+            return _selectedMove;
+        }
+
+        public void SendMove(ChessMove move)
+        {
+            _selectedMove = move;
+            _semaphoreMoveSend.Release();
         }
 
     }

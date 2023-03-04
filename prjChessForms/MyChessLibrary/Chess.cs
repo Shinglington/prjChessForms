@@ -26,22 +26,26 @@ namespace prjChessForms.MyChessLibrary
 
         private GameResult _result;
         private Player[] _players;
-        private Player _currentPlayer;
+        private Player CurrentPlayer;
+        private int _turnCount;
         public Chess()
         {
             CreatePlayers();
             StartGame();
         }
 
+        public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
+
         public async Task StartGame()
         {
+            _turnCount = 0;
             await Play(cts.Token);
             OnGameOver();
         }
 
         public async Task Play(CancellationToken cToken)
         {
-            _currentPlayer = _players[0];
+            CurrentPlayer = _players[0];
             _result = GameResult.Unfinished;
             while (_result == GameResult.Unfinished)
             {
@@ -49,21 +53,22 @@ namespace prjChessForms.MyChessLibrary
                 {
                     _timer.Elapsed += OnPlayerTimerTick;
                     _timer.Start();
-                    ChessMove move = await _currentPlayer.GetMove();
+                    ChessMove move = await CurrentPlayer.GetMove();
                     _timer.Stop();
                     _timer.Elapsed -= OnPlayerTimerTick;
-                    if (Rulebook.CheckLegalMove(_board, _currentPlayer, move))
+                    if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
-                        Rulebook.MakeMove(_board, _currentPlayer, move);
-                        if (_currentPlayer == _players[1])
+                        Rulebook.MakeMove(_board, CurrentPlayer, move);
+                        _turnCount++;
+                        if (CurrentPlayer == _players[1])
                         {
-                            _currentPlayer = _players[0];
+                            CurrentPlayer = _players[0];
                         }
                         else
                         {
-                            _currentPlayer = _players[1];
+                            CurrentPlayer = _players[1];
                         }
-                        _result = Rulebook.GetGameResult(_board, _currentPlayer);
+                        _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                     }
                 }
                 catch when (cToken.IsCancellationRequested)
@@ -81,8 +86,8 @@ namespace prjChessForms.MyChessLibrary
 
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
-            _currentPlayer.TickTime(new TimeSpan(0, 0, 1));
-            if (_currentPlayer.RemainingTime > TimeSpan.Zero)
+            CurrentPlayer.TickTime(new TimeSpan(0, 0, 1));
+            if (CurrentPlayer.RemainingTime > TimeSpan.Zero)
             {
                 _timer.Elapsed -= OnPlayerTimerTick;
                 cts.Cancel();
@@ -94,7 +99,7 @@ namespace prjChessForms.MyChessLibrary
             Player winner = null;
             if (_result == GameResult.Checkmate || _result == GameResult.Time)
             {
-                winner = _currentPlayer == _players[0] ? _players[1] : _players[0];
+                winner = CurrentPlayer == _players[0] ? _players[1] : _players[0];
             }
             GameOver.Invoke(this, new GameOverEventArgs(winner, _result));
         }
