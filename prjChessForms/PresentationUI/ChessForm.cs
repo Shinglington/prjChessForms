@@ -10,32 +10,24 @@ namespace prjChessForms.PresentationUI
 {
     public partial class ChessForm : Form
     {
-        private Board _board;
+        private Chess _game;
         private TableLayoutPanel _layoutPanel;
-        private Label[] _timerLabels;
-        private System.Timers.Timer _timer;
 
-        private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
-        private CancellationTokenSource cts = new CancellationTokenSource();
         private Coords _clickedCoords;
         private Coords _fromCoords = new Coords();
         private Coords _toCoords = new Coords();
 
-        private GameResult _result;
-        private Player[] _players;
-        private Player _currentPlayer;
         public ChessForm()
         {
             InitializeComponent();
-            CreatePlayers();
-            SetupControls();
-            StartGame();
+
+            CreateGame();
 
         }
 
         public async Task StartGame()
         {
-            await Play(cts.Token);
+            await _game.Play();
             OnGameOver();
         }
 
@@ -108,7 +100,10 @@ namespace prjChessForms.PresentationUI
             return move;
         }
 
-
+        private void CreateGame()
+        {
+            _game = new Chess();
+        }
         private void CreatePlayers()
         {
             _players = new Player[2];

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 
-namespace prjChessForms
+namespace prjChessForms.MyChessLibrary
 {
 
     public struct Coords
@@ -39,7 +38,7 @@ namespace prjChessForms
             return hashCode;
         }
     }
-    class Board : TableLayoutPanel
+    class Board
     {
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
@@ -49,16 +48,6 @@ namespace prjChessForms
         {
             _players = players;
             SetupBoard();
-            Display();
-        }
-
-        public void Display()
-        {
-            foreach (Square s in _squares)
-            {
-                s.Parent = this;
-                SetCellPosition(s, new TableLayoutPanelCellPosition(s.Coords.X, RowCount - 1 - s.Coords.Y));
-            }
         }
 
         public void MakeMove(ChessMove Move)
@@ -278,17 +267,13 @@ namespace prjChessForms
 
 
     }
-    class Square : Button
+    class Square
     {
-        private Color _defaultPanelColour;
         private Piece _piece;
-        public Square(Board board, int x, int y)
+        public Square(int x, int y)
         {
-            Parent = board;
             Coords = new Coords(x, y);
-            _defaultPanelColour = (x + y) % 2 == 0 ? Color.SandyBrown : Color.LightGray;
             Piece = null;
-            SetupSquare();
         }
 
         public Piece Piece
@@ -304,30 +289,12 @@ namespace prjChessForms
             set
             {
                 _piece = value;
-                UpdateSquare();
             }
         }
         public Coords Coords { get; }
-
-        public void ResetPanelColour()
-        {
-            BackColor = _defaultPanelColour;
-        }
-
         public GhostPawn GetGhostPawn()
         {
             return (_piece != null && _piece.GetType() == typeof(GhostPawn)) ? (GhostPawn)_piece : null;
-        }
-        private void SetupSquare()
-        {
-            BackColor = _defaultPanelColour;
-            Dock = DockStyle.Fill;
-            UpdateSquare();
-        }
-
-        private void UpdateSquare()
-        {
-            Image = Piece != null ? Piece.Image : null;
         }
 
     }
