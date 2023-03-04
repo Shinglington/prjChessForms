@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using prjChessForms.PresentationUI;
 namespace prjChessForms
 {
     internal static class Program
@@ -13,7 +14,7 @@ namespace prjChessForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Chess());
+            Application.Run(new ChessForm());
         }
     }
 }

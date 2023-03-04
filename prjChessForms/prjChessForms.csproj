@@ -46,21 +46,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Board.cs">
+    <Compile Include="MyChessLibrary\Board.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Chess.cs">
+    <Compile Include="MyChessLibrary\Chess.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Chess.Designer.cs">
+    <Compile Include="MyChessLibrary\Chess.Designer.cs">
       <DependentUpon>Chess.cs</DependentUpon>
     </Compile>
-    <Compile Include="Piece.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="MyChessLibrary\Piece.cs" />
+    <Compile Include="MyChessLibrary\Player.cs" />
+    <Compile Include="PresentationUI\ChessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PresentationUI\ChessForm.Designer.cs">
+      <DependentUpon>ChessForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rulebook.cs" />
-    <EmbeddedResource Include="Chess.resx">
+    <Compile Include="MyChessLibrary\Rulebook.cs" />
+    <EmbeddedResource Include="MyChessLibrary\Chess.resx">
       <DependentUpon>Chess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
