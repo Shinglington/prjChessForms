@@ -26,49 +26,38 @@ namespace prjChessForms.MyChessLibrary
 
         private GameResult _result;
         private Player[] _players;
-        private Player CurrentPlayer;
         private int _turnCount;
         public Chess()
         {
             CreatePlayers();
-            StartGame();
         }
 
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
 
         public async Task StartGame()
         {
-            _turnCount = 0;
             await Play(cts.Token);
             OnGameOver();
         }
 
         public async Task Play(CancellationToken cToken)
         {
-            CurrentPlayer = _players[0];
+            _turnCount = 0;
             _result = GameResult.Unfinished;
+            _timer.Elapsed += OnPlayerTimerTick;
             while (_result == GameResult.Unfinished)
             {
                 try
                 {
-                    _timer.Elapsed += OnPlayerTimerTick;
                     _timer.Start();
-                    ChessMove move = await CurrentPlayer.GetMove();
+                    ChessMove move = await CurrentPlayer.GetMove(cToken);
                     _timer.Stop();
-                    _timer.Elapsed -= OnPlayerTimerTick;
+
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
                         Rulebook.MakeMove(_board, CurrentPlayer, move);
-                        _turnCount++;
-                        if (CurrentPlayer == _players[1])
-                        {
-                            CurrentPlayer = _players[0];
-                        }
-                        else
-                        {
-                            CurrentPlayer = _players[1];
-                        }
                         _result = Rulebook.GetGameResult(_board, CurrentPlayer);
+                        _turnCount++;
                     }
                 }
                 catch when (cToken.IsCancellationRequested)
@@ -76,6 +65,7 @@ namespace prjChessForms.MyChessLibrary
                     _result = GameResult.Time;
                 }
             }
+            _timer.Elapsed -= OnPlayerTimerTick;
         }
         private void CreatePlayers()
         {
