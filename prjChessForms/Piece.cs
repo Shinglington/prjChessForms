@@ -32,6 +32,14 @@ namespace prjChessForms
 
         public PieceColour Colour { get { return Owner.Colour; } }
 
+        public string Name { get { return GetType().Name; } }
+
+        public string Fullname { get { return $"{Colour} {Name}"; } }
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }
     class Pawn : Piece
