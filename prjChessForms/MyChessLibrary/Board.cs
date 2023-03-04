@@ -129,19 +129,6 @@ namespace prjChessForms.MyChessLibrary
             return _squares[coords.X, coords.Y];
         }
 
-        public void ClearHighlights()
-        {
-            foreach (Square s in GetSquares())
-            {
-                s.ResetPanelColour();
-            }
-        }
-
-        public void HighlightAt(Coords coords, Color highlightColour)
-        {
-            GetSquareAt(coords).BackColor = highlightColour;
-        }
-
         public void RemoveGhostPawns()
         {
             foreach (Square s in GetSquares())
@@ -155,7 +142,6 @@ namespace prjChessForms.MyChessLibrary
 
         public bool CheckMoveInCheck(Player player, ChessMove move)
         {
-
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
             bool startPieceHasMoved = GetPieceAt(start).HasMoved;
@@ -173,38 +159,17 @@ namespace prjChessForms.MyChessLibrary
 
         private void SetupBoard()
         {
-            // Format
-            Dock = DockStyle.Fill;
-            Padding = new Padding(0);
-            Margin = new Padding(0);
-
-            ColumnCount = COL_COUNT;
-            ColumnStyles.Clear();
-            RowCount = ROW_COUNT;
-            ColumnStyles.Clear();
-
-            for (int c = 0; c < COL_COUNT; c++)
-            {
-                ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / COL_COUNT));
-            }
-
-            for (int r = 0; r < ROW_COUNT; r++)
-            {
-                RowStyles.Add(new RowStyle(SizeType.Percent, 100 / ROW_COUNT));
-            }
-
-            // Add squares
-            _squares = new Square[ColumnCount, RowCount];
+            _squares = new Square[COL_COUNT, ROW_COUNT];
             for (int y = 0; y < ROW_COUNT; y++)
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    _squares[x, y] = new Square(this, x, y);
+                    _squares[x, y] = new Square(x, y);
                 }
             }
-            // Add pieces
             AddDefaultPieces();
         }
+
         private void AddDefaultPieces()
         {
             char[,] defaultPieces =
@@ -264,9 +229,8 @@ namespace prjChessForms.MyChessLibrary
             }
             square.Piece = p;
         }
-
-
     }
+
     class Square
     {
         private Piece _piece;
