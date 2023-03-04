@@ -1,4 +1,4 @@
-﻿namespace prjChessForms
+﻿namespace prjChessForms.MyChessLibrary
 {
     partial class Chess
     {
