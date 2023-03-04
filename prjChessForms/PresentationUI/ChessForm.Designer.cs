@@ -1,4 +1,4 @@
-﻿namespace prjChessForms
+﻿namespace prjChessForms.PresentationUI
 {
     partial class ChessForm
     {
