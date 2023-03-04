@@ -1,6 +1,6 @@
 ﻿namespace prjChessForms.MyChessLibrary
 {
-    partial class Chess
+    partial class ChessForm
     {
         /// <summary>
         /// Required designer variable.

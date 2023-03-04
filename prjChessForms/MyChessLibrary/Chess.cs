@@ -36,6 +36,7 @@ namespace prjChessForms.MyChessLibrary
 
         public Square[,] BoardSquares { get { return _board.GetSquares(); } }
 
+        public Piece GetPieceAt(Coords coords) => _board.GetPieceAt(coords);
 
         public async Task StartGame()
         {

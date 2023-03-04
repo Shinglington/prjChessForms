@@ -1,10 +1,7 @@
-﻿using System;
+﻿using prjChessForms.MyChessLibrary;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
-
-using prjChessForms.MyChessLibrary;
 
 namespace prjChessForms.PresentationUI
 {
@@ -30,24 +27,17 @@ namespace prjChessForms.PresentationUI
         }
         private async Task<ChessMove> GetPlayerMove(CancellationToken cToken)
         {
-
             _fromCoords = new Coords();
             _toCoords = new Coords();
             ChessMove move = new ChessMove();
-            bool validMove = false;
-            while (!validMove)
+            bool completeInput = false;
+            while (!completeInput)
             {
                 await _semaphoreClick.WaitAsync(cToken);
-                if (_board.GetPieceAt(_clickedCoords) != null && _board.GetPieceAt(_clickedCoords).Owner == _currentPlayer)
+                if (_game.GetPieceAt(_clickedCoords) != null && _game.GetPieceAt(_clickedCoords).Owner.Equals(_game.CurrentPlayer))
                 {
                     _fromCoords = _clickedCoords;
                     _toCoords = new Coords();
-                    _board.ClearHighlights();
-                    _board.HighlightAt(_fromCoords, System.Drawing.Color.AliceBlue);
-                    foreach (ChessMove m in Rulebook.GetPossibleMoves(_board, _board.GetPieceAt(_fromCoords)))
-                    {
-                        _board.HighlightAt(m.EndCoords, System.Drawing.Color.Green);
-                    }
                 }
                 else if (!_fromCoords.Equals(new Coords()))
                 {
@@ -58,33 +48,14 @@ namespace prjChessForms.PresentationUI
                 if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
                 {
                     move = new ChessMove(_fromCoords, _toCoords);
-                    validMove = Rulebook.CheckLegalMove(_board, _currentPlayer, move);
+                    completeInput = true;
                 }
             }
-            _board.ClearHighlights();
             return move;
-        }
-
-        private void CreateGame()
-        {
-            _game = new Chess();
         }
         private void SetupControls()
         {
-
-            _boardPanel = new BoardTableLayoutPanel(_game.BoardSquares) 
-            { 
-                Parent = this,
-                Dock = DockStyle.Fill,
-            };
-
-
-
-            // Timer
-            _timer = new System.Timers.Timer(1000);
-            _timerLabels = new Label[2];
-
-            // Layout
+            // layout
             _layoutPanel = new TableLayoutPanel()
             {
                 Parent = this,
@@ -100,40 +71,44 @@ namespace prjChessForms.PresentationUI
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
 
-            // Board
-            _board = new Board(_players)
-            {
-                Parent = _layoutPanel
-            };
-            _layoutPanel.SetCellPosition(_board, new TableLayoutPanelCellPosition(0, 1));
-            foreach (Square square in _board.GetSquares())
-            {
-                square.Click += OnSquareClicked;
-            }
 
-            // White player label
-            TableLayoutPanel whiteTable = new TableLayoutPanel()
+            // Board panel
+            _boardPanel = new BoardTableLayoutPanel(_game.BoardSquares)
             {
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
-                ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
-                RowStyles = { new RowStyle(SizeType.Percent, 100) },
             };
-            _layoutPanel.SetCellPosition(whiteTable, new TableLayoutPanelCellPosition(0, 2));
-            Label whiteLabel = new Label()
-            {
-                Parent = whiteTable,
-                Dock = DockStyle.Fill,
-                Text = _players[0].Colour.ToString(),
-            };
-            whiteTable.SetCellPosition(whiteLabel, new TableLayoutPanelCellPosition(0, 0));
-            _timerLabels[0] = new Label()
-            {
-                Parent = whiteTable,
-                Dock = DockStyle.Fill,
-                Text = _players[0].RemainingTime.ToString(),
-            };
-            whiteTable.SetCellPosition(_timerLabels[0], new TableLayoutPanelCellPosition(1, 0));
+            _boardPanel.SquareClicked += OnSquareClicked;
+            _layoutPanel.SetCellPosition(_boardPanel, new TableLayoutPanelCellPosition(0, 1));
+
+            // Timer
+            //_timer = new System.Timers.Timer(1000);
+            //_timerLabels = new Label[2];
+
+
+            //// White player label
+            //TableLayoutPanel whiteTable = new TableLayoutPanel()
+            //{
+            //    Parent = _layoutPanel,
+            //    Dock = DockStyle.Fill,
+            //    ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
+            //    RowStyles = { new RowStyle(SizeType.Percent, 100) },
+            //};
+            //_layoutPanel.SetCellPosition(whiteTable, new TableLayoutPanelCellPosition(0, 2));
+            //Label whiteLabel = new Label()
+            //{
+            //    Parent = whiteTable,
+            //    Dock = DockStyle.Fill,
+            //    Text = _players[0].Colour.ToString(),
+            //};
+            //whiteTable.SetCellPosition(whiteLabel, new TableLayoutPanelCellPosition(0, 0));
+            //_timerLabels[0] = new Label()
+            //{
+            //    Parent = whiteTable,
+            //    Dock = DockStyle.Fill,
+            //    Text = _players[0].RemainingTime.ToString(),
+            //};
+            //whiteTable.SetCellPosition(_timerLabels[0], new TableLayoutPanelCellPosition(1, 0));
 
 
 
@@ -165,14 +140,10 @@ namespace prjChessForms.PresentationUI
             whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
 
-        private void OnSquareClicked(object sender, EventArgs e)
+        private void OnSquareClicked(object sender, SquareClickedEventArgs e)
         {
-            if (sender is Square square)
-            {
-                _clickedCoords = square.Coords;
-                Console.WriteLine(_clickedCoords);
-                _semaphoreClick.Release();
-            }
+            _clickedCoords = e.ClickedCoords;
+            _semaphoreClick.Release();
         }
 
         private void OnGameOver(object sender, GameOverEventArgs e)
