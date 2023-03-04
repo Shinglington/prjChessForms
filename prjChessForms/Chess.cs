@@ -221,7 +221,7 @@ namespace prjChessForms
                 timeLabel.Text = _currentPlayer.RemainingTime.ToString();
             });
 
-            if (TimeSpan.Compare(_currentPlayer.RemainingTime, new TimeSpan(0, 0, 0)) < 1)
+            if (_currentPlayer.RemainingTime > TimeSpan.Zero)
             {
                 _timer.Elapsed -= OnPlayerTimerTick;
                 cts.Cancel();
