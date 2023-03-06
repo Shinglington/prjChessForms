@@ -35,6 +35,7 @@ namespace prjChessForms.MyChessLibrary
         public string Name { get { return GetType().Name; } }
 
         public string Fullname { get { return $"{Colour} {Name}"; } }
+
         public override string ToString()
         {
             return Name;
@@ -88,6 +89,7 @@ namespace prjChessForms.MyChessLibrary
         {
             LinkedPawn = referencedPawn;
         }
+
         public Pawn LinkedPawn { get; }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
@@ -116,6 +118,7 @@ namespace prjChessForms.MyChessLibrary
     class Bishop : Piece
     {
         public Bishop(Player player) : base(player) { }
+
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
@@ -143,6 +146,7 @@ namespace prjChessForms.MyChessLibrary
     class Rook : Piece
     {
         public Rook(Player player) : base(player) { }
+
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
@@ -161,7 +165,6 @@ namespace prjChessForms.MyChessLibrary
                         break;
                     }
                 }
-
             }
             else if (yChange == 0 && xChange != 0)
             {
@@ -184,6 +187,7 @@ namespace prjChessForms.MyChessLibrary
     class Queen : Piece
     {
         public Queen(Player player) : base(player) { }
+
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             return BishopMove(board, startCoords, endCoords) || RookMove(board, startCoords, endCoords);
@@ -253,6 +257,7 @@ namespace prjChessForms.MyChessLibrary
     class King : Piece
     {
         public King(Player player) : base(player) { }
+
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
