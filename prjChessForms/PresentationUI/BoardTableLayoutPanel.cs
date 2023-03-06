@@ -55,7 +55,7 @@ namespace prjChessForms.PresentationUI
         {
             RowStyles.Clear();
             ColumnStyles.Clear();
-
+            _buttons = new Button[ColumnCount, RowCount];
             for(int x = 0; x < ColumnCount; x++)
             {
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / ColumnCount));
@@ -66,15 +66,16 @@ namespace prjChessForms.PresentationUI
                     Button button = new Button()
                     {
                         Parent = this,
-                        Dock = DockStyle.Fill
-
+                        Dock = DockStyle.Fill,
+                        Image = _boardSquares[x, y].Piece == null ? null : _boardSquares[x, y].Piece.Image
+                       
                     };
                     button.Click += OnSquareClicked;
                     _buttons[x, y] = button;
                     _boardSquares[x, y].PieceChanged += OnPieceInSquareChanged;
-                    
                 }
             }
+
         }
 
         private void OnSquareClicked(object sender, EventArgs e)

@@ -22,6 +22,7 @@ namespace prjChessForms.PresentationUI
         {
             InitializeComponent();
             _game = new Chess();
+            _game.WhitePlayer.RequestSendMove += (sender, e) => _game.WhitePlayer.SendMove(GetPlayerMove(e.CToken));
             SetupControls();
             _game.StartGame();
         }
@@ -53,6 +54,7 @@ namespace prjChessForms.PresentationUI
             }
             return move;
         }
+
         private void SetupControls()
         {
             // layout
@@ -115,29 +117,29 @@ namespace prjChessForms.PresentationUI
 
 
             // Black player label
-            TableLayoutPanel blackTable = new TableLayoutPanel()
-            {
-                Parent = _layoutPanel,
-                Dock = DockStyle.Fill,
-                ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
-                RowStyles = { new RowStyle(SizeType.Percent, 100) },
-            };
-            _layoutPanel.SetCellPosition(blackTable, new TableLayoutPanelCellPosition(0, 0));
-            Label blackLabel = new Label()
-            {
-                Parent = blackTable,
-                Dock = DockStyle.Fill,
-                Text = _players[1].Colour.ToString(),
-            };
-            blackTable.SetCellPosition(blackLabel, new TableLayoutPanelCellPosition(0, 0));
+            //TableLayoutPanel blackTable = new TableLayoutPanel()
+            //{
+            //    Parent = _layoutPanel,
+            //    Dock = DockStyle.Fill,
+            //    ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
+            //    RowStyles = { new RowStyle(SizeType.Percent, 100) },
+            //};
+            //_layoutPanel.SetCellPosition(blackTable, new TableLayoutPanelCellPosition(0, 0));
+            //Label blackLabel = new Label()
+            //{
+            //    Parent = blackTable,
+            //    Dock = DockStyle.Fill,
+            //    Text = _players[1].Colour.ToString(),
+            //};
+            //blackTable.SetCellPosition(blackLabel, new TableLayoutPanelCellPosition(0, 0));
 
-            _timerLabels[1] = new Label()
-            {
-                Parent = blackTable,
-                Dock = DockStyle.Fill,
-                Text = _players[1].RemainingTime.ToString(),
-            };
-            whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
+            //_timerLabels[1] = new Label()
+            //{
+            //    Parent = blackTable,
+            //    Dock = DockStyle.Fill,
+            //    Text = _players[1].RemainingTime.ToString(),
+            //};
+            //whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
 
         private void OnSquareClicked(object sender, SquareClickedEventArgs e)

@@ -1,6 +1,8 @@
-﻿namespace prjChessForms.MyChessLibrary
+﻿using System.Windows.Forms;
+
+namespace prjChessForms.MyChessLibrary
 {
-    partial class ChessForm
+    partial class ChessForm : Form
     {
         /// <summary>
         /// Required designer variable.

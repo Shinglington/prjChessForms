@@ -30,6 +30,8 @@ namespace prjChessForms.MyChessLibrary
         public Chess()
         {
             CreatePlayers();
+            _board = new Board(_players);
+            _timer = new System.Timers.Timer(1000);
         }
 
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
@@ -95,8 +97,11 @@ namespace prjChessForms.MyChessLibrary
             if (_result == GameResult.Checkmate || _result == GameResult.Time)
             {
                 winner = CurrentPlayer == _players[0] ? _players[1] : _players[0];
+            } 
+            if (GameOver != null)
+            {
+                GameOver.Invoke(this, new GameOverEventArgs(winner, _result));
             }
-            GameOver.Invoke(this, new GameOverEventArgs(winner, _result));
         }
     }
 }
