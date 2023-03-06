@@ -89,7 +89,6 @@ namespace prjChessForms.MyChessLibrary
         {
             LinkedPawn = referencedPawn;
         }
-
         public Pawn LinkedPawn { get; }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
