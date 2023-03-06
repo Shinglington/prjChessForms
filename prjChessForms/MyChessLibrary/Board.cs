@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -60,7 +59,6 @@ namespace prjChessForms.MyChessLibrary
             }
             return pieces;
         }
-
 
         public Piece GetPieceAt(Coords coords)
         {
@@ -196,6 +194,4 @@ namespace prjChessForms.MyChessLibrary
             square.Piece = p;
         }
     }
-
-
 }
