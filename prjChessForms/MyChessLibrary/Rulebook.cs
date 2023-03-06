@@ -26,6 +26,7 @@ namespace prjChessForms.MyChessLibrary
             return StartCoords.ToString() + " -> " + EndCoords.ToString();
         }
     }
+
     class Rulebook
     {
         public static void MakeMove(Board board, Player player, ChessMove move)
@@ -56,9 +57,6 @@ namespace prjChessForms.MyChessLibrary
             }
             board.MakeMove(move);
             Promotions(board, move.EndCoords);
-
-
-
         }
 
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)
@@ -111,7 +109,6 @@ namespace prjChessForms.MyChessLibrary
             }
             return possibleMoves;
         }
-
 
         public static GameResult GetGameResult(Board board, Player currentPlayer)
         {
@@ -170,6 +167,7 @@ namespace prjChessForms.MyChessLibrary
             }
             return !CheckIfThereAreRemainingLegalMoves(board, currentPlayer);
         }
+
         private static bool CheckIfThereAreRemainingLegalMoves(Board board, Player currentPlayer)
         {
             bool anyLegalMoves = false;
@@ -245,7 +243,6 @@ namespace prjChessForms.MyChessLibrary
             return false;
         }
 
-
         private static void Promotions(Board board, Coords endCoords)
         {
             Piece p = board.GetPieceAt(endCoords);
@@ -257,6 +254,5 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
         }
-
     }
 }

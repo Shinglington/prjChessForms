@@ -14,6 +14,8 @@ namespace prjChessForms.MyChessLibrary
             _players = players;
             SetupBoard();
         }
+        public int RowCount { get { return ROW_COUNT; } }
+        public int ColumnCount { get { return COL_COUNT; } }
 
         public void MakeMove(ChessMove Move)
         {
