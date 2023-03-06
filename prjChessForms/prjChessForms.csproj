@@ -66,6 +66,7 @@
     <Compile Include="MyChessLibrary\Chess.Designer.cs">
       <DependentUpon>Chess.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyChessLibrary\Coords.cs" />
     <Compile Include="MyChessLibrary\Piece.cs" />
     <Compile Include="MyChessLibrary\Player.cs" />
     <Compile Include="PresentationUI\BoardTableLayoutPanel.cs" />
