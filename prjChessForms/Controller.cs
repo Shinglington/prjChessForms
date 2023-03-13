@@ -22,6 +22,11 @@ namespace prjChessForms
 
         }
 
+        private void SetupEvents()
+        {
+           
+        }
+
 
         private async Task<ChessMove> GetPlayerMove()
         {

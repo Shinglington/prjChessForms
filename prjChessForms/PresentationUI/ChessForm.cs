@@ -1,12 +1,24 @@
-﻿using System;
+﻿using prjChessForms.MyChessLibrary;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
+    public class SquareClickedEventArgs : EventArgs
+    {
+        public SquareClickedEventArgs(Coords clickedCoords)
+        {
+            ClickedCoords = clickedCoords;
+        }
+
+        public Coords ClickedCoords { get; set; }
+    }
     public partial class ChessForm : Form
     {
+        public event EventHandler<SquareClickedEventArgs> SquareClicked;
+
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
 

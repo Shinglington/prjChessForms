@@ -71,10 +71,10 @@
     <Compile Include="MyChessLibrary\Piece.cs" />
     <Compile Include="MyChessLibrary\Player.cs" />
     <Compile Include="MyChessLibrary\Square.cs" />
-    <Compile Include="PresentationUI\BoardTableLayoutPanel.cs" />
-    <Compile Include="PresentationUI\ChessForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="PresentationUI\BoardTableLayoutPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PresentationUI\ChessForm.cs" />
     <Compile Include="PresentationUI\ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>

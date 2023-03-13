@@ -19,6 +19,8 @@ namespace prjChessForms.MyChessLibrary
     class Chess
     {
         public event EventHandler<GameOverEventArgs> GameOver;
+        public event EventHandler<EventArgs> RequestMove;
+        public event EventHandler<EventArgs> MoveReceived;
 
         private Board _board;
         private System.Timers.Timer _timer;
@@ -34,7 +36,6 @@ namespace prjChessForms.MyChessLibrary
             _timer = new System.Timers.Timer(1000);
         }
         public Controller Controller { get; set; }
-
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }

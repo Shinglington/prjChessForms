@@ -4,16 +4,6 @@ using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
-    class SquareClickedEventArgs : EventArgs
-    {
-        public SquareClickedEventArgs(Coords clickedCoords)
-        {
-            ClickedCoords = clickedCoords;
-        }
-
-        public Coords ClickedCoords { get; set; }
-    }
-
     class BoardTableLayoutPanel : TableLayoutPanel
     {
         public EventHandler<SquareClickedEventArgs> SquareClicked;
