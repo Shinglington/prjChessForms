@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using prjChessForms.MyChessLibrary;
+using System;
 using System.Windows.Forms;
-
-using prjChessForms.MyChessLibrary;
 
 namespace prjChessForms.PresentationUI
 {
-    class SquareClickedEventArgs : EventArgs 
-    { 
-        public SquareClickedEventArgs(Coords clickedCoords) 
+    class SquareClickedEventArgs : EventArgs
+    {
+        public SquareClickedEventArgs(Coords clickedCoords)
         {
             ClickedCoords = clickedCoords;
         }
@@ -42,9 +36,9 @@ namespace prjChessForms.PresentationUI
         public void Display(PieceColour perspective = PieceColour.White)
         {
             perspective = PieceColour.White;
-            for(int x = 0; x < ColumnCount; x++)
+            for (int x = 0; x < ColumnCount; x++)
             {
-                for(int y = 0; y < RowCount; y++)
+                for (int y = 0; y < RowCount; y++)
                 {
                     SetCellPosition(_buttons[x, y], new TableLayoutPanelCellPosition(x, RowCount - 1 - y));
                 }
@@ -56,7 +50,7 @@ namespace prjChessForms.PresentationUI
             RowStyles.Clear();
             ColumnStyles.Clear();
             _buttons = new Button[ColumnCount, RowCount];
-            for(int x = 0; x < ColumnCount; x++)
+            for (int x = 0; x < ColumnCount; x++)
             {
                 ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / ColumnCount));
                 for (int y = 0; y < RowCount; y++)
@@ -68,7 +62,7 @@ namespace prjChessForms.PresentationUI
                         Parent = this,
                         Dock = DockStyle.Fill,
                         Image = _boardSquares[x, y].Piece == null ? null : _boardSquares[x, y].Piece.Image
-                       
+
                     };
                     button.Click += OnSquareClicked;
                     _buttons[x, y] = button;
@@ -83,7 +77,7 @@ namespace prjChessForms.PresentationUI
             Button button = (Button)sender;
             TableLayoutPanelCellPosition position = GetPositionFromControl(button);
             Coords clickedCoords = new Coords();
-            switch (_perspective) 
+            switch (_perspective)
             {
                 case PieceColour.White:
                     clickedCoords = new Coords(position.Column, RowCount - 1 - position.Row);
@@ -96,7 +90,7 @@ namespace prjChessForms.PresentationUI
         }
         private void OnPieceInSquareChanged(object sender, EventArgs e)
         {
-            Square square = (Square) sender;
+            Square square = (Square)sender;
             Button button = _buttons[square.Coords.X, square.Coords.Y];
             button.Image = square.Piece.Image;
         }

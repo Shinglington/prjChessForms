@@ -16,9 +16,20 @@ namespace prjChessForms.MyChessLibrary
         public CancellationToken CToken { get; set; }
     }
 
+    public class SendMoveEventArgs : EventArgs
+    {
+        public SendMoveEventArgs(ChessMove move)
+        {
+            Move = move;
+        }
+
+        public ChessMove Move { get; set; }
+    }
     abstract class Player
     {
-        public event EventHandler<RequestMoveEventArgs> RequestSendMove;
+        public event EventHandler<RequestMoveEventArgs> RequestMove;
+        public event EventHandler TimeExpiredEvent;
+
         private SemaphoreSlim _semaphoreMoveSend = new SemaphoreSlim(0, 1);
         private ChessMove _selectedMove;
         public Player(PieceColour colour, TimeSpan initialTime)
@@ -32,21 +43,22 @@ namespace prjChessForms.MyChessLibrary
         public void TickTime(TimeSpan time)
         {
             RemainingTime = RemainingTime.Subtract(time);
+            if (RemainingTime < TimeSpan.Zero)
+            {
+                TimeExpiredEvent.Invoke(this, new EventArgs());
+            }
         }
         public async Task<ChessMove> GetMove(CancellationToken cToken)
         {
-            if (RequestSendMove!= null)
-            {
-                RequestSendMove.Invoke(this, new RequestMoveEventArgs(cToken));
-                await _semaphoreMoveSend.WaitAsync(cToken);
-            }
+            RequestMove.Invoke(this, new RequestMoveEventArgs(cToken));
+            await _semaphoreMoveSend.WaitAsync(cToken);
             return _selectedMove;
         }
 
-        public void SendMove(ChessMove move)
+        public void OnMoveSent(ChessMove move)
         {
-            _selectedMove = move;
             _semaphoreMoveSend.Release();
+            _selectedMove = move;
         }
 
     }

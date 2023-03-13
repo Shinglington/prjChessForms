@@ -1,4 +1,4 @@
-﻿using prjChessForms.MyChessLibrary;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,26 +7,19 @@ namespace prjChessForms.PresentationUI
 {
     public partial class ChessForm : Form
     {
-        private Chess _game;
-
-
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
 
         private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
-        private Coords _clickedCoords;
-        private Coords _fromCoords = new Coords();
-        private Coords _toCoords = new Coords();
+        private CancellationToken cts = new CancellationToken();
 
         public ChessForm()
         {
             InitializeComponent();
-            _game = new Chess();
-            _game.WhitePlayer.RequestSendMove += (sender, e) => _game.WhitePlayer.SendMove(GetPlayerMove(e.CToken));
             SetupControls();
-            _game.StartGame();
         }
-        private async Task<ChessMove> GetPlayerMove(CancellationToken cToken)
+        public Controller Controller { get; set; }
+        private async Task<ChessMove> GetPlayerMove()
         {
             _fromCoords = new Coords();
             _toCoords = new Coords();
@@ -75,7 +68,7 @@ namespace prjChessForms.PresentationUI
 
 
             // Board panel
-            _boardPanel = new BoardTableLayoutPanel(_game.BoardSquares)
+            _boardPanel = new BoardTableLayoutPanel()
             {
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
@@ -146,11 +139,6 @@ namespace prjChessForms.PresentationUI
         {
             _clickedCoords = e.ClickedCoords;
             _semaphoreClick.Release();
-        }
-
-        private void OnGameOver(object sender, GameOverEventArgs e)
-        {
-            MessageBox.Show(e.Result.ToString() + " ," + (e.Winner != null ? e.Winner.Colour.ToString() : "Nobody") + " Wins");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using prjChessForms.PresentationUI;
+using prjChessForms.MyChessLibrary;
 namespace prjChessForms
 {
     internal static class Program
@@ -14,7 +15,13 @@ namespace prjChessForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChessForm());
+
+
+            ChessForm form = new ChessForm();
+            Chess chess = new Chess();
+            Controller controller = new Controller(chess, form);
+
+            Application.Run(form);
         }
     }
 }

@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller.cs" />
     <Compile Include="MyChessLibrary\Board.cs" />
     <Compile Include="MyChessLibrary\Chess.cs" />
     <Compile Include="MyChessLibrary\Chess.Designer.cs">

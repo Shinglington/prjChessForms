@@ -33,6 +33,7 @@ namespace prjChessForms.MyChessLibrary
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
         }
+        public Controller Controller { get; set; }
 
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
