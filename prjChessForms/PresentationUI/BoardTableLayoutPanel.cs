@@ -1,5 +1,4 @@
-﻿using prjChessForms.MyChessLibrary;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -8,24 +7,19 @@ namespace prjChessForms.PresentationUI
     {
         public EventHandler<SquareClickedEventArgs> SquareClicked;
 
-        private Square[,] _boardSquares;
+        private const int ROWCOUNT = 8;
+        private const int COLUMNCOUNT = 16;
         private Button[,] _buttons;
-
-        private PieceColour _perspective;
-        public BoardTableLayoutPanel(Square[,] boardSquares)
+        public BoardTableLayoutPanel()
         {
-            _perspective = PieceColour.White;
-            _boardSquares = boardSquares;
-            ColumnCount = _boardSquares.GetLength(0);
-            RowCount = _boardSquares.GetLength(1);
-
+            ColumnCount = COLUMNCOUNT;
+            RowCount = ROWCOUNT;
             SetupRowsAndColumns();
             Display();
         }
 
-        public void Display(PieceColour perspective = PieceColour.White)
+        public void Display()
         {
-            perspective = PieceColour.White;
             for (int x = 0; x < ColumnCount; x++)
             {
                 for (int y = 0; y < RowCount; y++)
@@ -51,8 +45,6 @@ namespace prjChessForms.PresentationUI
                     {
                         Parent = this,
                         Dock = DockStyle.Fill,
-                        Image = _boardSquares[x, y].Piece == null ? null : _boardSquares[x, y].Piece.Image
-
                     };
                     button.Click += OnSquareClicked;
                     _buttons[x, y] = button;

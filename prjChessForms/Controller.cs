@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace prjChessForms
 {
-    public class Controller
+    class Controller
     {
         private Chess _game;
         private ChessForm _form;
