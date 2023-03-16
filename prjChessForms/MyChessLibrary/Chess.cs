@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Xml.Linq;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -15,21 +17,22 @@ namespace prjChessForms.MyChessLibrary
         public Player Winner { get; set; }
         public GameResult Result { get; set; }
     }
-    class RequestMoveEventArgs : EventArgs
+    
+    class PieceSelectionChangedEventArgs : EventArgs
     {
-        public RequestMoveEventArgs(Player player, CancellationToken cToken)
+        public PieceSelectionChangedEventArgs(Piece selectedPiece, List<ChessMove> validMoves)
         {
-            CToken = cToken;
-            PlayerToMove = player;
+            SelectedPiece = selectedPiece;
+            ValidMoves = validMoves;
         }
-        public CancellationToken CToken { get; set; }
-        public Player PlayerToMove { get; set; }
+        public Piece SelectedPiece { get; set; }
+        public List<ChessMove> ValidMoves { get; set; }
     }
+
     class Chess
     {
         public event EventHandler<GameOverEventArgs> GameOver;
-        public event EventHandler<RequestMoveEventArgs> RequestMove;
-        public event EventHandler<EventArgs> MoveReceived;
+        public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
 
         private Board _board;
         private System.Timers.Timer _timer;
@@ -38,12 +41,18 @@ namespace prjChessForms.MyChessLibrary
         private GameResult _result;
         private Player[] _players;
         private int _turnCount;
+
+        private Coords _receivedClick;
+        private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
+        private bool _waitingForClick;
         public Chess(Controller controller)
         {
             Controller = controller;
             CreatePlayers();
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
+            _waitingForClick = false;
+            SetupControllerEvents();
         }
         public Controller Controller { get; }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
@@ -67,11 +76,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 try
                 {
-                    _timer.Start();
-                    RequestMove.Invoke(this, new RequestMoveEventArgs(CurrentPlayer, cToken));
-                    ChessMove move = await CurrentPlayer.GetMove(cToken);
-                    _timer.Stop();
-
+                    ChessMove move = await GetChessMove(cToken);
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
                         Rulebook.MakeMove(_board, CurrentPlayer, move);
@@ -87,9 +92,45 @@ namespace prjChessForms.MyChessLibrary
             cts.Cancel();
             _timer.Elapsed -= OnPlayerTimerTick;
         }
+
+        private async Task<ChessMove> GetChessMove(CancellationToken cToken)
+        {
+            _timer.Start();
+            RequestMoveInput.Invoke(this, new RequestMoveInputEventArgs(CurrentPlayer, cToken));
+            await _semaphoreReceiveClick.WaitAsync(cToken);
+            _timer.Stop();
+                _fromCoords = new Coords();
+                _toCoords = new Coords();
+                ChessMove move = new ChessMove();
+                bool completeInput = false;
+                while (!completeInput)
+                {
+                    await _semaphoreClick.WaitAsync(cToken);
+                    if (_game.GetPieceAt(_clickedCoords) != null && _game.GetPieceAt(_clickedCoords).Owner.Equals(_game.CurrentPlayer))
+                    {
+                        _fromCoords = _clickedCoords;
+                        _toCoords = new Coords();
+                    }
+                    else if (!_fromCoords.Equals(new Coords()))
+                    {
+                        _toCoords = _clickedCoords;
+                    }
+                    // Check if move is valid now
+
+                    if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
+                    {
+                        move = new ChessMove(_fromCoords, _toCoords);
+                        completeInput = true;
+                    }
+                }
+                return move;
+        }
+
+
+
         private void SetupControllerEvents()
         {
-
+            MoveReceived += OnMoveReceived;
         }
         private void CreatePlayers()
         {
@@ -97,6 +138,16 @@ namespace prjChessForms.MyChessLibrary
             _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
             _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
         }
+
+        private void OnReceiveCoords(object sender, ReceiveCoordsEventArgs e) 
+        {
+            if (_waitingForClick)
+            {
+                _receivedClick = e.Coords;
+                _semaphoreReceiveClick.Release();
+            }
+        }
+
 
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {

@@ -7,6 +7,14 @@ using System.Windows.Forms;
 
 namespace prjChessForms
 {
+    class ReceiveCoordsEventArgs : EventArgs
+    {
+        public ReceiveCoordsEventArgs(Coords coords)
+        {
+            ClickedCoords = coords;
+        }
+        public Coords ClickedCoords { get; set; }
+    }
     class Controller
     {
         private CancellationToken cts = new CancellationToken();
@@ -54,7 +62,7 @@ namespace prjChessForms
             }
             return move;
         }
-        private async void SendMove(object sender, RequestMoveEventArgs e)
+        private async void SendMove(object sender, RequestMoveInputEventArgs e)
         {
             Player player = (Player)sender;
             ChessMove move = await GetPlayerMove(e.CToken);

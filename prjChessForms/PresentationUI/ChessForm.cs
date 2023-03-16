@@ -32,34 +32,6 @@ namespace prjChessForms.PresentationUI
             SetupControls();
         }
         public Controller Controller { get; }
-        private async Task<ChessMove> GetPlayerMove()
-        {
-            _fromCoords = new Coords();
-            _toCoords = new Coords();
-            ChessMove move = new ChessMove();
-            bool completeInput = false;
-            while (!completeInput)
-            {
-                await _semaphoreClick.WaitAsync(cToken);
-                if (_game.GetPieceAt(_clickedCoords) != null && _game.GetPieceAt(_clickedCoords).Owner.Equals(_game.CurrentPlayer))
-                {
-                    _fromCoords = _clickedCoords;
-                    _toCoords = new Coords();
-                }
-                else if (!_fromCoords.Equals(new Coords()))
-                {
-                    _toCoords = _clickedCoords;
-                }
-                // Check if move is valid now
-
-                if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
-                {
-                    move = new ChessMove(_fromCoords, _toCoords);
-                    completeInput = true;
-                }
-            }
-            return move;
-        }
 
         private void SetupControls()
         {
