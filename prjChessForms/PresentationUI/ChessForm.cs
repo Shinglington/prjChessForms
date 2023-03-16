@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
-    public class SquareClickedEventArgs : EventArgs
+    class SquareClickedEventArgs : EventArgs
     {
         public SquareClickedEventArgs(Coords clickedCoords)
         {
@@ -15,7 +15,7 @@ namespace prjChessForms.PresentationUI
 
         public Coords ClickedCoords { get; set; }
     }
-    public partial class ChessForm : Form
+    partial class ChessForm : Form
     {
         public event EventHandler<SquareClickedEventArgs> SquareClicked;
 
@@ -25,12 +25,13 @@ namespace prjChessForms.PresentationUI
         private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
         private CancellationToken cts = new CancellationToken();
 
-        public ChessForm()
+        public ChessForm(Controller controller)
         {
             InitializeComponent();
+            Controller = controller;
             SetupControls();
         }
-        public Controller Controller { get; set; }
+        public Controller Controller { get; }
         private async Task<ChessMove> GetPlayerMove()
         {
             _fromCoords = new Coords();

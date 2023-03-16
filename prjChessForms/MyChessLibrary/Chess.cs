@@ -14,12 +14,21 @@ namespace prjChessForms.MyChessLibrary
         }
         public Player Winner { get; set; }
         public GameResult Result { get; set; }
-
+    }
+    class RequestMoveEventArgs : EventArgs
+    {
+        public RequestMoveEventArgs(Player player, CancellationToken cToken)
+        {
+            CToken = cToken;
+            PlayerToMove = player;
+        }
+        public CancellationToken CToken { get; set; }
+        public Player PlayerToMove { get; set; }
     }
     class Chess
     {
         public event EventHandler<GameOverEventArgs> GameOver;
-        public event EventHandler<EventArgs> RequestMove;
+        public event EventHandler<RequestMoveEventArgs> RequestMove;
         public event EventHandler<EventArgs> MoveReceived;
 
         private Board _board;
@@ -29,13 +38,14 @@ namespace prjChessForms.MyChessLibrary
         private GameResult _result;
         private Player[] _players;
         private int _turnCount;
-        public Chess()
+        public Chess(Controller controller)
         {
+            Controller = controller;
             CreatePlayers();
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
         }
-        public Controller Controller { get; set; }
+        public Controller Controller { get; }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }
@@ -58,6 +68,7 @@ namespace prjChessForms.MyChessLibrary
                 try
                 {
                     _timer.Start();
+                    RequestMove.Invoke(this, new RequestMoveEventArgs(CurrentPlayer, cToken));
                     ChessMove move = await CurrentPlayer.GetMove(cToken);
                     _timer.Stop();
 
@@ -75,6 +86,10 @@ namespace prjChessForms.MyChessLibrary
             }
             cts.Cancel();
             _timer.Elapsed -= OnPlayerTimerTick;
+        }
+        private void SetupControllerEvents()
+        {
+
         }
         private void CreatePlayers()
         {

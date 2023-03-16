@@ -9,18 +9,16 @@ namespace prjChessForms
 {
     class Controller
     {
-        private Chess _game;
-        private ChessForm _form;
         private CancellationToken cts = new CancellationToken();
-        public Controller(Chess game, ChessForm form)
+        public Controller()
         {
-            _game = game;
-            _form = form;
-
-            _form.Controller = this;
-            _game.Controller = this;
-
+            ChessGame = new Chess(this);
+            ChessForm = new ChessForm(this);
         }
+
+        public Chess ChessGame { get; }
+        public ChessForm ChessForm { get; }
+
 
         private void SetupEvents()
         {
