@@ -1,5 +1,7 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -17,10 +19,9 @@ namespace prjChessForms.PresentationUI
             ColumnCount = COLUMNCOUNT;
             RowCount = ROWCOUNT;
             SetupRowsAndColumns();
-            SetupEvents();
             Display();
         }
-        
+
         public ChessForm ParentForm { get; }
 
         public void Display(bool flippedPerspective = false)
@@ -56,6 +57,35 @@ namespace prjChessForms.PresentationUI
             throw new ArgumentException("Button could not be found");
         }
 
+        public void UpdateImageInSquare(Coords coords, Image newImage)
+        {
+            _buttons[coords.X, coords.Y].Image = newImage;
+        }
+
+        public void ChangePieceSelection(Coords selectedCoords, List<Coords> highlightedCoords)
+        {
+            for(int y = 0; y < RowCount; y++)
+            {
+                for (int x = 0; x < ColumnCount; x++)
+                {
+                    Coords coords = new Coords(x, y);
+                    Button button = _buttons[x,y];
+                    if (coords.Equals(selectedCoords))
+                    {
+                        button.BackColor = Color.Blue;
+                    }
+                    else if (highlightedCoords.Contains(coords))
+                    {
+                        button.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        button.BackColor = DefaultBackColor;
+                    }
+                }
+            }
+        }
+
 
         private void SetupRowsAndColumns()
         {
@@ -79,24 +109,11 @@ namespace prjChessForms.PresentationUI
                 }
             }
         }
-        
-        private void SetupEvents()
-        {
-            ParentForm.ImageInSquareUpdate += OnImageInSquareUpdated;
-        }
 
         private void OnSquareClicked(object sender, EventArgs e)
         {
             Button button = (Button)sender;
             SquareClicked.Invoke(this, new SquareClickedEventArgs(GetCoordsOf(button)));
         }
-        private void OnImageInSquareUpdated(object sender, ImageInSquareUpdateEventArgs e)
-        {
-            Button button = _buttons[e.SquareCoords.X, e.SquareCoords.Y];
-            button.Image = e.Image;
-        }
-
-
-
     }
 }

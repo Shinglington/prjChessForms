@@ -72,6 +72,7 @@ namespace prjChessForms.MyChessLibrary
         public Player BlackPlayer { get { return _players[1]; } }
         public Square[,] BoardSquares { get { return _board.GetSquares(); } }
         public Piece GetPieceAt(Coords coords) => _board.GetPieceAt(coords);
+        public Coords GetCoordsOf(Piece piece) => _board.GetCoordsOfPiece(piece);
 
         public async Task StartGame()
         {
@@ -81,9 +82,12 @@ namespace prjChessForms.MyChessLibrary
 
         public void SyncGameAndBoard()
         {
-            foreach(Square s in BoardSquares)
+            if (PieceInSquareChanged != null)
             {
-                PieceInSquareChanged.Invoke(this, new PieceInSquareChangedEventArgs(s.Coords, GetPieceAt(s.Coords)));
+                foreach (Square s in BoardSquares)
+                {
+                    PieceInSquareChanged.Invoke(this, new PieceInSquareChangedEventArgs(s.Coords, GetPieceAt(s.Coords)));
+                }
             }
         }
 
@@ -127,7 +131,10 @@ namespace prjChessForms.MyChessLibrary
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
                     Piece p = GetPieceAt(_clickedCoords);
-                    PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(p, Rulebook.GetPossibleMoves(_board, p)));
+                    if (PieceSelectionChanged != null)
+                    {
+                        PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(p, Rulebook.GetPossibleMoves(_board, p)));
+                    }
                     fromCoords = _clickedCoords;
                     toCoords = new Coords();
                 }

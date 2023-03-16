@@ -1,5 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,11 +27,20 @@ namespace prjChessForms.PresentationUI
         public Coords SquareCoords { get; set; }
         public Image Image { get; set; }
     }
+
+    class SquareHighlightsChangedEventArgs : EventArgs
+    {
+        public SquareHighlightsChangedEventArgs(Coords selectedCoords, List<Coords> validMoves)
+        {
+            SelectedCoords = selectedCoords;
+            ValidMoves = validMoves;
+        }
+        public Coords SelectedCoords { get; set; }
+        public List<Coords> ValidMoves { get; set; }
+    }
     partial class ChessForm : Form
     {
-        public event EventHandler<SquareClickedEventArgs> SquareClicked;
-
-        public event EventHandler<ImageInSquareUpdateEventArgs> ImageInSquareUpdate;
+        public EventHandler<SquareClickedEventArgs> SquareClicked;
 
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
@@ -132,7 +142,8 @@ namespace prjChessForms.PresentationUI
 
         private void SetupEvents()
         {
-            Controller.ImageInSquareUpdate += (sender, e) => ImageInSquareUpdate.Invoke(this, e);
+            Controller.ImageInSquareUpdate += (sender, e) => _boardPanel.UpdateImageInSquare(e.SquareCoords, e.Image);
+            Controller.SquareHighlightsChanged += (sender, e) => _boardPanel.ChangePieceSelection(e.SelectedCoords, e.ValidMoves);
         }
     }
 
