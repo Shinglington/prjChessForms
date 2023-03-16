@@ -17,59 +17,34 @@ namespace prjChessForms
     }
     class Controller
     {
-        public EventHandler<CoordsClickedEventArgs> CoordsClicked
+        public EventHandler<CoordsClickedEventArgs> CoordsClicked;
+        public EventHandler<ImageInSquareUpdateEventArgs> ImageInSquareUpdate; 
 
         private CancellationToken cts = new CancellationToken();
         public Controller()
         {
             ChessGame = new Chess(this);
             ChessForm = new ChessForm(this);
+
+            SetupEvents();
+            Start();
         }
 
         public Chess ChessGame { get; }
         public ChessForm ChessForm { get; }
 
+        public void Start()
+        {
+            ChessGame.SyncGameAndBoard();
+            ChessGame.StartGame();
+        }
 
         private void SetupEvents()
         {
-           
+            ChessForm.SquareClicked += (sender, e) => CoordsClicked.Invoke(this, new CoordsClickedEventArgs(e.ClickedCoords));
+            ChessGame.PieceInSquareChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
         }
 
-
-        private async Task<ChessMove> GetPlayerMove()
-        {
-            _fromCoords = new Coords();
-            _toCoords = new Coords();
-            ChessMove move = new ChessMove();
-            bool completeInput = false;
-            while (!completeInput)
-            {
-                await _semaphoreClick.WaitAsync(cToken);
-                if (_game.GetPieceAt(_clickedCoords) != null && _game.GetPieceAt(_clickedCoords).Owner.Equals(_game.CurrentPlayer))
-                {
-                    _fromCoords = _clickedCoords;
-                    _toCoords = new Coords();
-                }
-                else if (!_fromCoords.Equals(new Coords()))
-                {
-                    _toCoords = _clickedCoords;
-                }
-                // Check if move is valid now
-
-                if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
-                {
-                    move = new ChessMove(_fromCoords, _toCoords);
-                    completeInput = true;
-                }
-            }
-            return move;
-        }
-        private async void SendMove(object sender, RequestMoveInputEventArgs e)
-        {
-            Player player = (Player)sender;
-            ChessMove move = await GetPlayerMove(e.CToken);
-            player.OnMoveSent(move);
-        }
 
         private void OnGameOver(object sender, GameOverEventArgs e)
         {
@@ -78,4 +53,3 @@ namespace prjChessForms
     }
 }
 
-}

@@ -1,5 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,24 +13,33 @@ namespace prjChessForms.PresentationUI
         {
             ClickedCoords = clickedCoords;
         }
-
         public Coords ClickedCoords { get; set; }
+    }
+
+    class ImageInSquareUpdateEventArgs : EventArgs
+    {
+        public ImageInSquareUpdateEventArgs(Coords coords, Image image)
+        {
+            SquareCoords = coords;
+            Image = image;
+        }
+        public Coords SquareCoords { get; set; }
+        public Image Image { get; set; }
     }
     partial class ChessForm : Form
     {
         public event EventHandler<SquareClickedEventArgs> SquareClicked;
 
+        public event EventHandler<ImageInSquareUpdateEventArgs> ImageInSquareUpdate;
+
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
-
-        private SemaphoreSlim _semaphoreClick = new SemaphoreSlim(0, 1);
-        private CancellationToken cts = new CancellationToken();
-
         public ChessForm(Controller controller)
         {
             InitializeComponent();
             Controller = controller;
             SetupControls();
+            SetupEvents();
         }
         public Controller Controller { get; }
 
@@ -53,12 +63,12 @@ namespace prjChessForms.PresentationUI
 
 
             // Board panel
-            _boardPanel = new BoardTableLayoutPanel()
+            _boardPanel = new BoardTableLayoutPanel(this)
             {
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
             };
-            _boardPanel.SquareClicked += OnSquareClicked;
+            _boardPanel.SquareClicked += (sender, e) => SquareClicked.Invoke(this, e);
             _layoutPanel.SetCellPosition(_boardPanel, new TableLayoutPanelCellPosition(0, 1));
 
             // Timer
@@ -120,10 +130,12 @@ namespace prjChessForms.PresentationUI
             //whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
 
-        private void OnSquareClicked(object sender, SquareClickedEventArgs e)
+        private void SetupEvents()
         {
-            _clickedCoords = e.ClickedCoords;
-            _semaphoreClick.Release();
+            Controller.ImageInSquareUpdate += (sender, e) => ImageInSquareUpdate.Invoke(this, e);
         }
     }
+
+   
+    
 }

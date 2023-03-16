@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjChessForms.MyChessLibrary;
+using System;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -8,26 +9,53 @@ namespace prjChessForms.PresentationUI
         public EventHandler<SquareClickedEventArgs> SquareClicked;
 
         private const int ROWCOUNT = 8;
-        private const int COLUMNCOUNT = 16;
+        private const int COLUMNCOUNT = 8;
         private Button[,] _buttons;
-        public BoardTableLayoutPanel()
+        public BoardTableLayoutPanel(ChessForm parentForm)
         {
+            ParentForm = parentForm;
             ColumnCount = COLUMNCOUNT;
             RowCount = ROWCOUNT;
             SetupRowsAndColumns();
+            SetupEvents();
             Display();
         }
+        
+        public ChessForm ParentForm { get; }
 
-        public void Display()
+        public void Display(bool flippedPerspective = false)
         {
             for (int x = 0; x < ColumnCount; x++)
             {
                 for (int y = 0; y < RowCount; y++)
                 {
-                    SetCellPosition(_buttons[x, y], new TableLayoutPanelCellPosition(x, RowCount - 1 - y));
+                    if (flippedPerspective)
+                    {
+                        SetCellPosition(_buttons[x, y], new TableLayoutPanelCellPosition(x, y));
+                    }
+                    else
+                    {
+                        SetCellPosition(_buttons[x, y], new TableLayoutPanelCellPosition(x, RowCount - 1 - y));
+                    }
                 }
             }
         }
+
+        public Coords GetCoordsOf(Button button)
+        {
+            for (int y = 0; y < _buttons.GetLength(1); y++)
+            {
+                for (int x = 0; x < _buttons.GetLength(0); x++)
+                {
+                    if (_buttons[x, y] == button)
+                    {
+                        return new Coords(x, y);
+                    }
+                }
+            }
+            throw new ArgumentException("Button could not be found");
+        }
+
 
         private void SetupRowsAndColumns()
         {
@@ -48,33 +76,24 @@ namespace prjChessForms.PresentationUI
                     };
                     button.Click += OnSquareClicked;
                     _buttons[x, y] = button;
-                    _boardSquares[x, y].PieceChanged += OnPieceInSquareChanged;
                 }
             }
-
+        }
+        
+        private void SetupEvents()
+        {
+            ParentForm.ImageInSquareUpdate += OnImageInSquareUpdated;
         }
 
         private void OnSquareClicked(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            TableLayoutPanelCellPosition position = GetPositionFromControl(button);
-            Coords clickedCoords = new Coords();
-            switch (_perspective)
-            {
-                case PieceColour.White:
-                    clickedCoords = new Coords(position.Column, RowCount - 1 - position.Row);
-                    break;
-                case PieceColour.Black:
-                    clickedCoords = new Coords(position.Column, position.Row);
-                    break;
-            }
-            SquareClicked.Invoke(this, new SquareClickedEventArgs(clickedCoords));
+            SquareClicked.Invoke(this, new SquareClickedEventArgs(GetCoordsOf(button)));
         }
-        private void OnPieceInSquareChanged(object sender, EventArgs e)
+        private void OnImageInSquareUpdated(object sender, ImageInSquareUpdateEventArgs e)
         {
-            Square square = (Square)sender;
-            Button button = _buttons[square.Coords.X, square.Coords.Y];
-            button.Image = square.Piece.Image;
+            Button button = _buttons[e.SquareCoords.X, e.SquareCoords.Y];
+            button.Image = e.Image;
         }
 
 

@@ -28,10 +28,23 @@ namespace prjChessForms.MyChessLibrary
         public List<ChessMove> ValidMoves { get; set; }
     }
 
+    class PieceInSquareChangedEventArgs : EventArgs 
+    { 
+        public PieceInSquareChangedEventArgs(Coords coords, Piece newPiece)
+        {
+            SquareCoords = coords;
+            NewPiece = newPiece;
+        }
+        public Coords SquareCoords { get; set; }
+        public Piece NewPiece { get; set; }
+    }
+
+
     class Chess
     {
         public event EventHandler<GameOverEventArgs> GameOver;
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
+        public event EventHandler<PieceInSquareChangedEventArgs> PieceInSquareChanged;
 
         private Board _board;
         private System.Timers.Timer _timer;
@@ -66,7 +79,15 @@ namespace prjChessForms.MyChessLibrary
             OnGameOver();
         }
 
-        public async Task Play(CancellationToken cToken)
+        public void SyncGameAndBoard()
+        {
+            foreach(Square s in BoardSquares)
+            {
+                PieceInSquareChanged.Invoke(this, new PieceInSquareChangedEventArgs(s.Coords, GetPieceAt(s.Coords)));
+            }
+        }
+
+        private async Task Play(CancellationToken cToken)
         {
             _turnCount = 0;
             _result = GameResult.Unfinished;
@@ -103,9 +124,10 @@ namespace prjChessForms.MyChessLibrary
             while (!completeInput)
             {
                 await _semaphoreReceiveClick.WaitAsync(cToken);
-
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
+                    Piece p = GetPieceAt(_clickedCoords);
+                    PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(p, Rulebook.GetPossibleMoves(_board, p)));
                     fromCoords = _clickedCoords;
                     toCoords = new Coords();
                 }
