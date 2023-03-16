@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Xml.Linq;
 
 namespace prjChessForms.MyChessLibrary
 {
     class GameOverEventArgs : EventArgs
     {
-        public GameOverEventArgs(Player winner, GameResult result) 
+        public GameOverEventArgs(Player winner, GameResult result)
         {
             Result = result;
             Winner = winner;
@@ -17,7 +16,7 @@ namespace prjChessForms.MyChessLibrary
         public Player Winner { get; set; }
         public GameResult Result { get; set; }
     }
-    
+
     class PieceSelectionChangedEventArgs : EventArgs
     {
         public PieceSelectionChangedEventArgs(Piece selectedPiece, List<ChessMove> validMoves)
@@ -42,7 +41,7 @@ namespace prjChessForms.MyChessLibrary
         private Player[] _players;
         private int _turnCount;
 
-        private Coords _receivedClick;
+        private Coords _clickedCoords;
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private bool _waitingForClick;
         public Chess(Controller controller)
@@ -95,42 +94,39 @@ namespace prjChessForms.MyChessLibrary
 
         private async Task<ChessMove> GetChessMove(CancellationToken cToken)
         {
+            Coords fromCoords = new Coords();
+            Coords toCoords = new Coords();
+            ChessMove move = new ChessMove();
+            bool completeInput = false;
+            _waitingForClick = true;
             _timer.Start();
-            RequestMoveInput.Invoke(this, new RequestMoveInputEventArgs(CurrentPlayer, cToken));
-            await _semaphoreReceiveClick.WaitAsync(cToken);
-            _timer.Stop();
-                _fromCoords = new Coords();
-                _toCoords = new Coords();
-                ChessMove move = new ChessMove();
-                bool completeInput = false;
-                while (!completeInput)
+            while (!completeInput)
+            {
+                await _semaphoreReceiveClick.WaitAsync(cToken);
+
+                if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
-                    await _semaphoreClick.WaitAsync(cToken);
-                    if (_game.GetPieceAt(_clickedCoords) != null && _game.GetPieceAt(_clickedCoords).Owner.Equals(_game.CurrentPlayer))
-                    {
-                        _fromCoords = _clickedCoords;
-                        _toCoords = new Coords();
-                    }
-                    else if (!_fromCoords.Equals(new Coords()))
-                    {
-                        _toCoords = _clickedCoords;
-                    }
-                    // Check if move is valid now
-
-                    if (!_toCoords.Equals(new Coords()) && !_fromCoords.Equals(new Coords()))
-                    {
-                        move = new ChessMove(_fromCoords, _toCoords);
-                        completeInput = true;
-                    }
+                    fromCoords = _clickedCoords;
+                    toCoords = new Coords();
                 }
-                return move;
+                else if (!fromCoords.Equals(new Coords()))
+                {
+                    toCoords = _clickedCoords;
+                }
+                // Check if move is valid now
+                if (!toCoords.Equals(new Coords()) && !fromCoords.Equals(new Coords()))
+                {
+                    move = new ChessMove(fromCoords, toCoords);
+                    completeInput = true;
+                }
+            }
+            _timer.Stop();
+            _waitingForClick = false;
+            return move;
         }
-
-
-
         private void SetupControllerEvents()
         {
-            MoveReceived += OnMoveReceived;
+            Controller.CoordsClicked += OnReceiveCoords;
         }
         private void CreatePlayers()
         {
@@ -139,15 +135,14 @@ namespace prjChessForms.MyChessLibrary
             _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
         }
 
-        private void OnReceiveCoords(object sender, ReceiveCoordsEventArgs e) 
+        private void OnReceiveCoords(object sender, CoordsClickedEventArgs e)
         {
             if (_waitingForClick)
             {
-                _receivedClick = e.Coords;
+                _clickedCoords = e.ClickedCoords;
                 _semaphoreReceiveClick.Release();
             }
         }
-
 
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
@@ -165,7 +160,7 @@ namespace prjChessForms.MyChessLibrary
             if (_result == GameResult.Checkmate || _result == GameResult.Time)
             {
                 winner = CurrentPlayer == _players[0] ? _players[1] : _players[0];
-            } 
+            }
             if (GameOver != null)
             {
                 GameOver.Invoke(this, new GameOverEventArgs(winner, _result));

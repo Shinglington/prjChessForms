@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace prjChessForms
 {
-    class ReceiveCoordsEventArgs : EventArgs
+    class CoordsClickedEventArgs : EventArgs
     {
-        public ReceiveCoordsEventArgs(Coords coords)
+        public CoordsClickedEventArgs(Coords coords)
         {
             ClickedCoords = coords;
         }
@@ -17,6 +17,8 @@ namespace prjChessForms
     }
     class Controller
     {
+        public EventHandler<CoordsClickedEventArgs> CoordsClicked
+
         private CancellationToken cts = new CancellationToken();
         public Controller()
         {
