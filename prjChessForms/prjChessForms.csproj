@@ -68,6 +68,7 @@
       <DependentUpon>Chess.cs</DependentUpon>
     </Compile>
     <Compile Include="MyChessLibrary\Coords.cs" />
+    <Compile Include="MyChessLibrary\CustomEventArgs.cs" />
     <Compile Include="MyChessLibrary\Piece.cs" />
     <Compile Include="MyChessLibrary\Player.cs" />
     <Compile Include="MyChessLibrary\Square.cs" />

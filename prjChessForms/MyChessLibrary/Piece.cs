@@ -25,15 +25,10 @@ namespace prjChessForms.MyChessLibrary
         }
 
         public bool HasMoved { get; set; }
-
         public Player Owner { get; }
-
         public Image Image { get; }
-
         public PieceColour Colour { get { return Owner.Colour; } }
-
         public string Name { get { return GetType().Name; } }
-
         public string Fullname { get { return $"{Colour} {Name}"; } }
 
         public override string ToString()

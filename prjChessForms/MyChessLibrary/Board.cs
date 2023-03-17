@@ -5,6 +5,8 @@ namespace prjChessForms.MyChessLibrary
 {
     class Board
     {
+        public event EventHandler<PieceChangedEventArgs> PieceChanged;
+
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private Player[] _players;
@@ -194,6 +196,14 @@ namespace prjChessForms.MyChessLibrary
                     throw new ArgumentException("Unrecognised pieceType");
             }
             square.Piece = p;
+        }
+
+        private void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        {
+            if (PieceChanged != null)
+            {
+                PieceChanged.Invoke(this, e);
+            }
         }
     }
 }

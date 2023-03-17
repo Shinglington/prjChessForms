@@ -44,7 +44,7 @@ namespace prjChessForms
         private void SetupEvents()
         {
             ChessForm.SquareClicked += (sender, e) => CoordsClicked.Invoke(this, new CoordsClickedEventArgs(e.ClickedCoords));
-            ChessGame.PieceInSquareChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
+            ChessGame.PieceChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
             ChessGame.PieceSelectionChanged += OnPieceSelectionChanged;
         }
 

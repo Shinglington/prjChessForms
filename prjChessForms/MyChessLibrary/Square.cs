@@ -2,17 +2,6 @@
 
 namespace prjChessForms.MyChessLibrary
 {
-    class PieceChangedEventArgs : EventArgs
-    {
-        public PieceChangedEventArgs(Square square, Piece newPiece)
-        {
-            NewPiece = newPiece;
-            Square = square;
-        }
-        public Square Square { get; set; }
-        public Piece NewPiece { get; set; }
-    }
-
     class Square
     {
         public event EventHandler<PieceChangedEventArgs> PieceChanged;

@@ -1,50 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class GameOverEventArgs : EventArgs
-    {
-        public GameOverEventArgs(Player winner, GameResult result)
-        {
-            Result = result;
-            Winner = winner;
-        }
-        public Player Winner { get; set; }
-        public GameResult Result { get; set; }
-    }
-
-    class PieceSelectionChangedEventArgs : EventArgs
-    {
-        public PieceSelectionChangedEventArgs(Piece selectedPiece, List<ChessMove> validMoves)
-        {
-            SelectedPiece = selectedPiece;
-            ValidMoves = validMoves;
-        }
-        public Piece SelectedPiece { get; set; }
-        public List<ChessMove> ValidMoves { get; set; }
-    }
-
-    class PieceInSquareChangedEventArgs : EventArgs 
-    { 
-        public PieceInSquareChangedEventArgs(Coords coords, Piece newPiece)
-        {
-            SquareCoords = coords;
-            NewPiece = newPiece;
-        }
-        public Coords SquareCoords { get; set; }
-        public Piece NewPiece { get; set; }
-    }
-
-
     class Chess
     {
         public event EventHandler<GameOverEventArgs> GameOver;
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
-        public event EventHandler<PieceInSquareChangedEventArgs> PieceInSquareChanged;
+        public event EventHandler<PieceChangedEventArgs> PieceChanged;
 
         private Board _board;
         private System.Timers.Timer _timer;
@@ -64,7 +29,7 @@ namespace prjChessForms.MyChessLibrary
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
-            SetupControllerEvents();
+            SetupEvents();
         }
         public Controller Controller { get; }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
@@ -82,11 +47,11 @@ namespace prjChessForms.MyChessLibrary
 
         public void SyncGameAndBoard()
         {
-            if (PieceInSquareChanged != null)
+            if (PieceChanged != null)
             {
                 foreach (Square s in BoardSquares)
                 {
-                    PieceInSquareChanged.Invoke(this, new PieceInSquareChangedEventArgs(s.Coords, GetPieceAt(s.Coords)));
+                    PieceChanged.Invoke(this, new PieceChangedEventArgs(s, s.Piece));
                 }
             }
         }
@@ -153,15 +118,27 @@ namespace prjChessForms.MyChessLibrary
             _waitingForClick = false;
             return move;
         }
-        private void SetupControllerEvents()
-        {
-            Controller.CoordsClicked += OnReceiveCoords;
-        }
         private void CreatePlayers()
         {
             _players = new Player[2];
             _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
             _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
+        }
+        private void SetupEvents()
+        {
+            _board.PieceChanged += OnPieceChanged;
+
+            Controller.CoordsClicked += OnReceiveCoords;
+
+
+        }
+
+        private void OnPieceChanged(object sender, PieceChangedEventArgs e)
+        {
+            if (PieceChanged != null)
+            {
+                PieceChanged.Invoke(this, e);
+            }
         }
 
         private void OnReceiveCoords(object sender, CoordsClickedEventArgs e)

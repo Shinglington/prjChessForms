@@ -10,7 +10,6 @@ namespace prjChessForms.MyChessLibrary
         Stalemate,
         Time
     }
-
     public struct ChessMove
     {
         public ChessMove(Coords startCoords, Coords endCoords)

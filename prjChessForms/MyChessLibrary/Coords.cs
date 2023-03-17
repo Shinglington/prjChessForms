@@ -9,7 +9,6 @@
         }
         public int X { get; }
         public int Y { get; }
-
         public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
 
         public override bool Equals(object obj)
