@@ -16,9 +16,10 @@ namespace prjChessForms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-
-            Controller controller = new Controller();
-            Application.Run(controller.ChessForm);
+            Chess game = new Chess();
+            ChessForm form = new ChessForm();
+            ChessController controller = new ChessController(game, form);
+            Application.Run(form);
         }
     }
 }

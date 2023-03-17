@@ -8,50 +8,19 @@ using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
-    class SquareClickedEventArgs : EventArgs
-    {
-        public SquareClickedEventArgs(Coords clickedCoords)
-        {
-            ClickedCoords = clickedCoords;
-        }
-        public Coords ClickedCoords { get; set; }
-    }
-
-    class ImageInSquareUpdateEventArgs : EventArgs
-    {
-        public ImageInSquareUpdateEventArgs(Coords coords, Image image)
-        {
-            SquareCoords = coords;
-            Image = image;
-        }
-        public Coords SquareCoords { get; set; }
-        public Image Image { get; set; }
-    }
-
-    class SquareHighlightsChangedEventArgs : EventArgs
-    {
-        public SquareHighlightsChangedEventArgs(Coords selectedCoords, List<Coords> validMoves)
-        {
-            SelectedCoords = selectedCoords;
-            ValidMoves = validMoves;
-        }
-        public Coords SelectedCoords { get; set; }
-        public List<Coords> ValidMoves { get; set; }
-    }
     partial class ChessForm : Form
     {
         public EventHandler<SquareClickedEventArgs> SquareClicked;
 
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
-        public ChessForm(Controller controller)
+        public ChessForm()
         {
             InitializeComponent();
-            Controller = controller;
             SetupControls();
             SetupEvents();
         }
-        public Controller Controller { get; }
+        public ChessController Controller { get; set;  }
 
         private void SetupControls()
         {

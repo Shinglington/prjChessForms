@@ -22,16 +22,15 @@ namespace prjChessForms.MyChessLibrary
         private Coords _clickedCoords;
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private bool _waitingForClick;
-        public Chess(Controller controller)
+        public Chess()
         {
-            Controller = controller;
             CreatePlayers();
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
             SetupEvents();
         }
-        public Controller Controller { get; }
+        public ChessController Controller { get; }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }

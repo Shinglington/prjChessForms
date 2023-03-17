@@ -16,36 +16,39 @@ namespace prjChessForms
         }
         public Coords ClickedCoords { get; set; }
     }  
-    class Controller
+    class ChessController
     {
         public EventHandler<CoordsClickedEventArgs> CoordsClicked;
         public EventHandler<ImageInSquareUpdateEventArgs> ImageInSquareUpdate;
         public EventHandler<SquareHighlightsChangedEventArgs> SquareHighlightsChanged;
 
         private CancellationToken cts = new CancellationToken();
-        public Controller()
+
+        private Chess _chessModel;
+        private ChessForm _chessView;
+
+        public ChessController(Chess chessModel, ChessForm chessView)
         {
-            ChessGame = new Chess(this);
-            ChessForm = new ChessForm(this);
+            _chessModel = chessModel;
+            _chessView = chessView;
+            _chessView.Controller = this;
 
             SetupEvents();
             Start();
         }
 
-        public Chess ChessGame { get; }
-        public ChessForm ChessForm { get; }
 
         public void Start()
         {
-            ChessGame.SyncGameAndBoard();
-            ChessGame.StartGame();
+            _chessModel.SyncGameAndBoard();
+            _chessModel.StartGame();
         }
 
         private void SetupEvents()
         {
-            ChessForm.SquareClicked += (sender, e) => CoordsClicked.Invoke(this, new CoordsClickedEventArgs(e.ClickedCoords));
-            ChessGame.PieceChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
-            ChessGame.PieceSelectionChanged += OnPieceSelectionChanged;
+            _chessView.SquareClicked += (sender, e) => CoordsClicked.Invoke(this, new CoordsClickedEventArgs(e.ClickedCoords));
+            _chessModel.PieceChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
+            _chessModel.PieceSelectionChanged += OnPieceSelectionChanged;
         }
 
         private void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
@@ -55,7 +58,7 @@ namespace prjChessForms
             {
                 highlightCoords.Add(move.EndCoords);
             }
-            SquareHighlightsChangedEventArgs eventArgs = new SquareHighlightsChangedEventArgs(ChessGame.GetCoordsOf(e.SelectedPiece), highlightCoords);
+            SquareHighlightsChangedEventArgs eventArgs = new SquareHighlightsChangedEventArgs(_chessModel.GetCoordsOf(e.SelectedPiece), highlightCoords);
             SquareHighlightsChanged.Invoke(this, eventArgs);
         }
 
