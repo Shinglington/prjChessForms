@@ -57,7 +57,7 @@ namespace prjChessForms.PresentationUI
             throw new ArgumentException("Button could not be found");
         }
 
-        public void UpdateImageInSquare(Coords coords, Image newImage)
+        public void UpdateSquare(Coords coords, Image newImage)
         {
             _buttons[coords.X, coords.Y].Image = newImage;
         }
@@ -85,7 +85,6 @@ namespace prjChessForms.PresentationUI
                 }
             }
         }
-
 
         private void SetupRowsAndColumns()
         {

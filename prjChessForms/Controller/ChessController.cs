@@ -6,22 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace prjChessForms
+namespace prjChessForms.Controller
 {
-    class CoordsClickedEventArgs : EventArgs
-    {
-        public CoordsClickedEventArgs(Coords coords)
-        {
-            ClickedCoords = coords;
-        }
-        public Coords ClickedCoords { get; set; }
-    }  
     class ChessController
     {
-        public EventHandler<CoordsClickedEventArgs> CoordsClicked;
-        public EventHandler<ImageInSquareUpdateEventArgs> ImageInSquareUpdate;
-        public EventHandler<SquareHighlightsChangedEventArgs> SquareHighlightsChanged;
-
         private CancellationToken cts = new CancellationToken();
 
         private Chess _chessModel;
@@ -31,35 +19,11 @@ namespace prjChessForms
         {
             _chessModel = chessModel;
             _chessView = chessView;
+
             _chessView.Controller = this;
+            _chessModel.AttachModelObserver(_chessView);
 
-            SetupEvents();
-            Start();
-        }
-
-
-        public void Start()
-        {
-            _chessModel.SyncGameAndBoard();
-            _chessModel.StartGame();
-        }
-
-        private void SetupEvents()
-        {
-            _chessView.SquareClicked += (sender, e) => CoordsClicked.Invoke(this, new CoordsClickedEventArgs(e.ClickedCoords));
-            _chessModel.PieceChanged += (sender, e) => ImageInSquareUpdate.Invoke(this, new ImageInSquareUpdateEventArgs(e.SquareCoords, e.NewPiece != null ? e.NewPiece.Image : null));
-            _chessModel.PieceSelectionChanged += OnPieceSelectionChanged;
-        }
-
-        private void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
-        {
-            List<Coords> highlightCoords = new List<Coords>();
-            foreach(ChessMove move in e.ValidMoves)
-            {
-                highlightCoords.Add(move.EndCoords);
-            }
-            SquareHighlightsChangedEventArgs eventArgs = new SquareHighlightsChangedEventArgs(_chessModel.GetCoordsOf(e.SelectedPiece), highlightCoords);
-            SquareHighlightsChanged.Invoke(this, eventArgs);
+            _chessView.SquareClicked += (sender, e) => _chessModel.SendCoords(e.ClickedCoords);
         }
 
         private void OnGameOver(object sender, GameOverEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjChessForms.Controller;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -28,7 +29,6 @@ namespace prjChessForms.MyChessLibrary
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
-            SetupEvents();
         }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
@@ -42,16 +42,24 @@ namespace prjChessForms.MyChessLibrary
             await Play(cts.Token);
             OnGameOver();
         }
-
-        public void SyncGameAndBoard()
+        public void SendCoords(Coords coords)
         {
-            if (PieceChanged != null)
+            if (_waitingForClick)
             {
-                foreach (Square s in BoardSquares)
-                {
-                    PieceChanged.Invoke(this, new PieceChangedEventArgs(s, s.Piece));
-                }
+                _clickedCoords = coords;
+                _semaphoreReceiveClick.Release();
             }
+        }
+
+        public void AttachModelObserver(IModelObserver observer)
+        {
+            _board.PieceChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
+            // Fire initially to update all squares
+            foreach(Square s in _board.GetSquares())
+            {
+                observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
+            }
+
         }
 
         private async Task Play(CancellationToken cToken)
@@ -122,19 +130,6 @@ namespace prjChessForms.MyChessLibrary
             _players[0] = new HumanPlayer(PieceColour.White, new TimeSpan(0, 3, 0));
             _players[1] = new HumanPlayer(PieceColour.Black, new TimeSpan(0, 3, 0));
         }
-        private void SetupEvents()
-        {
-            _board.PieceChanged += OnPieceChanged;
-        }
-
-        private void OnPieceChanged(object sender, PieceChangedEventArgs e)
-        {
-            if (PieceChanged != null)
-            {
-                PieceChanged.Invoke(this, e);
-            }
-        }
-
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
             CurrentPlayer.TickTime(new TimeSpan(0, 0, 1));

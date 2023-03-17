@@ -83,6 +83,7 @@
     <Compile Include="PresentationUI\ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PresentationUI\PresentationEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyChessLibrary\Rulebook.cs" />

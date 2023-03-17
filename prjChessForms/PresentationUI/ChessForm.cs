@@ -1,14 +1,11 @@
-﻿using prjChessForms.MyChessLibrary;
+﻿using prjChessForms.Controller;
+using prjChessForms.MyChessLibrary;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
-    partial class ChessForm : Form
+    partial class ChessForm : Form, IModelObserver
     {
         public EventHandler<SquareClickedEventArgs> SquareClicked;
 
@@ -18,9 +15,13 @@ namespace prjChessForms.PresentationUI
         {
             InitializeComponent();
             SetupControls();
-            SetupEvents();
         }
-        public ChessController Controller { get; set;  }
+        public ChessController Controller { get; set; }
+
+        public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        {
+            _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece != null ? e.NewPiece.Image : null);
+        }
 
         private void SetupControls()
         {
@@ -108,14 +109,8 @@ namespace prjChessForms.PresentationUI
             //};
             //whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
-
-        private void SetupEvents()
-        {
-            Controller.ImageInSquareUpdate += (sender, e) => _boardPanel.UpdateImageInSquare(e.SquareCoords, e.Image);
-            Controller.SquareHighlightsChanged += (sender, e) => _boardPanel.ChangePieceSelection(e.SelectedCoords, e.ValidMoves);
-        }
     }
 
-   
-    
+
+
 }
