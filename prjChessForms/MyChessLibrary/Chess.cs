@@ -30,7 +30,6 @@ namespace prjChessForms.MyChessLibrary
             _waitingForClick = false;
             SetupEvents();
         }
-        public ChessController Controller { get; }
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }
@@ -126,10 +125,6 @@ namespace prjChessForms.MyChessLibrary
         private void SetupEvents()
         {
             _board.PieceChanged += OnPieceChanged;
-
-            Controller.CoordsClicked += OnReceiveCoords;
-
-
         }
 
         private void OnPieceChanged(object sender, PieceChangedEventArgs e)
@@ -137,15 +132,6 @@ namespace prjChessForms.MyChessLibrary
             if (PieceChanged != null)
             {
                 PieceChanged.Invoke(this, e);
-            }
-        }
-
-        private void OnReceiveCoords(object sender, CoordsClickedEventArgs e)
-        {
-            if (_waitingForClick)
-            {
-                _clickedCoords = e.ClickedCoords;
-                _semaphoreReceiveClick.Release();
             }
         }
 

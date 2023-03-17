@@ -3,6 +3,8 @@ using System.Windows.Forms;
 
 using prjChessForms.PresentationUI;
 using prjChessForms.MyChessLibrary;
+using prjChessForms.Controller;
+
 namespace prjChessForms
 {
     internal static class Program

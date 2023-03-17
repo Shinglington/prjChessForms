@@ -61,7 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChessController.cs" />
+    <Compile Include="Controller\ChessController.cs" />
+    <Compile Include="Controller\IModelObserver.cs" />
+    <Compile Include="Controller\IViewPerspective.cs" />
     <Compile Include="MyChessLibrary\Board.cs" />
     <Compile Include="MyChessLibrary\Chess.cs" />
     <Compile Include="MyChessLibrary\Chess.Designer.cs">
@@ -81,7 +83,6 @@
     <Compile Include="PresentationUI\ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PresentationUI\PresentationEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyChessLibrary\Rulebook.cs" />

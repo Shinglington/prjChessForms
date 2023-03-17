@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.Controller
 {
-    internal class PresentationEventARgs
+    internal class IViewObserver
     {
     }
 }
