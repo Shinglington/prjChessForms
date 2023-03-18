@@ -1,6 +1,7 @@
 ﻿using prjChessForms.Controller;
 using prjChessForms.MyChessLibrary;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -48,7 +49,7 @@ namespace prjChessForms.PresentationUI
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
             };
-            _boardPanel.SquareClicked += (sender, e) => SquareClicked.Invoke(this, e);
+            _boardPanel.SquareClicked += OnBoardClicked;
             _layoutPanel.SetCellPosition(_boardPanel, new TableLayoutPanelCellPosition(0, 1));
 
             // Timer
@@ -109,6 +110,16 @@ namespace prjChessForms.PresentationUI
             //};
             //whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
         }
+
+        private void OnBoardClicked(object sender, SquareClickedEventArgs e)
+        {
+            if (SquareClicked != null)
+            {
+                SquareClicked.Invoke(this, e);
+            }
+
+        }
+            
     }
 
 

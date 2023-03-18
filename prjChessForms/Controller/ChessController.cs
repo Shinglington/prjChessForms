@@ -2,6 +2,8 @@
 using prjChessForms.PresentationUI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,12 +25,21 @@ namespace prjChessForms.Controller
             _chessView.Controller = this;
             _chessModel.AttachModelObserver(_chessView);
 
-            _chessView.SquareClicked += (sender, e) => _chessModel.SendCoords(e.ClickedCoords);
+            _chessView.SquareClicked += OnBoardClickReceived;
+
+
+            _chessModel.StartGame();
         }
 
         private void OnGameOver(object sender, GameOverEventArgs e)
         {
             MessageBox.Show(e.Result.ToString() + " ," + (e.Winner != null ? e.Winner.Colour.ToString() : "Nobody") + " Wins");
+        }
+
+        private void OnBoardClickReceived(object sender, SquareClickedEventArgs e)
+        {
+            Debug.WriteLine("Controller received coords clicked at {0} ", e.ClickedCoords);
+            _chessModel.SendCoords(e.ClickedCoords);
         }
     }
 }

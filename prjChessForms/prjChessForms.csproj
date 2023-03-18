@@ -63,7 +63,6 @@
   <ItemGroup>
     <Compile Include="Controller\ChessController.cs" />
     <Compile Include="Controller\IModelObserver.cs" />
-    <Compile Include="Controller\IViewPerspective.cs" />
     <Compile Include="MyChessLibrary\Board.cs" />
     <Compile Include="MyChessLibrary\Chess.cs" />
     <Compile Include="MyChessLibrary\Chess.Designer.cs">
