@@ -24,8 +24,8 @@ namespace prjChessForms.MyChessLibrary
             SelectedPiece = selectedPiece;
             ValidMoves = validMoves;
         }
-        public Piece SelectedPiece { get; set; }
-        public List<ChessMove> ValidMoves { get; set; }
+        public Coords SelectedPieceCoords { get; set; }
+        public List<Coords> PossibleEndCoords { get; set; }
     }
 
     class GameOverEventArgs : EventArgs

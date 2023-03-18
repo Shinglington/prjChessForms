@@ -24,6 +24,11 @@ namespace prjChessForms.PresentationUI
             _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece != null ? e.NewPiece.Image : null);
         }
 
+        public void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
+        {
+
+        }
+
         private void SetupControls()
         {
             // layout
