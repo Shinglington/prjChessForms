@@ -12,6 +12,9 @@ namespace prjChessForms.PresentationUI
 
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
+
+        private PlayerInformationPanel _whiteInfo;
+        private PlayerInformationPanel _blackInfo;
         public ChessForm()
         {
             InitializeComponent();
@@ -40,7 +43,13 @@ namespace prjChessForms.PresentationUI
 
         private void SetupControls()
         {
-            // layout
+            SetupLayoutPanel();
+            SetupBoard();
+            SetupPlayerInfo();
+        }
+
+        private void SetupLayoutPanel()
+        {
             _layoutPanel = new TableLayoutPanel()
             {
                 Parent = this,
@@ -55,9 +64,10 @@ namespace prjChessForms.PresentationUI
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
             _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
+        }
 
-
-            // Board panel
+        private void SetupBoard()
+        {
             _boardPanel = new BoardTableLayoutPanel(this)
             {
                 Parent = _layoutPanel,
@@ -65,64 +75,12 @@ namespace prjChessForms.PresentationUI
             };
             _boardPanel.SquareClicked += OnBoardClicked;
             _layoutPanel.SetCellPosition(_boardPanel, new TableLayoutPanelCellPosition(0, 1));
+        }
 
-            // Timer
-            //_timer = new System.Timers.Timer(1000);
-            //_timerLabels = new Label[2];
-
-
-            //// White player label
-            //TableLayoutPanel whiteTable = new TableLayoutPanel()
-            //{
-            //    Parent = _layoutPanel,
-            //    Dock = DockStyle.Fill,
-            //    ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
-            //    RowStyles = { new RowStyle(SizeType.Percent, 100) },
-            //};
-            //_layoutPanel.SetCellPosition(whiteTable, new TableLayoutPanelCellPosition(0, 2));
-            //Label whiteLabel = new Label()
-            //{
-            //    Parent = whiteTable,
-            //    Dock = DockStyle.Fill,
-            //    Text = _players[0].Colour.ToString(),
-            //};
-            //whiteTable.SetCellPosition(whiteLabel, new TableLayoutPanelCellPosition(0, 0));
-            //_timerLabels[0] = new Label()
-            //{
-            //    Parent = whiteTable,
-            //    Dock = DockStyle.Fill,
-            //    Text = _players[0].RemainingTime.ToString(),
-            //};
-            //whiteTable.SetCellPosition(_timerLabels[0], new TableLayoutPanelCellPosition(1, 0));
-
-
-
-
-
-            // Black player label
-            //TableLayoutPanel blackTable = new TableLayoutPanel()
-            //{
-            //    Parent = _layoutPanel,
-            //    Dock = DockStyle.Fill,
-            //    ColumnStyles = { new ColumnStyle(SizeType.Percent, 50), new ColumnStyle(SizeType.Percent, 50) },
-            //    RowStyles = { new RowStyle(SizeType.Percent, 100) },
-            //};
-            //_layoutPanel.SetCellPosition(blackTable, new TableLayoutPanelCellPosition(0, 0));
-            //Label blackLabel = new Label()
-            //{
-            //    Parent = blackTable,
-            //    Dock = DockStyle.Fill,
-            //    Text = _players[1].Colour.ToString(),
-            //};
-            //blackTable.SetCellPosition(blackLabel, new TableLayoutPanelCellPosition(0, 0));
-
-            //_timerLabels[1] = new Label()
-            //{
-            //    Parent = blackTable,
-            //    Dock = DockStyle.Fill,
-            //    Text = _players[1].RemainingTime.ToString(),
-            //};
-            //whiteTable.SetCellPosition(_timerLabels[1], new TableLayoutPanelCellPosition(1, 0));
+        private void SetupPlayerInfo()
+        {
+            _whiteInfo = new PlayerInformationPanel(PieceColour.White);
+            _blackInfo = new PlayerInformationPanel(PieceColour.Black);
         }
 
         private void OnBoardClicked(object sender, SquareClickedEventArgs e)
