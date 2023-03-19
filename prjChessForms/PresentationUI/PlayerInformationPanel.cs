@@ -20,6 +20,7 @@ namespace prjChessForms.PresentationUI
 
         public void UpdateInfo(TimeSpan remainingTime, List<Piece> capturedPieces)
         {
+            _timeLabel.Text = remainingTime.ToString();
             UpdateCapturedPieces(capturedPieces);
         }
 
