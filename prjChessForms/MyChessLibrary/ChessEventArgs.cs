@@ -6,52 +6,35 @@ using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class PieceChangedEventArgs : EventArgs
+    class ModelChangedEventArgs : EventArgs 
     {
-        public PieceChangedEventArgs(Square square, Piece newPiece)
+        public ModelChangedEventArgs(Player white, Player black, Square[,] squares, Piece selectedPiece, List<Coords> possibleMoves)
         {
-            NewPiece = newPiece;
-            Square = square;
+            WhitePlayer = white;
+            BlackPlayer = black;
+            Squares = squares;
+            SelectedPiece = selectedPiece;
+            PossibleMoves = possibleMoves;
         }
-        public Square Square { get; set; }
-        public Piece NewPiece { get; set; }
+
+        public Player WhitePlayer { get; }
+        public Player BlackPlayer { get; }
+        public Square[,] Squares { get; }
+        public Piece SelectedPiece { get; }
+        public List<Coords> PossibleMoves { get; }
+
     }
 
-    class PieceSelectionChangedEventArgs : EventArgs
+    class GameOverEventArgs : EventArgs 
     {
-        public PieceSelectionChangedEventArgs(Piece piece, Coords selectedPieceCoords, List<Coords> validMoves)
-        {
-            SelectedPiece = piece;
-            SelectedPieceCoords = selectedPieceCoords;
-            PossibleEndCoords = validMoves;
-        }
-        public Piece SelectedPiece { get; set; }
-        public Coords SelectedPieceCoords { get; set; }
-        public List<Coords> PossibleEndCoords { get; set; }
-    }
-
-    class GameOverEventArgs : EventArgs
-    {
-        public GameOverEventArgs(Player winner, GameResult result)
+        public GameOverEventArgs(GameResult result, Player winner)
         {
             Result = result;
             Winner = winner;
         }
-        public Player Winner { get; set; }
+        
         public GameResult Result { get; set; }
-    }
-
-    class PlayerInfoChangedEventArgs : EventArgs
-    {
-        public PlayerInfoChangedEventArgs(Player player, Piece capturedPiece)
-        {
-            Player = player;
-            PlayerRemainingTime = player.RemainingTime;
-            NewCapturedPiece = capturedPiece;
-        }
-        public Player Player { get; set; }
-        public TimeSpan PlayerRemainingTime { get; set; }
-        public Piece NewCapturedPiece { get; set; }
+        public Player Winner { get; set; }
     }
 
 }

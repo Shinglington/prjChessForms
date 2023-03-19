@@ -58,36 +58,37 @@ namespace prjChessForms.PresentationUI
             throw new ArgumentException("Button could not be found");
         }
 
-        public void UpdateSquare(Coords coords, Image newImage)
+        public void UpdateSquares(Square[,] squares, Piece selectedPiece, List<Coords> possibleMoves)
         {
-            _buttons[coords.X, coords.Y].Image = newImage;
-            Debug.WriteLine("Button at {0} updated image", coords);
-        }
-
-        public void ChangePieceSelection(Piece piece, Coords selectedCoords, List<Coords> highlightedCoords)
-        {
-            for(int y = 0; y < RowCount; y++)
+            for (int y = 0; y < squares.GetLength(1); y++)
             {
-                for (int x = 0; x < ColumnCount; x++)
+                for (int x = 0; x < squares.GetLength(0); x++)
                 {
-                    Coords coords = new Coords(x, y);
-                    Button button = _buttons[x,y];
-                    if (piece != null && coords.Equals(selectedCoords))
+                    Piece piece = squares[x, y].Piece;
+                    Button button = _buttons[x, y];
+                    if (piece != null)
                     {
-                        button.BackColor = Color.Blue;
-                    }
-                    else if (highlightedCoords.Contains(coords))
-                    {
-                        button.BackColor = Color.Green;
+                        button.Image = piece.Image;
+                        if (piece.Equals(selectedPiece))
+                        {
+                            button.BackColor = Color.Blue;
+                        }
+                        else if (possibleMoves.Contains(new Coords(x, y)))
+                        {
+                            button.BackColor = Color.Green;
+                        }
+                        else
+                        {
+                            button.BackColor = DefaultBackColor;
+                        }
                     }
                     else
                     {
-                        button.BackColor = DefaultBackColor;
+                        button.Image = null;  
                     }
                 }
             }
         }
-
         private void SetupRowsAndColumns()
         {
             RowStyles.Clear();

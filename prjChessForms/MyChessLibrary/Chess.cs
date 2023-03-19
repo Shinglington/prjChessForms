@@ -24,6 +24,7 @@ namespace prjChessForms.MyChessLibrary
         private int _turnCount;
 
         private Coords _clickedCoords;
+        private Piece _selectedPiece;
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private bool _waitingForClick;
         public Chess()
@@ -74,7 +75,8 @@ namespace prjChessForms.MyChessLibrary
                     ChessMove move = await GetChessMove(cToken);
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
-                        (Rulebook.MakeMove(_board, CurrentPlayer, move);
+                        Rulebook.MakeMove(_board, CurrentPlayer, move);
+                        _selectedPiece = null;
                         _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                         _turnCount++;
                     }
@@ -106,6 +108,7 @@ namespace prjChessForms.MyChessLibrary
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
                     Piece p = GetPieceAt(_clickedCoords);
+                    _selectedPiece = p;
                     fromCoords = _clickedCoords;
                     toCoords = new Coords();
                 }
@@ -136,7 +139,15 @@ namespace prjChessForms.MyChessLibrary
         {
             if (ModelChanged != null)
             {
-                ModelChanged.Invoke(this, new ModelChangedEventArgs(WhitePlayer, BlackPlayer));
+                List<Coords> possibleMoves = new List<Coords>();
+                if (_selectedPiece != null)    
+                {
+                    foreach(ChessMove m in Rulebook.GetPossibleMoves(_board, _selectedPiece))
+                    {
+                        possibleMoves.Add(m.EndCoords);
+                    }
+                }
+                ModelChanged.Invoke(this, new ModelChangedEventArgs(WhitePlayer, BlackPlayer, _board.GetSquares(), _selectedPiece, possibleMoves));
             }
         }
 
@@ -161,7 +172,7 @@ namespace prjChessForms.MyChessLibrary
             }
             if (GameOver != null)
             {
-                GameOver.Invoke(this, new GameOverEventArgs(winner, _result));
+                GameOver.Invoke(this, new GameOverEventArgs(_result, winner));
             }
         }
     }

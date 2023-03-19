@@ -22,28 +22,13 @@ namespace prjChessForms.PresentationUI
         }
         public ChessController Controller { get; set; }
 
-        public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        public void OnModelChanged(object sender, ModelChangedEventArgs e)
         {
-            _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece != null ? e.NewPiece.Image : null);
-        }
+            _whiteInfo.UpdateInfo(e.WhitePlayer.RemainingTime, e.WhitePlayer.CapturedPieces);
+            _blackInfo.UpdateInfo(e.BlackPlayer.RemainingTime, e.BlackPlayer.CapturedPieces);
 
-        public void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
-        {
-            _boardPanel.ChangePieceSelection(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
-        }
+            _boardPanel.UpdateSquares(e.Squares, e.SelectedPiece, e.PossibleMoves);
 
-        public void OnPlayerInfoUpdated(object sender, PlayerInfoChangedEventArgs e)
-        {
-            Player player = e.Player;
-            switch(player.Colour)
-            {
-                case PieceColour.White:
-                    _whiteInfo.UpdateInfo(e);
-                    break;
-                case PieceColour.Black:
-                    _blackInfo.UpdateInfo(e);
-                    break;
-            }
         }
 
         private void SetupControls()

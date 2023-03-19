@@ -4,7 +4,6 @@ namespace prjChessForms.MyChessLibrary
 {
     class Square
     {
-        public event EventHandler<PieceChangedEventArgs> PieceChanged;
         private Piece _piece;
         public Square(int x, int y)
         {
@@ -24,10 +23,6 @@ namespace prjChessForms.MyChessLibrary
             set
             {
                 _piece = value;
-                if (PieceChanged != null)
-                {
-                    PieceChanged(this, new PieceChangedEventArgs(this, Piece));
-                }
             }
         }
         public Coords Coords { get; }

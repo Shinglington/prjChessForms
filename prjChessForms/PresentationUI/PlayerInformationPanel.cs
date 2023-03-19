@@ -18,10 +18,10 @@ namespace prjChessForms.PresentationUI
 
         public PieceColour PieceColour { get; }
 
-        public void UpdateInfo(PlayerInfoChangedEventArgs e)
+        public void UpdateInfo(TimeSpan remainingTime, List<Piece> capturedPieces)
         {
-            _timeLabel.Text = e.PlayerRemainingTime.ToString();
-            UpdateCapturedPieces(e.NewCapturedPiece);
+            _timeLabel.Text = remainingTime.ToString();
+            UpdateCapturedPieces(capturedPieces);
         }
 
 
@@ -77,7 +77,7 @@ namespace prjChessForms.PresentationUI
         }
 
 
-        private void UpdateCapturedPieces(Piece capturedPiece)
+        private void UpdateCapturedPieces(List<Piece> capturedPiece)
         {
 
         }
