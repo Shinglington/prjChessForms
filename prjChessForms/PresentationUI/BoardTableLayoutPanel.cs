@@ -64,7 +64,7 @@ namespace prjChessForms.PresentationUI
             Debug.WriteLine("Button at {0} updated image", coords);
         }
 
-        public void ChangePieceSelection(Coords selectedCoords, List<Coords> highlightedCoords)
+        public void ChangePieceSelection(Piece piece, Coords selectedCoords, List<Coords> highlightedCoords)
         {
             for(int y = 0; y < RowCount; y++)
             {
@@ -72,7 +72,7 @@ namespace prjChessForms.PresentationUI
                 {
                     Coords coords = new Coords(x, y);
                     Button button = _buttons[x,y];
-                    if (coords.Equals(selectedCoords))
+                    if (piece != null && coords.Equals(selectedCoords))
                     {
                         button.BackColor = Color.Blue;
                     }

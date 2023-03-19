@@ -128,11 +128,15 @@ namespace prjChessForms.MyChessLibrary
         private void SetupBoard()
         {
             _squares = new Square[COL_COUNT, ROW_COUNT];
+            Square s;
             for (int y = 0; y < ROW_COUNT; y++)
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    _squares[x, y] = new Square(x, y);
+                    s = new Square(x, y);
+                    s.PieceChanged += OnPieceInSquareChanged;
+                    _squares[x, y] = s;
+                    
                 }
             }
             AddDefaultPieces();

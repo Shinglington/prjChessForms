@@ -26,7 +26,7 @@ namespace prjChessForms.PresentationUI
 
         public void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
         {
-            _boardPanel.ChangePieceSelection(e.SelectedPieceCoords, e.PossibleEndCoords);
+            _boardPanel.ChangePieceSelection(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
         }
 
         private void SetupControls()
