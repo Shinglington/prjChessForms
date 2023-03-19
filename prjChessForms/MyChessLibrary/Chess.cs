@@ -1,5 +1,6 @@
 ﻿using prjChessForms.Controller;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,6 +78,7 @@ namespace prjChessForms.MyChessLibrary
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
                         Rulebook.MakeMove(_board, CurrentPlayer, move);
+                        OnPieceSelectionChanged(null);
                         _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                         _turnCount++;
                     }
@@ -108,10 +110,7 @@ namespace prjChessForms.MyChessLibrary
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
                     Piece p = GetPieceAt(_clickedCoords);
-                    if (PieceSelectionChanged != null)
-                    {
-                        PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(p, Rulebook.GetPossibleMoves(_board, p)));
-                    }
+                    OnPieceSelectionChanged(p);
                     fromCoords = _clickedCoords;
                     toCoords = new Coords();
                 }
@@ -157,6 +156,24 @@ namespace prjChessForms.MyChessLibrary
             if (GameOver != null)
             {
                 GameOver.Invoke(this, new GameOverEventArgs(winner, _result));
+            }
+        }
+
+        private void OnPieceSelectionChanged(Piece p)
+        {
+            if (PieceSelectionChanged != null)
+            {
+                List<Coords> validMoves = new List<Coords>();
+                Coords pCoords = new Coords();
+                if (p != null)
+                {
+                    pCoords = GetCoordsOf(p);
+                    foreach (ChessMove m in Rulebook.GetPossibleMoves(_board, p))
+                    {
+                        validMoves.Add(m.EndCoords);
+                    }
+                }
+                PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(p, pCoords, validMoves));
             }
         }
     }

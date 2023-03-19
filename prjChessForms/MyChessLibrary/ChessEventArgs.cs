@@ -19,11 +19,13 @@ namespace prjChessForms.MyChessLibrary
 
     class PieceSelectionChangedEventArgs : EventArgs
     {
-        public PieceSelectionChangedEventArgs(Piece selectedPiece, List<ChessMove> validMoves)
+        public PieceSelectionChangedEventArgs(Piece piece, Coords selectedPieceCoords, List<Coords> validMoves)
         {
-            SelectedPiece = selectedPiece;
-            ValidMoves = validMoves;
+            SelectedPiece = piece;
+            SelectedPieceCoords = selectedPieceCoords;
+            PossibleEndCoords = validMoves;
         }
+        public Piece SelectedPiece { get; set; }
         public Coords SelectedPieceCoords { get; set; }
         public List<Coords> PossibleEndCoords { get; set; }
     }

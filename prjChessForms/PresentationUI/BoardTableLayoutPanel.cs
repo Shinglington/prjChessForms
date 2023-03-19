@@ -61,6 +61,7 @@ namespace prjChessForms.PresentationUI
         public void UpdateSquare(Coords coords, Image newImage)
         {
             _buttons[coords.X, coords.Y].Image = newImage;
+            Debug.WriteLine("Button at {0} updated image", coords);
         }
 
         public void ChangePieceSelection(Coords selectedCoords, List<Coords> highlightedCoords)
