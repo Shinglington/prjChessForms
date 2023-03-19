@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -12,6 +13,7 @@ namespace prjChessForms.MyChessLibrary
         }
         public TimeSpan RemainingTime { get; private set; }
         public PieceColour Colour { get; }
+        public List<Piece> CapturedPieces { get; private set; }
 
         public void TickTime(TimeSpan time)
         {
@@ -21,6 +23,12 @@ namespace prjChessForms.MyChessLibrary
                 TimeExpiredEvent.Invoke(this, new EventArgs());
             }
         }
+
+        public void AddCapturedPiece(Piece piece)
+        {
+            CapturedPieces.Add(piece);
+        }
+
     }
 
     class HumanPlayer : Player

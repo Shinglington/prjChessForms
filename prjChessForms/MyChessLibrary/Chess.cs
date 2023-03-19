@@ -12,6 +12,8 @@ namespace prjChessForms.MyChessLibrary
     {
         public event EventHandler<GameOverEventArgs> GameOver;
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
+        public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
+        public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
 
         private Board _board;
         private System.Timers.Timer _timer;
@@ -57,6 +59,7 @@ namespace prjChessForms.MyChessLibrary
         {
             _board.PieceChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
             PieceSelectionChanged += new EventHandler<PieceSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
+            PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             // Fire initially to update all squares
             foreach(Square s in _board.GetSquares())
             {
@@ -77,7 +80,7 @@ namespace prjChessForms.MyChessLibrary
                     ChessMove move = await GetChessMove(cToken);
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
-                        Rulebook.MakeMove(_board, CurrentPlayer, move);
+                        UpdatePlayerCapturedPieces(Rulebook.MakeMove(_board, CurrentPlayer, move));
                         OnPieceSelectionChanged(null);
                         _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                         _turnCount++;
@@ -136,9 +139,26 @@ namespace prjChessForms.MyChessLibrary
             _players[0] = new HumanPlayer(PieceColour.White, time);
             _players[1] = new HumanPlayer(PieceColour.Black, time);
         }
+
+        private void UpdatePlayerCapturedPieces(Piece capturedPiece)
+        {
+            if (capturedPiece != null)
+            {
+                CurrentPlayer.AddCapturedPiece(capturedPiece);
+                if (PlayerCapturedPiecesChanged != null)
+                {
+                    PlayerCapturedPiecesChanged.Invoke(this, new PlayerCapturedPiecesChangedEventArgs(CurrentPlayer));
+                }
+            }
+        }
+
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
             CurrentPlayer.TickTime(new TimeSpan(0, 0, 1));
+            if (PlayerTimerTick != null)
+            {
+                PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(CurrentPlayer));
+            }
             if (CurrentPlayer.RemainingTime < TimeSpan.Zero)
             {
                 _timer.Elapsed -= OnPlayerTimerTick;

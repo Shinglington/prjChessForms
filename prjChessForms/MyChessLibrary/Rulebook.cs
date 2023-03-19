@@ -28,17 +28,19 @@ namespace prjChessForms.MyChessLibrary
 
     class Rulebook
     {
-        public static void MakeMove(Board board, Player player, ChessMove move)
+        public static Piece MakeMove(Board board, Player player, ChessMove move)
         {
             if (!CheckLegalMove(board, player, move))
             {
                 throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
             }
 
+            Piece capturedPiece = board.GetPieceAt(move.EndCoords);
             if (IsEnPassant(board, move))
             {
                 GhostPawn ghostPawn = board.GetSquareAt(move.EndCoords).GetGhostPawn();
                 Coords linkedPawnCoords = board.GetCoordsOfPiece(ghostPawn.LinkedPawn);
+                capturedPiece = ghostPawn.LinkedPawn;
                 board.GetSquareAt(linkedPawnCoords).Piece = null;
             }
             // Remove ghost pawns
@@ -56,6 +58,8 @@ namespace prjChessForms.MyChessLibrary
             }
             board.MakeMove(move);
             Promotions(board, move.EndCoords);
+
+            return capturedPiece;
         }
 
         public static bool CheckLegalMove(Board board, Player player, ChessMove move)

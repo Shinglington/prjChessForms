@@ -29,6 +29,15 @@ namespace prjChessForms.PresentationUI
             _boardPanel.ChangePieceSelection(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
         }
 
+        public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
+        {
+            
+        }
+        public void OnPlayerPiecesCapturedChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
+        {
+            
+        }
+
         private void SetupControls()
         {
             // layout
@@ -122,9 +131,9 @@ namespace prjChessForms.PresentationUI
             {
                 SquareClicked.Invoke(this, e);
             }
-
         }
-            
+
+
     }
 
 
