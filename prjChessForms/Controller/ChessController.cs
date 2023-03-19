@@ -31,11 +31,6 @@ namespace prjChessForms.Controller
             _chessModel.StartGame();
         }
 
-        private void OnGameOver(object sender, GameOverEventArgs e)
-        {
-            MessageBox.Show(e.Result.ToString() + " ," + (e.Winner != null ? e.Winner.Colour.ToString() : "Nobody") + " Wins");
-        }
-
         private void OnBoardClickReceived(object sender, SquareClickedEventArgs e)
         {
             Debug.WriteLine("Controller received coords clicked at {0} ", e.ClickedCoords);

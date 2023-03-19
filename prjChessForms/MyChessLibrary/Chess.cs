@@ -60,7 +60,6 @@ namespace prjChessForms.MyChessLibrary
         {
             ModelChanged += new EventHandler<ModelChangedEventArgs>(observer.OnModelChanged);
             InvokeModelChanged();
-
         }
 
         private async Task Play(CancellationToken cToken)
