@@ -32,13 +32,18 @@ namespace prjChessForms.PresentationUI
             _boardPanel.ChangePieceSelection(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
         }
 
-        public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
+        public void OnPlayerInfoUpdated(object sender, PlayerInfoChangedEventArgs e)
         {
-            
-        }
-        public void OnPlayerPiecesCapturedChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
-        {
-            
+            Player player = e.Player;
+            switch(player.Colour)
+            {
+                case PieceColour.White:
+                    _whiteInfo.UpdateInfo(e);
+                    break;
+                case PieceColour.Black:
+                    _blackInfo.UpdateInfo(e);
+                    break;
+            }
         }
 
         private void SetupControls()
@@ -79,8 +84,18 @@ namespace prjChessForms.PresentationUI
 
         private void SetupPlayerInfo()
         {
-            _whiteInfo = new PlayerInformationPanel(PieceColour.White);
-            _blackInfo = new PlayerInformationPanel(PieceColour.Black);
+            _whiteInfo = new PlayerInformationPanel(PieceColour.White)
+            {
+                Parent = _layoutPanel,
+                Dock = DockStyle.Fill,
+            };
+            _layoutPanel.SetCellPosition(_whiteInfo, new TableLayoutPanelCellPosition(0, 0));
+            _blackInfo = new PlayerInformationPanel(PieceColour.Black)
+            {
+                Parent = _layoutPanel,
+                Dock = DockStyle.Fill,
+            };
+            _layoutPanel.SetCellPosition(_blackInfo, new TableLayoutPanelCellPosition(0, 2));
         }
 
         private void OnBoardClicked(object sender, SquareClickedEventArgs e)

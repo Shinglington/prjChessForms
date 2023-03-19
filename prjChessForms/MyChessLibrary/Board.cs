@@ -136,7 +136,6 @@ namespace prjChessForms.MyChessLibrary
                     s = new Square(x, y);
                     s.PieceChanged += OnPieceInSquareChanged;
                     _squares[x, y] = s;
-                    
                 }
             }
             AddDefaultPieces();

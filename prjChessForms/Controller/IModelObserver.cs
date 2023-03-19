@@ -8,7 +8,6 @@ namespace prjChessForms.Controller
     {
         void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e);
         void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e);
-
-        void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
+        void OnPlayerInfoUpdated(object sender, PlayerInfoChangedEventArgs e);
     }
 }

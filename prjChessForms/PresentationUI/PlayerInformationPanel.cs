@@ -1,5 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -16,6 +17,14 @@ namespace prjChessForms.PresentationUI
         }
 
         public PieceColour PieceColour { get; }
+
+        public void UpdateInfo(PlayerInfoChangedEventArgs e)
+        {
+            _timeLabel.Text = e.PlayerRemainingTime.ToString();
+            UpdateCapturedPieces(e.NewCapturedPiece);
+        }
+
+
 
         private void SetupPanel()
         {
@@ -65,6 +74,12 @@ namespace prjChessForms.PresentationUI
                 Dock = DockStyle.Fill,
             };
             SetCellPosition(_timeLabel, new TableLayoutPanelCellPosition(2, 0));
+        }
+
+
+        private void UpdateCapturedPieces(Piece capturedPiece)
+        {
+
         }
 
 

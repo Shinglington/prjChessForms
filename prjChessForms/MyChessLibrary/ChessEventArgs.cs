@@ -41,21 +41,17 @@ namespace prjChessForms.MyChessLibrary
         public GameResult Result { get; set; }
     }
 
-    class PlayerTimerTickEventArgs : EventArgs
+    class PlayerInfoChangedEventArgs : EventArgs
     {
-        public PlayerTimerTickEventArgs(Player player)
+        public PlayerInfoChangedEventArgs(Player player, Piece capturedPiece)
         {
+            Player = player;
             PlayerRemainingTime = player.RemainingTime;
+            NewCapturedPiece = capturedPiece;
         }
+        public Player Player { get; set; }
         public TimeSpan PlayerRemainingTime { get; set; }
-    }
-    class PlayerCapturedPiecesChangedEventArgs : EventArgs
-    {
-        public PlayerCapturedPiecesChangedEventArgs(Player player)
-        {
-            CapturedPieces = player.CapturedPieces;
-        }
-        public List<Piece> CapturedPieces { get; set; }
+        public Piece NewCapturedPiece { get; set; }
     }
 
 }
