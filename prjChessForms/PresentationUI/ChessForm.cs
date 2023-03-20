@@ -28,7 +28,26 @@ namespace prjChessForms.PresentationUI
             _boardPanel.UpdateSquares(e.Squares, e.SelectedPiece, e.PossibleMoves);
             _whiteInfo.UpdateInfo(e.WhitePlayer.RemainingTime, e.WhitePlayer.CapturedPieces);
             _blackInfo.UpdateInfo(e.BlackPlayer.RemainingTime, e.BlackPlayer.CapturedPieces);
+        }
 
+        public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        {
+            _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece);
+        }
+
+        public void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
+        {
+            _boardPanel.UpdateHighlights(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
+        }
+
+        public void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
+        {
+            
+        }
+
+        public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
+        {
+            
         }
 
         private void SetupControls()
@@ -90,7 +109,6 @@ namespace prjChessForms.PresentationUI
                 SquareClicked.Invoke(this, e);
             }
         }
-
 
     }
 

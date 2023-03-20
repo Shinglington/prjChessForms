@@ -10,6 +10,7 @@ namespace prjChessForms.MyChessLibrary
         {
             Colour = colour;
             RemainingTime = initialTime;
+            CapturedPieces = new List<Piece>();
         }
         public TimeSpan RemainingTime { get; private set; }
         public PieceColour Colour { get; }

@@ -89,6 +89,33 @@ namespace prjChessForms.PresentationUI
             }
         }
 
+        public void UpdateHighlights(Piece selectedPiece, Coords selectedCoords, List<Coords> possibleMoves)
+        {
+            for (int y = 0; y < _buttons.GetLength(1); y++)
+            {
+                for (int x = 0; x < _buttons.GetLength(0); x++)
+                {
+                    Button button = _buttons[x, y];
+                    if (selectedPiece != null && selectedCoords.Equals(new Coords(x, y)))
+                    {
+                        button.BackColor = Color.Blue;
+                    }
+                    else if (possibleMoves.Contains(new Coords(x, y)))
+                    {
+                        button.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        button.BackColor = DefaultBackColor;
+                    }
+                }
+            }
+        }
+        public void UpdateSquare(Coords coords, Piece piece)
+        {
+            _buttons[coords.X, coords.Y].Image = piece != null ? piece.Image : null;
+        }
+
         private void SetupRowsAndColumns()
         {
             RowStyles.Clear();

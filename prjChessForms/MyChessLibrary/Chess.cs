@@ -27,7 +27,6 @@ namespace prjChessForms.MyChessLibrary
         private int _turnCount;
 
         private Coords _clickedCoords;
-        private Piece _selectedPiece;
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private bool _waitingForClick;
         public Chess()
@@ -62,9 +61,13 @@ namespace prjChessForms.MyChessLibrary
         public void AttachModelObserver(IModelObserver observer)
         {
             _board.PieceInSquareChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
+            PieceSelectionChanged += new EventHandler<PieceSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
             PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
-            InvokeModelChanged();
+            foreach(Square s in _board.GetSquares())
+            {
+                observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
+            }
         }
 
         private async Task Play(CancellationToken cToken)
@@ -79,8 +82,8 @@ namespace prjChessForms.MyChessLibrary
                     ChessMove move = await GetChessMove(cToken);
                     if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
                     {
-                        Rulebook.MakeMove(_board, CurrentPlayer, move);
-                        _selectedPiece = null;
+                        CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
+                        ChangeSelection(null);
                         _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                         _turnCount++;
                     }
@@ -111,8 +114,7 @@ namespace prjChessForms.MyChessLibrary
                 _waitingForClick = false;
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
-                    Piece p = GetPieceAt(_clickedCoords);
-                    _selectedPiece = p;
+                    ChangeSelection(GetPieceAt(_clickedCoords));
                     fromCoords = _clickedCoords;
                     toCoords = new Coords();
                 }
@@ -138,28 +140,13 @@ namespace prjChessForms.MyChessLibrary
             _players[0] = new HumanPlayer(PieceColour.White, time);
             _players[1] = new HumanPlayer(PieceColour.Black, time);
         }
-
-        private void InvokeModelChanged()
-        {
-            if (ModelChanged != null)
-            {
-                List<Coords> possibleMoves = new List<Coords>();
-                if (_selectedPiece != null)    
-                {
-                    foreach(ChessMove m in Rulebook.GetPossibleMoves(_board, _selectedPiece))
-                    {
-                        possibleMoves.Add(m.EndCoords);
-                    }
-                }
-                ModelChanged.Invoke(this, new ModelChangedEventArgs(WhitePlayer, BlackPlayer, _board.GetSquares(), _selectedPiece, possibleMoves));
-            }
-        }
-
-
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
             CurrentPlayer.TickTime(new TimeSpan(0, 0, 1));
-            InvokeModelChanged();
+            if (PlayerTimerTick != null)
+            {
+                PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(CurrentPlayer));
+            }
             if (CurrentPlayer.RemainingTime < TimeSpan.Zero)
             {
                 _timer.Elapsed -= OnPlayerTimerTick;
@@ -177,6 +164,33 @@ namespace prjChessForms.MyChessLibrary
             if (GameOver != null)
             {
                 GameOver.Invoke(this, new GameOverEventArgs(_result, winner));
+            }
+        }
+
+        private void CapturePiece(Piece p)
+        {
+            CurrentPlayer.AddCapturedPiece(p);
+            if (PlayerCapturedPiecesChanged != null)
+            {
+                PlayerCapturedPiecesChanged.Invoke(this, new PlayerCapturedPiecesChangedEventArgs(CurrentPlayer));
+            }
+        }
+
+        private void ChangeSelection(Piece selectedPiece)
+        {
+            if (PieceSelectionChanged != null)
+            {
+                List<Coords> endCoords = new List<Coords>();
+                Coords selectedCoords = new Coords();
+                if (selectedPiece != null)
+                {
+                    selectedCoords = GetCoordsOf(selectedPiece);
+                    foreach (ChessMove m in Rulebook.GetPossibleMoves(_board, selectedPiece))
+                    {
+                        endCoords.Add(m.EndCoords);
+                    }
+                }
+                PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(selectedPiece, selectedCoords, endCoords));
             }
         }
     }
