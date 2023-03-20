@@ -24,10 +24,10 @@ namespace prjChessForms.PresentationUI
 
         public void OnModelChanged(object sender, ModelChangedEventArgs e)
         {
-            _whiteInfo.UpdateInfo(e.WhitePlayer.RemainingTime, e.WhitePlayer.CapturedPieces);
-            _blackInfo.UpdateInfo(e.BlackPlayer.RemainingTime, e.BlackPlayer.CapturedPieces);
 
             _boardPanel.UpdateSquares(e.Squares, e.SelectedPiece, e.PossibleMoves);
+            _whiteInfo.UpdateInfo(e.WhitePlayer.RemainingTime, e.WhitePlayer.CapturedPieces);
+            _blackInfo.UpdateInfo(e.BlackPlayer.RemainingTime, e.BlackPlayer.CapturedPieces);
 
         }
 

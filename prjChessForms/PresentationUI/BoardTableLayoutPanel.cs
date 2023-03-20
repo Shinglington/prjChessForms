@@ -1,7 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -84,11 +83,12 @@ namespace prjChessForms.PresentationUI
                     }
                     else
                     {
-                        button.Image = null;  
+                        button.Image = null;
                     }
                 }
             }
         }
+
         private void SetupRowsAndColumns()
         {
             RowStyles.Clear();

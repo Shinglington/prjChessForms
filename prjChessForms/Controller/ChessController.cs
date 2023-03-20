@@ -26,8 +26,6 @@ namespace prjChessForms.Controller
             _chessModel.AttachModelObserver(_chessView);
 
             _chessView.SquareClicked += OnBoardClickReceived;
-
-
             _chessModel.StartGame();
         }
 
