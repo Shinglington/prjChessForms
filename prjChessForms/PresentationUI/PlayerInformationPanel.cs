@@ -21,7 +21,7 @@ namespace prjChessForms.PresentationUI
         public void UpdateInfo(TimeSpan remainingTime, List<Piece> capturedPieces)
         {
             UpdateCapturedPieces(capturedPieces);
-            UpdateTimer(remainingTime);
+            _timeLabel.Text = remainingTime.ToString();
         }
 
         private void SetupPanel()
@@ -78,11 +78,6 @@ namespace prjChessForms.PresentationUI
         private void UpdateCapturedPieces(List<Piece> capturedPiece)
         {
 
-        }
-
-        private void UpdateTimer(TimeSpan remainingTime)
-        {
-            _timeLabel.Text = remainingTime.ToString();
         }
 
 
