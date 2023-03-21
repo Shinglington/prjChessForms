@@ -17,21 +17,12 @@ namespace prjChessForms.PresentationUI
         private PlayerInformationPanel _whiteInfo;
         private PlayerInformationPanel _blackInfo;
 
-        private BackgroundWorker _backgroundWorker;
         public ChessForm()
         {
             InitializeComponent();
             SetupControls();
         }
         public ChessController Controller { get; set; }
-
-        public void OnModelChanged(object sender, ModelChangedEventArgs e)
-        {
-
-            _boardPanel.UpdateSquares(e.Squares, e.SelectedPiece, e.PossibleMoves);
-            _whiteInfo.UpdateTime(e.WhitePlayer.RemainingTime);
-            _blackInfo.UpdateTime(e.BlackPlayer.RemainingTime);
-        }
 
         public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
         {
@@ -50,7 +41,16 @@ namespace prjChessForms.PresentationUI
 
         public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
         {
-            _whiteInfo.UpdateTime(e.PlayerRemainingTime);
+            switch (e.CurrentPlayer.Colour) 
+            {
+                case PieceColour.White:
+                    _whiteInfo.UpdateTime(e.PlayerRemainingTime);
+                    break;
+                case PieceColour.Black:
+                    _blackInfo.UpdateTime(e.PlayerRemainingTime);
+                    break;
+            }
+
         }
 
         private void SetupControls()

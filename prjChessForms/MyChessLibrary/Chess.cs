@@ -68,6 +68,9 @@ namespace prjChessForms.MyChessLibrary
             {
                 observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
             }
+
+            observer.OnPlayerTimerTick(this, new PlayerTimerTickEventArgs(WhitePlayer));
+            observer.OnPlayerTimerTick(this, new PlayerTimerTickEventArgs(BlackPlayer));
         }
 
         private async Task Play(CancellationToken cToken)
@@ -111,7 +114,6 @@ namespace prjChessForms.MyChessLibrary
                 Debug.WriteLine("Waiting for click");
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 Debug.WriteLine("Received click at {0}", _clickedCoords);
-                _waitingForClick = false;
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
                     ChangeSelection(GetPieceAt(_clickedCoords));
@@ -122,7 +124,6 @@ namespace prjChessForms.MyChessLibrary
                 {
                     toCoords = _clickedCoords;
                 }
-                _waitingForClick = true;
                 // Check if move is valid now
                 if (!toCoords.Equals(new Coords()) && !fromCoords.Equals(new Coords()))
                 {

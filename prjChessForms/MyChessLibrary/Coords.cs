@@ -2,7 +2,7 @@
 {
    public struct Coords
     {
-        public Coords(int x, int y)
+        public Coords(int x = -1, int y = -1)
         {
             X = x;
             Y = y;

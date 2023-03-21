@@ -12,8 +12,6 @@ namespace prjChessForms.Controller
 {
     class ChessController
     {
-        private CancellationToken cts = new CancellationToken();
-
         private Chess _chessModel;
         private ChessForm _chessView;
 
