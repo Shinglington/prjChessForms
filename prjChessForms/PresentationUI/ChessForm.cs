@@ -1,6 +1,7 @@
 ﻿using prjChessForms.Controller;
 using prjChessForms.MyChessLibrary;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -15,6 +16,8 @@ namespace prjChessForms.PresentationUI
 
         private PlayerInformationPanel _whiteInfo;
         private PlayerInformationPanel _blackInfo;
+
+        private BackgroundWorker _backgroundWorker;
         public ChessForm()
         {
             InitializeComponent();
@@ -26,8 +29,8 @@ namespace prjChessForms.PresentationUI
         {
 
             _boardPanel.UpdateSquares(e.Squares, e.SelectedPiece, e.PossibleMoves);
-            _whiteInfo.UpdateInfo(e.WhitePlayer.RemainingTime, e.WhitePlayer.CapturedPieces);
-            _blackInfo.UpdateInfo(e.BlackPlayer.RemainingTime, e.BlackPlayer.CapturedPieces);
+            _whiteInfo.UpdateTime(e.WhitePlayer.RemainingTime);
+            _blackInfo.UpdateTime(e.BlackPlayer.RemainingTime);
         }
 
         public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
@@ -47,7 +50,7 @@ namespace prjChessForms.PresentationUI
 
         public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
         {
-            
+            _whiteInfo.UpdateTime(e.PlayerRemainingTime);
         }
 
         private void SetupControls()

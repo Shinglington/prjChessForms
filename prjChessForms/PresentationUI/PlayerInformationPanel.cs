@@ -17,11 +17,24 @@ namespace prjChessForms.PresentationUI
         }
 
         public PieceColour PieceColour { get; }
-
-        public void UpdateInfo(TimeSpan remainingTime, List<Piece> capturedPieces)
+        
+        public void UpdateTime(TimeSpan remainingTime)
         {
-            UpdateCapturedPieces(capturedPieces);
-            _timeLabel.Text = remainingTime.ToString();
+            string text = remainingTime.ToString();
+            if (_timeLabel.InvokeRequired)
+            {
+                Action safeWrite = delegate { UpdateTime(remainingTime); };
+                _timeLabel.Invoke(safeWrite);
+            }
+            else
+            {
+                _timeLabel.Text = text;
+            }
+        }
+
+        public void UpdateCapturedPieces(List<Piece> capturedPiece)
+        {
+
         }
 
         private void SetupPanel()
@@ -75,10 +88,6 @@ namespace prjChessForms.PresentationUI
         }
 
 
-        private void UpdateCapturedPieces(List<Piece> capturedPiece)
-        {
-
-        }
 
 
 

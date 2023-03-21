@@ -48,8 +48,11 @@ namespace prjChessForms.MyChessLibrary
     {
         public PlayerTimerTickEventArgs(Player player)
         {
+            CurrentPlayer = player;
             PlayerRemainingTime = player.RemainingTime;
         }
+
+        public Player CurrentPlayer { get; set; }
         public TimeSpan PlayerRemainingTime { get; set; }
     }
     class PlayerCapturedPiecesChangedEventArgs : EventArgs
