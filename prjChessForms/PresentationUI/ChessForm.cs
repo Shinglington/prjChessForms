@@ -96,13 +96,13 @@ namespace prjChessForms.PresentationUI
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
             };
-            _layoutPanel.SetCellPosition(_whiteInfo, new TableLayoutPanelCellPosition(0, 0));
+            _layoutPanel.SetCellPosition(_whiteInfo, new TableLayoutPanelCellPosition(0, 2));
             _blackInfo = new PlayerInformationPanel(PieceColour.Black)
             {
                 Parent = _layoutPanel,
                 Dock = DockStyle.Fill,
             };
-            _layoutPanel.SetCellPosition(_blackInfo, new TableLayoutPanelCellPosition(0, 2));
+            _layoutPanel.SetCellPosition(_blackInfo, new TableLayoutPanelCellPosition(0, 0));
         }
 
         private void OnBoardClicked(object sender, SquareClickedEventArgs e)

@@ -2,13 +2,19 @@
 {
    public struct Coords
     {
-        public Coords(int x = -1, int y = -1)
+        public static readonly Coords Null = new Coords(-1, -1);
+        public Coords(int x, int y)
         {
             X = x;
             Y = y;
         }
         public int X { get; }
         public int Y { get; }
+
+        public bool IsNull()
+        {
+            return X == -1 && Y == -1;
+        }
         public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
 
         public override bool Equals(object obj)

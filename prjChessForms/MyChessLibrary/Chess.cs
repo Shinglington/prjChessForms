@@ -103,8 +103,8 @@ namespace prjChessForms.MyChessLibrary
 
         private async Task<ChessMove> GetChessMove(CancellationToken cToken)
         {
-            Coords fromCoords = new Coords();
-            Coords toCoords = new Coords();
+            Coords fromCoords = Coords.Null;
+            Coords toCoords = Coords.Null;
             ChessMove move = new ChessMove();
             bool completeInput = false;
             _waitingForClick = true;
@@ -114,18 +114,19 @@ namespace prjChessForms.MyChessLibrary
                 Debug.WriteLine("Waiting for click");
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 Debug.WriteLine("Received click at {0}", _clickedCoords);
+
                 if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
                 {
                     ChangeSelection(GetPieceAt(_clickedCoords));
                     fromCoords = _clickedCoords;
-                    toCoords = new Coords();
+                    toCoords = Coords.Null;
                 }
-                else if (!fromCoords.Equals(new Coords()))
+                else if (!fromCoords.Equals(Coords.Null))
                 {
                     toCoords = _clickedCoords;
                 }
                 // Check if move is valid now
-                if (!toCoords.Equals(new Coords()) && !fromCoords.Equals(new Coords()))
+                if (!toCoords.IsNull() && !fromCoords.IsNull())
                 {
                     move = new ChessMove(fromCoords, toCoords);
                     completeInput = true;
