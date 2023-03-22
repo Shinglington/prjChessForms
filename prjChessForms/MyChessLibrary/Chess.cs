@@ -126,7 +126,7 @@ namespace prjChessForms.MyChessLibrary
                     toCoords = _clickedCoords;
                 }
                 // Check if move is valid now
-                if (!toCoords.IsNull() && !fromCoords.IsNull())
+                if (!toCoords.IsNull && !fromCoords.IsNull)
                 {
                     move = new ChessMove(fromCoords, toCoords);
                     completeInput = true;

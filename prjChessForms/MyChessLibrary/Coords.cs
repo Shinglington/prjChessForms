@@ -11,10 +11,8 @@
         public int X { get; }
         public int Y { get; }
 
-        public bool IsNull()
-        {
-            return X == -1 && Y == -1;
-        }
+        public bool IsNull => this.Equals(Null);
+
         public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
 
         public override bool Equals(object obj)
