@@ -50,7 +50,6 @@ namespace prjChessForms.PresentationUI
             SetupLabel();
             SetupCapturedPieces();
             SetupTimer();
-
         }
 
         private void SetupLabel()
@@ -86,11 +85,5 @@ namespace prjChessForms.PresentationUI
             };
             SetCellPosition(_timeLabel, new TableLayoutPanelCellPosition(2, 0));
         }
-
-
-
-
-
-
     }
 }

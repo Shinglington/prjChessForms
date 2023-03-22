@@ -13,9 +13,7 @@ namespace prjChessForms.MyChessLibrary
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
         public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
         public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
-
         public event EventHandler<GameOverEventArgs> GameOver;
-
 
 
         private Board _board;
@@ -31,7 +29,7 @@ namespace prjChessForms.MyChessLibrary
         private bool _waitingForClick;
         public Chess()
         {
-            CreatePlayers(new TimeSpan(0, 3, 0));
+            CreatePlayers(new TimeSpan(0, 0, 10));
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
@@ -48,6 +46,7 @@ namespace prjChessForms.MyChessLibrary
             await Play(cts.Token);
             OnGameOver();
         }
+
         public void SendCoords(Coords coords)
         {
             if (_waitingForClick)
@@ -64,6 +63,7 @@ namespace prjChessForms.MyChessLibrary
             PieceSelectionChanged += new EventHandler<PieceSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
             PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
+            GameOver += new EventHandler<GameOverEventArgs>(observer.OnGameOver);
             foreach(Square s in _board.GetSquares())
             {
                 observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
@@ -83,17 +83,15 @@ namespace prjChessForms.MyChessLibrary
                 try
                 {
                     ChessMove move = await GetChessMove(cToken);
-                    if (Rulebook.CheckLegalMove(_board, CurrentPlayer, move))
-                    {
-                        CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
-                        ChangeSelection(null);
-                        _result = Rulebook.GetGameResult(_board, CurrentPlayer);
-                        _turnCount++;
-                    }
+                    CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
+                    ChangeSelection(null);
+                    _result = Rulebook.GetGameResult(_board, CurrentPlayer);
+                    _turnCount++;
                 }
                 catch when (cToken.IsCancellationRequested)
                 {
                     Debug.WriteLine("Cancelled Play");
+                    _waitingForClick = false;
                     _result = GameResult.Time;
                 }
             }
@@ -126,35 +124,46 @@ namespace prjChessForms.MyChessLibrary
                     toCoords = _clickedCoords;
                 }
                 // Check if move is valid now
-                if (!toCoords.IsNull && !fromCoords.IsNull)
+                if (!toCoords.IsNull && !fromCoords.IsNull && Rulebook.CheckLegalMove(_board, CurrentPlayer, new ChessMove(fromCoords, toCoords)))
                 {
                     move = new ChessMove(fromCoords, toCoords);
                     completeInput = true;
+                }
+                else
+                {
+                    toCoords = Coords.Null;
                 }
             }
             _waitingForClick = false;
             _timer.Stop();
             return move;
         }
+
         private void CreatePlayers(TimeSpan time)
         {
             _players = new Player[2];
             _players[0] = new HumanPlayer(PieceColour.White, time);
             _players[1] = new HumanPlayer(PieceColour.Black, time);
         }
+
         private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
         {
-            CurrentPlayer.TickTime(new TimeSpan(0, 0, 1));
-            if (PlayerTimerTick != null)
-            {
-                PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(CurrentPlayer));
-            }
-            if (CurrentPlayer.RemainingTime < TimeSpan.Zero)
+            TimeSpan interval = new TimeSpan(0, 0, 1);
+            if (CurrentPlayer.RemainingTime.Subtract(interval) < TimeSpan.Zero)
             {
                 _timer.Elapsed -= OnPlayerTimerTick;
                 cts.Cancel();
             }
+            else
+            {
+                CurrentPlayer.TickTime(interval);
+                if (PlayerTimerTick != null)
+                {
+                    PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(CurrentPlayer));
+                }
+            }
         }
+
         private void OnGameOver()
         {
             cts.Cancel();

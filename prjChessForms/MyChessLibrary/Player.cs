@@ -19,10 +19,6 @@ namespace prjChessForms.MyChessLibrary
         public void TickTime(TimeSpan time)
         {
             RemainingTime = RemainingTime.Subtract(time);
-            if (RemainingTime < TimeSpan.Zero)
-            {
-                TimeExpiredEvent.Invoke(this, new EventArgs());
-            }
         }
 
         public void AddCapturedPiece(Piece piece)

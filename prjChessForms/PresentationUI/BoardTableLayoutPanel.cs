@@ -21,7 +21,6 @@ namespace prjChessForms.PresentationUI
             SetupRowsAndColumns();
             Display();
         }
-
         public ChessForm ParentForm { get; }
 
         public void Display(bool flippedPerspective = false)
@@ -111,6 +110,7 @@ namespace prjChessForms.PresentationUI
                 }
             }
         }
+
         public void UpdateSquare(Coords coords, Piece piece)
         {
             _buttons[coords.X, coords.Y].Image = piece != null ? piece.Image : null;

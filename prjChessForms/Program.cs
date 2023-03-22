@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-
-using prjChessForms.PresentationUI;
+﻿using prjChessForms.Controller;
 using prjChessForms.MyChessLibrary;
-using prjChessForms.Controller;
+using prjChessForms.PresentationUI;
+using System;
+using System.Windows.Forms;
 
 namespace prjChessForms
 {

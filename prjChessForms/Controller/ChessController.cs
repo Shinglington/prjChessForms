@@ -1,12 +1,5 @@
 ﻿using prjChessForms.MyChessLibrary;
 using prjChessForms.PresentationUI;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Remoting.Channels;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace prjChessForms.Controller
 {
@@ -29,7 +22,6 @@ namespace prjChessForms.Controller
 
         private void OnBoardClickReceived(object sender, SquareClickedEventArgs e)
         {
-            Debug.WriteLine("Controller received coords clicked at {0} ", e.ClickedCoords);
             _chessModel.SendCoords(e.ClickedCoords);
         }
     }

@@ -39,6 +39,18 @@ namespace prjChessForms.PresentationUI
             
         }
 
+        public void OnGameOver(object sender, GameOverEventArgs e)
+        {
+            if (e.Winner == null)
+            {
+                MessageBox.Show("Draw", e.Result.ToString());
+            }
+            else
+            {
+                MessageBox.Show(e.Winner.Colour.ToString() + " Wins!", e.Result.ToString());
+            }
+        }
+
         public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
         {
             switch (e.CurrentPlayer.Colour) 

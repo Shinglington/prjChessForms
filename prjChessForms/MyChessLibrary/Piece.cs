@@ -23,7 +23,6 @@ namespace prjChessForms.MyChessLibrary
                 Image = null;
             }
         }
-
         public bool HasMoved { get; set; }
         public Player Owner { get; }
         public Image Image { get; }
@@ -35,9 +34,9 @@ namespace prjChessForms.MyChessLibrary
         {
             return Name;
         }
-
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }
+
     class Pawn : Piece
     {
         public Pawn(Player player) : base(player) { }
@@ -47,13 +46,11 @@ namespace prjChessForms.MyChessLibrary
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
-
             int direction = yChange > 0 ? 1 : -1;
             if (direction != (Owner.Colour == PieceColour.White ? 1 : -1))
             {
                 return false;
             }
-
             if (xChange == 0 && board.GetPieceAt(endCoords) == null)
             {
                 if (Math.Abs(yChange) == 1)
@@ -66,7 +63,6 @@ namespace prjChessForms.MyChessLibrary
                     allowed = true;
                 }
             }
-
             if (Math.Abs(xChange) == 1 && Math.Abs(yChange) == 1)
             {
                 if (board.GetPieceAt(endCoords) != null)

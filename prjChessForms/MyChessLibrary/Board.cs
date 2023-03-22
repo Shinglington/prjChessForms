@@ -75,7 +75,6 @@ namespace prjChessForms.MyChessLibrary
             {
                 throw new ArgumentNullException();
             }
-
             foreach (Square s in GetSquares())
             {
                 if (s.Piece == piece)
@@ -83,7 +82,6 @@ namespace prjChessForms.MyChessLibrary
                     return s.Coords;
                 }
             }
-
             throw new Exception("Piece could not be located");
         }
 
@@ -148,7 +146,6 @@ namespace prjChessForms.MyChessLibrary
                 { 'P','P','P','P','P','P','P','P'},
                 { 'R','N','B','Q','K','B','N','R'}
             };
-            // Pieces
             Player player;
             Square square;
             for (int i = 0; i < 2; i++)
