@@ -1,8 +1,6 @@
 ﻿using prjChessForms.Controller;
 using prjChessForms.MyChessLibrary;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -13,7 +11,6 @@ namespace prjChessForms.PresentationUI
 
         private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
-
         private PlayerInformationPanel _whiteInfo;
         private PlayerInformationPanel _blackInfo;
 
@@ -36,7 +33,7 @@ namespace prjChessForms.PresentationUI
 
         public void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
         {
-            
+
         }
 
         public void OnGameOver(object sender, GameOverEventArgs e)
@@ -53,7 +50,7 @@ namespace prjChessForms.PresentationUI
 
         public void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e)
         {
-            switch (e.CurrentPlayer.Colour) 
+            switch (e.CurrentPlayer.Colour)
             {
                 case PieceColour.White:
                     _whiteInfo.UpdateTime(e.PlayerRemainingTime);
@@ -62,7 +59,6 @@ namespace prjChessForms.PresentationUI
                     _blackInfo.UpdateTime(e.PlayerRemainingTime);
                     break;
             }
-
         }
 
         private void SetupControls()
@@ -126,7 +122,4 @@ namespace prjChessForms.PresentationUI
         }
 
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 ﻿using prjChessForms.MyChessLibrary;
 
-
 namespace prjChessForms.Controller
 {
     interface IModelObserver

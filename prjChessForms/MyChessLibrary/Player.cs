@@ -5,7 +5,6 @@ namespace prjChessForms.MyChessLibrary
 {
     abstract class Player
     {
-        public event EventHandler TimeExpiredEvent;
         public Player(PieceColour colour, TimeSpan initialTime)
         {
             Colour = colour;
@@ -27,7 +26,6 @@ namespace prjChessForms.MyChessLibrary
         }
 
     }
-
     class HumanPlayer : Player
     {
         public HumanPlayer(PieceColour colour, TimeSpan initialTime) : base(colour, initialTime) { }
@@ -38,5 +36,4 @@ namespace prjChessForms.MyChessLibrary
         public ComputerPlayer(PieceColour colour, TimeSpan initialTime) : base(colour, initialTime) { }
 
     }
-
 }

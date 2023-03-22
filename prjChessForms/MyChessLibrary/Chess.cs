@@ -29,7 +29,7 @@ namespace prjChessForms.MyChessLibrary
         private bool _waitingForClick;
         public Chess()
         {
-            CreatePlayers(new TimeSpan(0, 0, 10));
+            CreatePlayers(new TimeSpan(0, 10, 0));
             _board = new Board(_players);
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
