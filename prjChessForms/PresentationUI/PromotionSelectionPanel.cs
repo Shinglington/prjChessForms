@@ -6,16 +6,9 @@ using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
 {
-    enum PromotionOption
-    {
-        Knight,
-        Bishop,
-        Rook,
-        Queen
-    }
     class PromotionSelectionPanel : Form
     {
-        public EventHandler<PromotionEventArgs> PromotionSelected;
+        public EventHandler<PromotionSelectedEventArgs> PromotionSelected;
 
         private TableLayoutPanel _panel;
         private PromotionOption _selectedPromotion;
@@ -35,20 +28,12 @@ namespace prjChessForms.PresentationUI
                 _selectedPromotion = value;
                 if (PromotionSelected != null)
                 {
-                    PromotionSelected.Invoke(this, new PromotionEventArgs())
+                    PromotionSelected.Invoke(this, new PromotionSelectedEventArgs(_selectedPromotion));
                 }
             }
         }
 
-        private void OnSelectionButtonClicked(PromotionOption)
-
-        private void OnQueenSelectionClicked(object sender, EventArgs e) => SelectedPromotionOption = PromotionOption.Queen;
-
-        private void OnBishopSelectionClicked(object sender, EventArgs e) => SelectedPromotionOption = PromotionOption.Bishop;
-
-        private void OnKnightSelectionClicked(object sender, EventArgs e) => SelectedPromotionOption = PromotionOption.Knight;
-
-        private void OnRookSelectionClicked(object sender, EventArgs e) => SelectedPromotionOption = PromotionOption.Rook;
+        private void OnSelectionButtonClicked(PromotionOption option) => SelectedPromotionOption = option;
 
         private void SetupPanel()
         {
@@ -68,42 +53,20 @@ namespace prjChessForms.PresentationUI
 
         private void SetupButtons()
         {
-            Button button = new Button() 
+            Button button;
+            int i = 0;
+            foreach(PromotionOption option in Enum.GetValues(typeof(PromotionOption)))
             {
-                Parent = _panel,
-                Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_Queen"),
-                Dock = DockStyle.Fill
-            };
-            _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(0, 0));
-            button.Click += OnQueenSelectionClicked;
-
-            button = new Button()
-            {
-                Parent = _panel,
-                Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_Rook"),
-                Dock = DockStyle.Fill
-            };
-            _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(0, 1));
-            button.Click += OnRookSelectionClicked;
-
-            button = new Button()
-            {
-                Parent = _panel,
-                Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_Knight"),
-                Dock = DockStyle.Fill
-            };
-            _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(1, 0));
-            button.Click += OnKnightSelectionClicked;
-
-            button = new Button()
-            {
-                Parent = _panel,
-                Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_Bishop"),
-                Dock = DockStyle.Fill
-            };
-            _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(1, 1));
-            button.Click += OnBishopSelectionClicked;
+                i++;
+                button = new Button()
+                {
+                    Parent = _panel,
+                    Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_" + option.ToString()),
+                    Dock = DockStyle.Fill
+                };
+                _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(i/2, i%2));
+                button.Click += (sender, e) => OnSelectionButtonClicked(option);
+            }
         }
-
     }
 }
