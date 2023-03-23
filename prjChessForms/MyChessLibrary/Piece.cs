@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -32,7 +34,7 @@ namespace prjChessForms.MyChessLibrary
 
         public override string ToString()
         {
-            return Name;
+            return Fullname;
         }
         public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }

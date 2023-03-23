@@ -57,8 +57,6 @@ namespace prjChessForms.MyChessLibrary
                 board.MakeMove(new ChessMove(rookCoords, new Coords(move.EndCoords.X + direction * -1, move.EndCoords.Y)));
             }
             board.MakeMove(move);
-            Promotions(board, move.EndCoords);
-
             return capturedPiece;
         }
 

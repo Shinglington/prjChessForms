@@ -16,8 +16,6 @@ namespace prjChessForms.MyChessLibrary
         public event EventHandler<PromotionEventArgs> PlayerPromotion; 
         public event EventHandler<GameOverEventArgs> GameOver;
 
-
-
         private Board _board;
         private System.Timers.Timer _timer;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -26,7 +24,6 @@ namespace prjChessForms.MyChessLibrary
 
         private Player[] _players;
         private int _turnCount;
-
 
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private Coords _clickedCoords;
@@ -230,6 +227,7 @@ namespace prjChessForms.MyChessLibrary
             Piece promotedPiece = new Queen(owner);
             if (PlayerPromotion != null)
             {
+                PlayerPromotion.Invoke(this, new PromotionEventArgs(owner.Colour, promotionCoords));
                 _waitingForPromotion = true;
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 _waitingForPromotion = false;

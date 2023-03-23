@@ -8,9 +8,12 @@ namespace prjChessForms.PresentationUI
     partial class ChessForm : Form, IModelObserver
     {
         public EventHandler<SquareClickedEventArgs> SquareClicked;
+        public EventHandler<PromotionSelectedEventArgs> PromotionSelected;
 
-        private BoardTableLayoutPanel _boardPanel;
         private TableLayoutPanel _layoutPanel;
+        private BoardTableLayoutPanel _boardPanel;
+        private PromotionSelectionPanel _promotionPanel;
+
         private PlayerInformationPanel _whiteInfo;
         private PlayerInformationPanel _blackInfo;
 
@@ -36,11 +39,10 @@ namespace prjChessForms.PresentationUI
 
         }
 
-
         public void OnPromotion(object sender, PromotionEventArgs e)
         {
-            PromotionSelectionPanel promotionSelection = new PromotionSelectionPanel();
-            promotionSelection.ShowDialog();
+            _promotionPanel = new PromotionSelectionPanel(e.PromotingColour);
+            _promotionPanel.PromotionSelected += OnPromotionSelected;
         }
 
         public void OnGameOver(object sender, GameOverEventArgs e)
@@ -125,6 +127,16 @@ namespace prjChessForms.PresentationUI
             if (SquareClicked != null)
             {
                 SquareClicked.Invoke(this, e);
+            }
+        }
+
+        private void OnPromotionSelected(object sender, PromotionSelectedEventArgs e)
+        {
+            if (PromotionSelected != null)
+            {
+                _promotionPanel.Hide();
+                _promotionPanel = null;
+                PromotionSelected.Invoke(this, e);
             }
         }
     }

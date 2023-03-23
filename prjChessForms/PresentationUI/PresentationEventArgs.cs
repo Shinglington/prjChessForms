@@ -11,4 +11,15 @@ namespace prjChessForms.PresentationUI
         }
         public Coords ClickedCoords { get; set; }
     }
+
+    class PromotionSelectedEventArgs : EventArgs 
+    {
+        public PromotionSelectedEventArgs(PromotionOption option)
+        {
+            SelectedOption = option;
+        }
+
+        public PromotionOption SelectedOption { get; set; }
+    }
+
 }
