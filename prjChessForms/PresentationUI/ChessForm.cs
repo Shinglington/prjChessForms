@@ -44,7 +44,6 @@ namespace prjChessForms.PresentationUI
             _promotionPanel = new PromotionSelectionPanel(e.PromotingColour);
             _promotionPanel.PromotionSelected += OnPromotionSelected;
             _promotionPanel.Show();
-
         }
 
         public void OnGameOver(object sender, GameOverEventArgs e)

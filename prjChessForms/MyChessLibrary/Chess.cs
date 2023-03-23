@@ -10,10 +10,10 @@ namespace prjChessForms.MyChessLibrary
 {
     enum PromotionOption
     {
+        Queen,
+        Rook,
         Knight,
         Bishop,
-        Rook,
-        Queen
     }
 
     class Chess

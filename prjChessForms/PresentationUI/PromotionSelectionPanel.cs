@@ -1,7 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
 using System.Drawing;
-using System.Resources;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -23,7 +22,7 @@ namespace prjChessForms.PresentationUI
         public PromotionOption SelectedPromotionOption
         {
             get { return _selectedPromotion; }
-            set 
+            set
             {
                 _selectedPromotion = value;
                 if (PromotionSelected != null)
@@ -55,7 +54,7 @@ namespace prjChessForms.PresentationUI
         {
             Button button;
             int i = 0;
-            foreach(PromotionOption option in Enum.GetValues(typeof(PromotionOption)))
+            foreach (PromotionOption option in Enum.GetValues(typeof(PromotionOption)))
             {
                 button = new Button()
                 {
@@ -63,7 +62,7 @@ namespace prjChessForms.PresentationUI
                     Image = (Image)Properties.Resources.ResourceManager.GetObject(PieceColour.ToString() + "_" + option.ToString()),
                     Dock = DockStyle.Fill
                 };
-                _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(i/2, i%2));
+                _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(i / 2, i % 2));
                 button.Click += (sender, e) => OnSelectionButtonClicked(option);
                 i++;
             }
