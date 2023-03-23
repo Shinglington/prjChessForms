@@ -17,12 +17,18 @@ namespace prjChessForms.Controller
             _chessModel.AttachModelObserver(_chessView);
 
             _chessView.SquareClicked += OnBoardClickReceived;
+            _chessView.PromotionSelected += OnPromotionReceived;
             _chessModel.StartGame();
         }
 
         private void OnBoardClickReceived(object sender, SquareClickedEventArgs e)
         {
             _chessModel.SendCoords(e.ClickedCoords);
+        }
+
+        private void OnPromotionReceived(object sender, PromotionSelectedEventArgs e)
+        {
+            _chessModel.SendPromotion(e.SelectedOption);
         }
     }
 }

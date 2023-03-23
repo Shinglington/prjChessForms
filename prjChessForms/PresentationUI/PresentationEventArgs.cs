@@ -21,5 +21,4 @@ namespace prjChessForms.PresentationUI
 
         public PromotionOption SelectedOption { get; set; }
     }
-
 }

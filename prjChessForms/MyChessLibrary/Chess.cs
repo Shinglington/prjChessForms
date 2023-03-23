@@ -35,7 +35,7 @@ namespace prjChessForms.MyChessLibrary
 
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         private Coords _clickedCoords;
-        private Type _promotionType;
+        private PromotionOption _selectedPromotion;
         private bool _waitingForClick, _waitingForPromotion;
         public Chess()
         {
@@ -67,12 +67,12 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        public void SendPromotion(Type pieceType)
+        public void SendPromotion(PromotionOption option)
         {
             if (_waitingForPromotion)
             {
-                Debug.WriteLine("Promotion received to {0}", pieceType.ToString());
-                _promotionType = pieceType;
+                Debug.WriteLine("Promotion received to {0}", option.ToString());
+                _selectedPromotion = option;
                 _semaphoreReceiveClick.Release();
             }
         }
@@ -239,15 +239,15 @@ namespace prjChessForms.MyChessLibrary
                 _waitingForPromotion = true;
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 _waitingForPromotion = false;
-                switch (_promotionType.ToString()) 
+                switch (_selectedPromotion) 
                 {
-                    case "Knight":
+                    case PromotionOption.Knight:
                         promotedPiece = new Knight(owner);
                         break;
-                    case "Bishop":
+                    case PromotionOption.Bishop:
                         promotedPiece = new Bishop(owner);
                         break;
-                    case "Rook":
+                    case PromotionOption.Rook:
                         promotedPiece = new Rook(owner);
                         break;
                 }

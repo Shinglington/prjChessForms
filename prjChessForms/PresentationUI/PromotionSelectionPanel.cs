@@ -57,7 +57,6 @@ namespace prjChessForms.PresentationUI
             int i = 0;
             foreach(PromotionOption option in Enum.GetValues(typeof(PromotionOption)))
             {
-                i++;
                 button = new Button()
                 {
                     Parent = _panel,
@@ -66,6 +65,7 @@ namespace prjChessForms.PresentationUI
                 };
                 _panel.SetCellPosition(button, new TableLayoutPanelCellPosition(i/2, i%2));
                 button.Click += (sender, e) => OnSelectionButtonClicked(option);
+                i++;
             }
         }
     }
