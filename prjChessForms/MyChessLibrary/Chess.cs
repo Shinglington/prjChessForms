@@ -8,6 +8,14 @@ using System.Timers;
 
 namespace prjChessForms.MyChessLibrary
 {
+    enum PromotionOption
+    {
+        Knight,
+        Bishop,
+        Rook,
+        Queen
+    }
+
     class Chess
     {
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
@@ -243,7 +251,6 @@ namespace prjChessForms.MyChessLibrary
                         promotedPiece = new Rook(owner);
                         break;
                 }
-
             }
             _board.GetSquareAt(promotionCoords).Piece = promotedPiece;
         }
