@@ -153,13 +153,13 @@ namespace prjChessForms.MyChessLibrary
             return check;
         }
 
-        public static bool RequiresPromotion(Board board, Coords endCoords)
+        public static bool RequiresPromotion(Board board, Coords pieceCoords)
         {
             bool requiresPromotion = false;
-            Piece p = board.GetPieceAt(endCoords);
+            Piece p = board.GetPieceAt(pieceCoords);
             if (p.GetType() == typeof(Pawn))
             {
-                if (endCoords.Y == 0 || endCoords.Y == board.RowCount - 1)
+                if (pieceCoords.Y == 0 || pieceCoords.Y == board.RowCount - 1)
                 {
                     requiresPromotion = true;
                 }

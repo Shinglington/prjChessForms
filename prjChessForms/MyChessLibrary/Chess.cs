@@ -27,9 +27,11 @@ namespace prjChessForms.MyChessLibrary
         private Player[] _players;
         private int _turnCount;
 
-        private Coords _clickedCoords;
+
         private SemaphoreSlim _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
-        private bool _waitingForClick;
+        private Coords _clickedCoords;
+        private Type _promotionType;
+        private bool _waitingForClick, _waitingForPromotion;
         public Chess()
         {
             CreatePlayers(new TimeSpan(0, 10, 0));
@@ -56,6 +58,16 @@ namespace prjChessForms.MyChessLibrary
             {
                 Debug.WriteLine("Model received coords input of {0}", coords);
                 _clickedCoords = coords;
+                _semaphoreReceiveClick.Release();
+            }
+        }
+
+        public void SendPromotion(Type pieceType)
+        {
+            if (_waitingForPromotion)
+            {
+                Debug.WriteLine("Promotion received to {0}", pieceType.ToString());
+                _promotionType = pieceType;
                 _semaphoreReceiveClick.Release();
             }
         }
@@ -88,6 +100,10 @@ namespace prjChessForms.MyChessLibrary
                     ChessMove move = await GetChessMove(cToken);
                     CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
                     ChangeSelection(null);
+                    if (Rulebook.RequiresPromotion(_board, move.EndCoords))
+                    {
+                        await Promotion(move.EndCoords, cToken);
+                    }
                     _turnCount++;
                     _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                 }
@@ -208,9 +224,30 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        private void Promotion(Piece promotingPiece)
+        private async Task Promotion(Coords promotionCoords, CancellationToken cToken)
         {
+            Player owner = GetPieceAt(promotionCoords).Owner;
+            Piece promotedPiece = new Queen(owner);
+            if (PlayerPromotion != null)
+            {
+                _waitingForPromotion = true;
+                await _semaphoreReceiveClick.WaitAsync(cToken);
+                _waitingForPromotion = false;
+                switch (_promotionType.ToString()) 
+                {
+                    case "Knight":
+                        promotedPiece = new Knight(owner);
+                        break;
+                    case "Bishop":
+                        promotedPiece = new Bishop(owner);
+                        break;
+                    case "Rook":
+                        promotedPiece = new Rook(owner);
+                        break;
+                }
 
+            }
+            _board.GetSquareAt(promotionCoords).Piece = promotedPiece;
         }
     }
 }

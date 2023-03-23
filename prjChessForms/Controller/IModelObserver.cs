@@ -9,5 +9,6 @@ namespace prjChessForms.Controller
         void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e);
         void OnPlayerTimerTick(object sender, PlayerTimerTickEventArgs e);
         void OnGameOver(object sender, GameOverEventArgs e);
+        void OnPromotion(object sender, PromotionEventArgs e);
     }
 }

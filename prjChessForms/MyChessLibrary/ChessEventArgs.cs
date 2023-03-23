@@ -49,12 +49,10 @@ namespace prjChessForms.MyChessLibrary
 
     class PromotionEventArgs : EventArgs
     {
-        public PromotionEventArgs(Pawn piece, Coords coords)
+        public PromotionEventArgs(Coords coords)
         {
-            PromotingPiece = piece;
             PromotingCoords = coords;
         }
-        public Pawn PromotingPiece { get; set; }
         public Coords PromotingCoords { get; set; }
     }
 

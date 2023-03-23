@@ -36,6 +36,13 @@ namespace prjChessForms.PresentationUI
 
         }
 
+
+        public void OnPromotion(object sender, PromotionEventArgs e)
+        {
+            PromotionSelectionPanel promotionSelection = new PromotionSelectionPanel();
+            promotionSelection.ShowDialog();
+        }
+
         public void OnGameOver(object sender, GameOverEventArgs e)
         {
             if (e.Winner == null)
@@ -120,6 +127,5 @@ namespace prjChessForms.PresentationUI
                 SquareClicked.Invoke(this, e);
             }
         }
-
     }
 }
