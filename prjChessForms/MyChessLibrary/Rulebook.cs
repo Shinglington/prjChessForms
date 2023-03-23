@@ -153,6 +153,20 @@ namespace prjChessForms.MyChessLibrary
             return check;
         }
 
+        public static bool RequiresPromotion(Board board, Coords endCoords)
+        {
+            bool requiresPromotion = false;
+            Piece p = board.GetPieceAt(endCoords);
+            if (p.GetType() == typeof(Pawn))
+            {
+                if (endCoords.Y == 0 || endCoords.Y == board.RowCount - 1)
+                {
+                    requiresPromotion = true;
+                }
+            }
+            return requiresPromotion;
+        }
+
         private static bool IsInCheckmate(Board board, Player currentPlayer)
         {
             if (!IsInCheck(board, currentPlayer))
@@ -244,18 +258,6 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             return false;
-        }
-
-        private static void Promotions(Board board, Coords endCoords)
-        {
-            Piece p = board.GetPieceAt(endCoords);
-            if (p.GetType() == typeof(Pawn)) 
-            {
-                if (endCoords.Y == 0 || endCoords.Y == board.RowCount - 1)
-                {
-                    board.GetSquareAt(endCoords).Piece = new Queen(p.Owner);
-                }
-            }
         }
     }
 }

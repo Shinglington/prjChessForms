@@ -47,6 +47,17 @@ namespace prjChessForms.MyChessLibrary
         public List<Piece> CapturedPieces { get; set; }
     }
 
+    class PromotionEventArgs : EventArgs
+    {
+        public PromotionEventArgs(Pawn piece, Coords coords)
+        {
+            PromotingPiece = piece;
+            PromotingCoords = coords;
+        }
+        public Pawn PromotingPiece { get; set; }
+        public Coords PromotingCoords { get; set; }
+    }
+
     class GameOverEventArgs : EventArgs
     {
         public GameOverEventArgs(GameResult result, Player winner)

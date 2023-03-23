@@ -13,7 +13,9 @@ namespace prjChessForms.MyChessLibrary
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
         public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
         public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
+        public event EventHandler<PromotionEventArgs> PlayerPromotion; 
         public event EventHandler<GameOverEventArgs> GameOver;
+
 
 
         private Board _board;
@@ -64,12 +66,12 @@ namespace prjChessForms.MyChessLibrary
             PieceSelectionChanged += new EventHandler<PieceSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
             PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
+            PlayerPromotion += new EventHandler<PromotionEventArgs>(observer.OnPromotion);
             GameOver += new EventHandler<GameOverEventArgs>(observer.OnGameOver);
             foreach(Square s in _board.GetSquares())
             {
                 observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
             }
-
             observer.OnPlayerTimerTick(this, new PlayerTimerTickEventArgs(WhitePlayer));
             observer.OnPlayerTimerTick(this, new PlayerTimerTickEventArgs(BlackPlayer));
         }
@@ -204,6 +206,11 @@ namespace prjChessForms.MyChessLibrary
                 }
                 PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(selectedPiece, selectedCoords, endCoords));
             }
+        }
+
+        private void Promotion(Piece promotingPiece)
+        {
+
         }
     }
 }
