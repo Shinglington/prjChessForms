@@ -21,6 +21,7 @@ namespace prjChessForms.MyChessLibrary
         private CancellationTokenSource cts = new CancellationTokenSource();
 
         private GameResult _result;
+
         private Player[] _players;
         private int _turnCount;
 
@@ -85,8 +86,8 @@ namespace prjChessForms.MyChessLibrary
                     ChessMove move = await GetChessMove(cToken);
                     CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
                     ChangeSelection(null);
-                    _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                     _turnCount++;
+                    _result = Rulebook.GetGameResult(_board, CurrentPlayer);
                 }
                 catch when (cToken.IsCancellationRequested)
                 {
@@ -95,8 +96,8 @@ namespace prjChessForms.MyChessLibrary
                     _result = GameResult.Time;
                 }
             }
-            cts.Cancel();
             _timer.Elapsed -= OnPlayerTimerTick;
+            cts.Cancel();
         }
 
         private async Task<ChessMove> GetChessMove(CancellationToken cToken)

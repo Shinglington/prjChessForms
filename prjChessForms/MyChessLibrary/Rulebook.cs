@@ -10,7 +10,6 @@ namespace prjChessForms.MyChessLibrary
         Stalemate,
         Time
     }
-
     public struct ChessMove
     {
         public ChessMove(Coords startCoords, Coords endCoords)
@@ -114,13 +113,13 @@ namespace prjChessForms.MyChessLibrary
             return possibleMoves;
         }
 
-        public static GameResult GetGameResult(Board board, Player currentPlayer)
+        public static GameResult GetGameResult(Board board, Player current)
         {
-            if (IsInStalemate(board, currentPlayer))
+            if (IsInStalemate(board, current))
             {
                 return GameResult.Stalemate;
             }
-            else if (IsInCheckmate(board, currentPlayer))
+            else if (IsInCheckmate(board, current))
             {
                 return GameResult.Checkmate;
             }
