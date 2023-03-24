@@ -204,10 +204,13 @@ namespace prjChessForms.MyChessLibrary
 
         private void CapturePiece(Piece p)
         {
-            CurrentPlayer.AddCapturedPiece(p);
-            if (PlayerCapturedPiecesChanged != null)
+            if (p != null)
             {
-                PlayerCapturedPiecesChanged.Invoke(this, new PlayerCapturedPiecesChangedEventArgs(CurrentPlayer));
+                CurrentPlayer.AddCapturedPiece(p);
+                if (PlayerCapturedPiecesChanged != null)
+                {
+                    PlayerCapturedPiecesChanged.Invoke(this, new PlayerCapturedPiecesChangedEventArgs(CurrentPlayer, p));
+                }
             }
         }
 

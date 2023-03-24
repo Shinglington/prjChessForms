@@ -40,11 +40,13 @@ namespace prjChessForms.MyChessLibrary
 
     class PlayerCapturedPiecesChangedEventArgs : EventArgs
     {
-        public PlayerCapturedPiecesChangedEventArgs(Player player)
+        public PlayerCapturedPiecesChangedEventArgs(Player player, Piece capturedPiece)
         {
-            CapturedPieces = player.CapturedPieces;
+            Player = player;
+            CapturedPiece = capturedPiece;
         }
-        public List<Piece> CapturedPieces { get; set; }
+        public Player Player { get; set; }
+        public Piece CapturedPiece { get; set; }
     }
 
     class PromotionEventArgs : EventArgs

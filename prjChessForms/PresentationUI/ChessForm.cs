@@ -36,7 +36,15 @@ namespace prjChessForms.PresentationUI
 
         public void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
         {
-
+            switch (e.Player.Colour)
+            {
+                case PieceColour.White:
+                    _whiteInfo.UpdateCapturedPieces(e.CapturedPiece);
+                    break;
+                case PieceColour.Black:
+                    _blackInfo.UpdateCapturedPieces(e.CapturedPiece);
+                    break;
+            }
         }
 
         public void OnPromotion(object sender, PromotionEventArgs e)
@@ -84,6 +92,7 @@ namespace prjChessForms.PresentationUI
             {
                 Parent = this,
                 Dock = DockStyle.Fill,
+                Padding = new Padding(0)
             };
             _layoutPanel.ColumnStyles.Clear();
             _layoutPanel.RowStyles.Clear();
@@ -91,9 +100,9 @@ namespace prjChessForms.PresentationUI
             _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90));
             _layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
 
-            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
-            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
-            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
+            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 80));
+            _layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
         }
 
         private void SetupBoard()

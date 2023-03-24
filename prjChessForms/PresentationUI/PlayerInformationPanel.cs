@@ -9,7 +9,7 @@ namespace prjChessForms.PresentationUI
     {
         private Label _colourLabel;
         private Label _timeLabel;
-        private FlowLayoutPanel _capturedPieces;
+        private CapturedPiecesPanel _capturedPieces;
         public PlayerInformationPanel(PieceColour colour)
         {
             PieceColour = colour;
@@ -32,9 +32,9 @@ namespace prjChessForms.PresentationUI
             }
         }
 
-        public void UpdateCapturedPieces(List<Piece> capturedPiece)
+        public void UpdateCapturedPieces(Piece capturedPiece)
         {
-
+            _capturedPieces.AddCapturedPiece(capturedPiece);
         }
 
         private void SetupPanel()
@@ -47,8 +47,9 @@ namespace prjChessForms.PresentationUI
             ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
             ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
 
-            SetupLabel();
+
             SetupCapturedPieces();
+            SetupLabel();
             SetupTimer();
         }
 
@@ -65,11 +66,11 @@ namespace prjChessForms.PresentationUI
 
         private void SetupCapturedPieces()
         {
-            _capturedPieces = new FlowLayoutPanel() 
+            _capturedPieces = new CapturedPiecesPanel(PieceColour)
             {
-                FlowDirection = FlowDirection.LeftToRight,
                 Parent = this,
                 Dock = DockStyle.Fill,
+                Padding = new Padding(0),
             };
             SetCellPosition(_capturedPieces, new TableLayoutPanelCellPosition(1, 0));
 

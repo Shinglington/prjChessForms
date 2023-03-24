@@ -76,6 +76,9 @@
     <Compile Include="PresentationUI\BoardTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PresentationUI\CapturedPiecesPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PresentationUI\ChessForm.cs">
       <SubType>Form</SubType>
     </Compile>
