@@ -1,6 +1,5 @@
 ﻿using prjChessForms.MyChessLibrary;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace prjChessForms.PresentationUI
@@ -17,7 +16,7 @@ namespace prjChessForms.PresentationUI
         }
 
         public PieceColour PieceColour { get; }
-        
+
         public void UpdateTime(TimeSpan remainingTime)
         {
             string text = remainingTime.ToString();
@@ -41,12 +40,11 @@ namespace prjChessForms.PresentationUI
         {
             RowStyles.Clear();
             ColumnStyles.Clear();
-            
+
             RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
             ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-
 
             SetupCapturedPieces();
             SetupLabel();
@@ -55,7 +53,7 @@ namespace prjChessForms.PresentationUI
 
         private void SetupLabel()
         {
-            _colourLabel = new Label 
+            _colourLabel = new Label
             {
                 Text = PieceColour.ToString(),
                 Parent = this,
@@ -73,7 +71,6 @@ namespace prjChessForms.PresentationUI
                 Padding = new Padding(0),
             };
             SetCellPosition(_capturedPieces, new TableLayoutPanelCellPosition(1, 0));
-
         }
 
         private void SetupTimer()

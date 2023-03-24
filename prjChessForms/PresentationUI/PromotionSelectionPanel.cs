@@ -8,7 +8,6 @@ namespace prjChessForms.PresentationUI
     class PromotionSelectionPanel : Form
     {
         public EventHandler<PromotionSelectedEventArgs> PromotionSelected;
-
         private TableLayoutPanel _panel;
         private PromotionOption _selectedPromotion;
         public PromotionSelectionPanel(PieceColour colour)
