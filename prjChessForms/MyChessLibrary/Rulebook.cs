@@ -208,7 +208,6 @@ namespace prjChessForms.MyChessLibrary
                     return true;
                 }
             }
-
             return false;
         }
 
