@@ -70,7 +70,14 @@
     </Compile>
     <Compile Include="MyChessLibrary\Coords.cs" />
     <Compile Include="MyChessLibrary\ChessEventArgs.cs" />
-    <Compile Include="MyChessLibrary\Piece.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Bishop.cs" />
+    <Compile Include="MyChessLibrary\Pieces\GhostPawn.cs" />
+    <Compile Include="MyChessLibrary\Pieces\King.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Knight.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Pawn.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Piece.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Queen.cs" />
+    <Compile Include="MyChessLibrary\Pieces\Rook.cs" />
     <Compile Include="MyChessLibrary\Player.cs" />
     <Compile Include="MyChessLibrary\Square.cs" />
     <Compile Include="PresentationUI\BoardTableLayoutPanel.cs">
