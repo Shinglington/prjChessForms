@@ -2,7 +2,7 @@
 {
     class GhostPawn : Piece
     {
-        public GhostPawn(Player player, Pawn referencedPawn) : base(player)
+        public GhostPawn(PieceColour colour, Pawn referencedPawn) : base(colour)
         {
             LinkedPawn = referencedPawn;
         }

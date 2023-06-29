@@ -4,7 +4,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Pawn : Piece
     {
-        public Pawn(Player player) : base(player) { }
+        public Pawn(PieceColour colour) : base(colour) { }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
@@ -12,7 +12,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
             int direction = yChange > 0 ? 1 : -1;
-            if (direction != (Owner.Colour == PieceColour.White ? 1 : -1))
+            if (direction != (Colour == PieceColour.White ? 1 : -1))
             {
                 return false;
             }

@@ -4,7 +4,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Bishop : Piece
     {
-        public Bishop(Player player) : base(player) { }
+        public Bishop(PieceColour colour) : base(colour) { }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {

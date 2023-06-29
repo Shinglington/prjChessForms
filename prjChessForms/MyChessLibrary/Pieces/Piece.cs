@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace prjChessForms.MyChessLibrary.Pieces
 {
@@ -11,9 +9,9 @@ namespace prjChessForms.MyChessLibrary.Pieces
     }
     abstract class Piece
     {
-        public Piece(Player player)
+        public Piece(PieceColour colour)
         {
-            Owner = player;
+            Colour = colour;
             string imageName = Colour.ToString() + "_" + this.GetType().Name;
             try
             {
@@ -25,9 +23,8 @@ namespace prjChessForms.MyChessLibrary.Pieces
             }
         }
         public bool HasMoved { get; set; }
-        public Player Owner { get; }
         public Image Image { get; }
-        public PieceColour Colour { get { return Owner.Colour; } }
+        public PieceColour Colour { get; }
         public string Name { get { return GetType().Name; } }
         public string Fullname { get { return $"{Colour} {Name}"; } }
 

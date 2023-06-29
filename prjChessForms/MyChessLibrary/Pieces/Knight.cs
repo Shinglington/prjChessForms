@@ -4,7 +4,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Knight : Piece
     {
-        public Knight(Player player) : base(player) { }
+        public Knight(PieceColour colour) : base(colour) { }
 
         public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {

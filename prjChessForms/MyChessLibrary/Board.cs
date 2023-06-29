@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using prjChessForms.MyChessLibrary.Pieces;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -136,10 +137,10 @@ namespace prjChessForms.MyChessLibrary
                     _squares[x, y] = s;
                 }
             }
-            AddDefaultPieces();
+            PlaceStartingPieces();
         }
 
-        private void AddDefaultPieces()
+        private void PlaceStartingPieces()
         {
             char[,] defaultPieces =
             {
