@@ -1,4 +1,6 @@
-﻿namespace prjChessForms.MyChessLibrary
+﻿using System;
+
+namespace prjChessForms.MyChessLibrary
 {
    public struct Coords
     {
@@ -7,6 +9,22 @@
         {
             X = x;
             Y = y;
+        }
+        public Coords(string str)
+        {
+            try
+            {
+                X = int.Parse(str[1].ToString());
+                Y = Char.ToLower(str[0]) - 'a';
+                if (Y < 0 || Y > 8)
+                {
+                    throw new ArgumentOutOfRangeException(String.Format("{0} is not a valid coordinate", str));
+                }
+            }
+            catch
+            {
+                throw new ArgumentOutOfRangeException(String.Format("{0} is not a valid coordinate", str));
+            }
         }
         public int X { get; }
         public int Y { get; }

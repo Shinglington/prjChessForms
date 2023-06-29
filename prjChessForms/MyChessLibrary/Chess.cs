@@ -6,8 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
+using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
+    public enum PieceColour
+    {
+        White,
+        Black
+    }
     enum PromotionOption
     {
         Queen,
@@ -40,7 +46,7 @@ namespace prjChessForms.MyChessLibrary
         public Chess()
         {
             CreatePlayers(new TimeSpan(0, 10, 0));
-            _board = new Board(_players);
+            _board = new Board();
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
         }
@@ -103,7 +109,7 @@ namespace prjChessForms.MyChessLibrary
                 try
                 {
                     ChessMove move = await GetChessMove(cToken);
-                    CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer, move));
+                    CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer.Colour, move));
                     ChangeSelection(null);
                     if (Rulebook.RequiresPromotion(_board, move.EndCoords))
                     {
@@ -137,7 +143,7 @@ namespace prjChessForms.MyChessLibrary
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 Debug.WriteLine("Received click at {0}", _clickedCoords);
 
-                if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Owner.Equals(CurrentPlayer))
+                if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Colour.Equals(CurrentPlayer.Colour))
                 {
                     ChangeSelection(GetPieceAt(_clickedCoords));
                     fromCoords = _clickedCoords;
@@ -148,7 +154,7 @@ namespace prjChessForms.MyChessLibrary
                     toCoords = _clickedCoords;
                 }
                 // Check if move is valid now
-                if (!toCoords.IsNull && !fromCoords.IsNull && Rulebook.CheckLegalMove(_board, CurrentPlayer, new ChessMove(fromCoords, toCoords)))
+                if (!toCoords.IsNull && !fromCoords.IsNull && Rulebook.CheckLegalMove(_board, CurrentPlayer.Colour, new ChessMove(fromCoords, toCoords)))
                 {
                     move = new ChessMove(fromCoords, toCoords);
                     completeInput = true;
@@ -234,24 +240,24 @@ namespace prjChessForms.MyChessLibrary
 
         private async Task Promotion(Coords promotionCoords, CancellationToken cToken)
         {
-            Player owner = GetPieceAt(promotionCoords).Owner;
-            Piece promotedPiece = new Queen(owner);
+            PieceColour colour = GetPieceAt(promotionCoords).Colour;
+            Piece promotedPiece = new Queen(colour);
             if (PlayerPromotion != null)
             {
-                PlayerPromotion.Invoke(this, new PromotionEventArgs(owner.Colour, promotionCoords));
+                PlayerPromotion.Invoke(this, new PromotionEventArgs(colour, promotionCoords));
                 _waitingForPromotion = true;
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 _waitingForPromotion = false;
                 switch (_selectedPromotion) 
                 {
                     case PromotionOption.Knight:
-                        promotedPiece = new Knight(owner);
+                        promotedPiece = new Knight(colour);
                         break;
                     case PromotionOption.Bishop:
-                        promotedPiece = new Bishop(owner);
+                        promotedPiece = new Bishop(colour);
                         break;
                     case PromotionOption.Rook:
-                        promotedPiece = new Rook(owner);
+                        promotedPiece = new Rook(colour);
                         break;
                 }
             }

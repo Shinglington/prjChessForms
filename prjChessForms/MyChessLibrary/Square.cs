@@ -1,5 +1,5 @@
 ﻿using System;
-
+using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
     class Square

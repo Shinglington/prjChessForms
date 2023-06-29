@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
     class PieceChangedEventArgs : EventArgs

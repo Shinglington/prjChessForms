@@ -1,12 +1,7 @@
 ﻿using System.Drawing;
 
-namespace prjChessForms.MyChessLibrary.Pieces
+namespace prjChessForms.MyChessLibrary
 {
-    public enum PieceColour
-    {
-        White,
-        Black
-    }
     abstract class Piece
     {
         public Piece(PieceColour colour)

@@ -10,11 +10,9 @@ namespace prjChessForms.MyChessLibrary
 
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
-        private Player[] _players;
         private Square[,] _squares;
-        public Board(Player[] players)
+        public Board()
         {
-            _players = players;
             SetupBoard();
         }
         public int RowCount { get { return ROW_COUNT; } }
@@ -107,7 +105,7 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        public bool CheckMoveInCheck(Player player, ChessMove move)
+        public bool CheckMoveInCheck(PieceColour colour, ChessMove move)
         {
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
@@ -115,7 +113,7 @@ namespace prjChessForms.MyChessLibrary
             Piece originalEndPiece = GetPieceAt(end);
 
             MakeMove(move);
-            bool SelfCheck = Rulebook.IsInCheck(this, player);
+            bool SelfCheck = Rulebook.IsInCheck(this, colour);
             MakeMove(new ChessMove(end, start));
 
             GetSquareAt(start).Piece.HasMoved = startPieceHasMoved;
@@ -142,61 +140,48 @@ namespace prjChessForms.MyChessLibrary
 
         private void PlaceStartingPieces()
         {
-            char[,] defaultPieces =
-            {
-                { 'P','P','P','P','P','P','P','P'},
-                { 'R','N','B','Q','K','B','N','R'}
-            };
-            Player player;
-            Square square;
-            for (int i = 0; i < 2; i++)
-            {
-                player = _players[i];
-                for (int y = 0; y < 2; y++)
-                {
-                    for (int x = 0; x < COL_COUNT; x++)
-                    {
-                        if (player.Colour == PieceColour.White)
-                        {
-                            square = GetSquareAt(new Coords(x, 1 - y));
-                        }
-                        else
-                        {
-                            square = GetSquareAt(new Coords(x, ROW_COUNT - 2 + y));
-                        }
-                        AddPiece(defaultPieces[y, x], player, square);
-                    }
-                }
-            }
+            PlaceBlackStartingPieces();
+            PlaceWhiteStartingPieces();
         }
 
-        private void AddPiece(char pieceType, Player player, Square square)
+        private void PlaceBlackStartingPieces()
         {
-            Piece p = null;
-            switch (pieceType)
+            PieceColour col = PieceColour.Black;
+            for (int x = 0; x < COL_COUNT; x++)
             {
-                case 'P':
-                    p = new Pawn(player);
-                    break;
-                case 'N':
-                    p = new Knight(player);
-                    break;
-                case 'B':
-                    p = new Bishop(player);
-                    break;
-                case 'R':
-                    p = new Rook(player);
-                    break;
-                case 'Q':
-                    p = new Queen(player);
-                    break;
-                case 'K':
-                    p = new King(player);
-                    break;
-                default:
-                    throw new ArgumentException("Unrecognised pieceType");
+                PlacePiece(new Pawn(col), new Coords(x, 6));
             }
-            square.Piece = p;
+            PlacePiece(new Rook(col), new Coords(0, 7));
+            PlacePiece(new Knight(col), new Coords(1, 7));
+            PlacePiece(new Bishop(col), new Coords(2, 7));
+            PlacePiece(new Queen(col), new Coords(3, 7));
+            PlacePiece(new King(col), new Coords(4, 7));
+            PlacePiece(new Bishop(col), new Coords(5, 7));
+            PlacePiece(new Knight(col), new Coords(6, 7));
+            PlacePiece(new Rook(col), new Coords(7, 7));
+        }
+
+        private void PlaceWhiteStartingPieces()
+        {
+            PieceColour col = PieceColour.White;
+            for (int x = 0; x < COL_COUNT; x++)
+            {
+                PlacePiece(new Pawn(col), new Coords(x, 1));
+            }
+            PlacePiece(new Rook(col), new Coords(0, 0));
+            PlacePiece(new Knight(col), new Coords(1, 0));
+            PlacePiece(new Bishop(col), new Coords(2, 0));
+            PlacePiece(new Queen(col), new Coords(3, 0));
+            PlacePiece(new King(col), new Coords(4, 0));
+            PlacePiece(new Bishop(col), new Coords(5, 0));
+            PlacePiece(new Knight(col), new Coords(6, 0));
+            PlacePiece(new Rook(col), new Coords(7, 0));
+        }
+
+        private void PlacePiece(Piece piece, Coords coords)
+        {
+            Square square = GetSquareAt(coords);
+            square.Piece = piece;
         }
 
         private void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)

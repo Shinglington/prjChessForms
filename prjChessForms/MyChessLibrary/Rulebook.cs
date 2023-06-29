@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using prjChessForms.MyChessLibrary.Pieces;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -10,28 +11,11 @@ namespace prjChessForms.MyChessLibrary
         Stalemate,
         Time
     }
-
-    public struct ChessMove
-    {
-        public ChessMove(Coords startCoords, Coords endCoords)
-        {
-            StartCoords = startCoords;
-            EndCoords = endCoords;
-        }
-
-        public Coords StartCoords { get; }
-        public Coords EndCoords { get; }
-        public override string ToString()
-        {
-            return StartCoords.ToString() + " -> " + EndCoords.ToString();
-        }
-    }
-
     class Rulebook
     {
-        public static Piece MakeMove(Board board, Player player, ChessMove move)
+        public static Piece MakeMove(Board board, PieceColour colour, ChessMove move)
         {
-            if (!CheckLegalMove(board, player, move))
+            if (!CheckLegalMove(board, colour, move))
             {
                 throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
             }
@@ -49,7 +33,7 @@ namespace prjChessForms.MyChessLibrary
             if (IsDoublePawnMove(board, move))
             {
                 Coords ghostPawnCoords = new Coords(move.StartCoords.X, move.StartCoords.Y + (move.EndCoords.Y - move.StartCoords.Y) / 2);
-                board.GetSquareAt(ghostPawnCoords).Piece = new GhostPawn(player, (Pawn)board.GetPieceAt(move.StartCoords));
+                board.GetSquareAt(ghostPawnCoords).Piece = new GhostPawn(colour, (Pawn)board.GetPieceAt(move.StartCoords));
             }
             else if (IsCastle(board, move))
             {
@@ -61,7 +45,7 @@ namespace prjChessForms.MyChessLibrary
             return capturedPiece;
         }
 
-        public static bool CheckLegalMove(Board board, Player player, ChessMove move)
+        public static bool CheckLegalMove(Board board, PieceColour colour, ChessMove move)
         {
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
@@ -69,7 +53,7 @@ namespace prjChessForms.MyChessLibrary
             bool legal = false;
             Piece movedPiece = board.GetPieceAt(start);
             Piece capturedPiece = board.GetPieceAt(end);
-            if (movedPiece != null && movedPiece.Colour == player.Colour && !start.Equals(end))
+            if (movedPiece != null && movedPiece.Colour == colour && !start.Equals(end))
             {
                 if (IsEnPassant(board, move) || IsCastle(board, move))
                 {
@@ -77,9 +61,9 @@ namespace prjChessForms.MyChessLibrary
                 }
                 else if (movedPiece.CanMove(board, start, end))
                 {
-                    if (capturedPiece == null || (capturedPiece.Colour != player.Colour))
+                    if (capturedPiece == null || (capturedPiece.Colour != colour))
                     {
-                        if (!board.CheckMoveInCheck(player, move))
+                        if (!board.CheckMoveInCheck(colour, move))
                         {
                             legal = true;
                         }
@@ -102,7 +86,7 @@ namespace prjChessForms.MyChessLibrary
                     for (int x = 0; x < board.ColumnCount; x++)
                     {
                         move = new ChessMove(pieceCoords, new Coords(x, y));
-                        if (CheckLegalMove(board, piece.Owner, move))
+                        if (CheckLegalMove(board, p.Colour, move))
                         {
                             possibleMoves.Add(move);
                         }
@@ -114,11 +98,11 @@ namespace prjChessForms.MyChessLibrary
 
         public static GameResult GetGameResult(Board board, Player current)
         {
-            if (IsInStalemate(board, current))
+            if (IsInStalemate(board, current.Colour))
             {
                 return GameResult.Stalemate;
             }
-            else if (IsInCheckmate(board, current))
+            else if (IsInCheckmate(board, current.Colour))
             {
                 return GameResult.Checkmate;
             }
@@ -129,10 +113,10 @@ namespace prjChessForms.MyChessLibrary
 
         }
 
-        public static bool IsInCheck(Board board, Player currentPlayer)
+        public static bool IsInCheck(Board board, PieceColour colour)
         {
             bool check = false;
-            King king = board.GetKing(currentPlayer.Colour);
+            King king = board.GetKing(colour);
             if (king == null)
             {
                 return true;
@@ -140,9 +124,9 @@ namespace prjChessForms.MyChessLibrary
             Coords kingCoords = board.GetCoordsOfPiece(king);
             foreach (Square square in board.GetSquares())
             {
-                if (square.Piece != null && square.Piece.Owner != currentPlayer)
+                if (square.Piece != null && square.Piece.Colour != colour)
                 {
-                    if (CheckLegalMove(board, square.Piece.Owner, new ChessMove(square.Coords, kingCoords)))
+                    if (CheckLegalMove(board, square.Piece.Colour, new ChessMove(square.Coords, kingCoords)))
                     {
                         check = true;
                         break;
@@ -166,28 +150,28 @@ namespace prjChessForms.MyChessLibrary
             return requiresPromotion;
         }
 
-        private static bool IsInCheckmate(Board board, Player currentPlayer)
+        private static bool IsInCheckmate(Board board, PieceColour colour)
         {
-            if (!IsInCheck(board, currentPlayer))
+            if (!IsInCheck(board, colour))
             {
                 return false;
             }
-            return !CheckIfThereAreRemainingLegalMoves(board, currentPlayer);
+            return !CheckIfThereAreRemainingLegalMoves(board, colour);
         }
 
-        private static bool IsInStalemate(Board board, Player currentPlayer)
+        private static bool IsInStalemate(Board board, PieceColour colour)
         {
-            if (IsInCheck(board, currentPlayer))
+            if (IsInCheck(board, colour))
             {
                 return false;
             }
-            return !CheckIfThereAreRemainingLegalMoves(board, currentPlayer);
+            return !CheckIfThereAreRemainingLegalMoves(board, colour);
         }
 
-        private static bool CheckIfThereAreRemainingLegalMoves(Board board, Player currentPlayer)
+        private static bool CheckIfThereAreRemainingLegalMoves(Board board, PieceColour colour)
         {
             bool anyLegalMoves = false;
-            foreach (Piece p in board.GetPieces(currentPlayer.Colour))
+            foreach (Piece p in board.GetPieces(colour))
             {
                 List<ChessMove> moves = GetPossibleMoves(board, p);
                 if (moves.Count > 0) 
@@ -227,7 +211,7 @@ namespace prjChessForms.MyChessLibrary
                         Coords currCoords = new Coords(move.StartCoords.X + direction, move.StartCoords.Y);
                         while (!currCoords.Equals(rookCoords))
                         {
-                            if (board.GetPieceAt(currCoords) != null || board.CheckMoveInCheck(p.Owner, new ChessMove(move.StartCoords, currCoords)))
+                            if (board.GetPieceAt(currCoords) != null || board.CheckMoveInCheck(p.Colour, new ChessMove(move.StartCoords, currCoords)))
                             {
                                 isCastleMove = false;
                                 break;
