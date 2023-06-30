@@ -1,17 +1,18 @@
 ﻿using System;
 using prjChessForms.MyChessLibrary.Pieces;
+using prjChessForms.MyChessLibrary.Interfaces;
 namespace prjChessForms.MyChessLibrary
 {
-    class Square
+    class Square : ISquare
     {
         public EventHandler<PieceChangedEventArgs> PieceChanged;
-        private Piece _piece;
+        private IPiece _piece;
         public Square(int x, int y)
         {
             Coords = new Coords(x, y);
             _piece = null;
         }
-        public Piece Piece
+        public IPiece Piece
         {
             get
             {

@@ -1,12 +1,12 @@
 ﻿using System;
-
+using prjChessForms.MyChessLibrary.Interfaces;
 namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Queen : Piece
     {
         public Queen(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
             return BishopMove(board, startCoords, endCoords) || RookMove(board, startCoords, endCoords);
         }
