@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary.Interfaces
 {
-    internal class IRulebook
+    public interface IRulebook
     {
+        IPiece MakeMove(IBoard board, PieceColour colour, ChessMove move);
+
     }
 }
