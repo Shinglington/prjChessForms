@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using prjChessForms.MyChessLibrary.Pieces;
-
+using prjChessForms.MyChessLibrary.Interfaces;
 namespace prjChessForms.MyChessLibrary
 {
     public enum GameResult 
@@ -12,24 +12,16 @@ namespace prjChessForms.MyChessLibrary
         Time
     }
 
-    public interface IRulebook
+    class Rulebook : IRulebook
     {
-        public Piece MakeMove(PieceColour colour, ChessMove move);
-
-    }
-
-
-
-    class Rulebook
-    {
-        public static Piece MakeMove(Board board, PieceColour colour, ChessMove move)
+        public static IPiece MakeMove(Board board, PieceColour colour, ChessMove move)
         {
             if (!CheckLegalMove(board, colour, move))
             {
                 throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
             }
 
-            Piece capturedPiece = board.GetPieceAt(move.EndCoords);
+            IPiece capturedPiece = board.GetPieceAt(move.EndCoords);
             if (IsEnPassant(board, move))
             {
                 GhostPawn ghostPawn = board.GetSquareAt(move.EndCoords).GetGhostPawn();

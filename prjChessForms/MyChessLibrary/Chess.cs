@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
+using prjChessForms.MyChessLibrary.Interfaces;
 using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
@@ -53,9 +54,8 @@ namespace prjChessForms.MyChessLibrary
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }
-        public Square[,] BoardSquares { get { return _board.GetSquares(); } }
-        public Piece GetPieceAt(Coords coords) => _board.GetPieceAt(coords);
-        public Coords GetCoordsOf(Piece piece) => _board.GetCoordsOfPiece(piece);
+        public IPiece GetPieceAt(Coords coords) => _board.GetPieceAt(coords);
+        public Coords GetCoordsOf(IPiece piece) => _board.GetCoordsOfPiece(piece);
 
         public async Task StartGame()
         {
@@ -220,7 +220,7 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        private void ChangeSelection(Piece selectedPiece)
+        private void ChangeSelection(IPiece selectedPiece)
         {
             if (PieceSelectionChanged != null)
             {
@@ -241,7 +241,7 @@ namespace prjChessForms.MyChessLibrary
         private async Task Promotion(Coords promotionCoords, CancellationToken cToken)
         {
             PieceColour colour = GetPieceAt(promotionCoords).Colour;
-            Piece promotedPiece = new Queen(colour);
+            IPiece promotedPiece = new Queen(colour);
             if (PlayerPromotion != null)
             {
                 PlayerPromotion.Invoke(this, new PromotionEventArgs(colour, promotionCoords));
