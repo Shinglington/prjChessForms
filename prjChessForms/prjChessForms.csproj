@@ -74,7 +74,6 @@
     <Compile Include="MyChessLibrary\Interfaces\IBoard.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPiece.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPlayer.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\IRulebook.cs" />
     <Compile Include="MyChessLibrary\Interfaces\ISquare.cs" />
     <Compile Include="MyChessLibrary\Pieces\Bishop.cs" />
     <Compile Include="MyChessLibrary\Pieces\GhostPawn.cs" />
