@@ -71,6 +71,7 @@
     <Compile Include="MyChessLibrary\ChessMove.cs" />
     <Compile Include="MyChessLibrary\Coords.cs" />
     <Compile Include="MyChessLibrary\ChessEventArgs.cs" />
+    <Compile Include="MyChessLibrary\IPiece.cs" />
     <Compile Include="MyChessLibrary\Pieces\Bishop.cs" />
     <Compile Include="MyChessLibrary\Pieces\GhostPawn.cs" />
     <Compile Include="MyChessLibrary\Pieces\King.cs" />
