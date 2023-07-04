@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
-using prjChessForms.MyChessLibrary.Interfaces;
+
 namespace prjChessForms.MyChessLibrary
 {
-    public abstract class Piece : IPiece
+    abstract class Piece
     {
         public Piece(PieceColour colour)
         {
@@ -27,6 +27,6 @@ namespace prjChessForms.MyChessLibrary
         {
             return Fullname;
         }
-        public abstract bool CanMove(IBoard board, Coords startCoords, Coords endCoords);
+        public abstract bool CanMove(Board board, Coords startCoords, Coords endCoords);
     }
 }

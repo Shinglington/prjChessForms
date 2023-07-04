@@ -16,19 +16,16 @@ namespace prjChessForms.MyChessLibrary.Interfaces
 
     public interface IViewableBoard
     {
-        List<IPiece> GetPieces(PieceColour colour);
-        IPiece GetPieceAt(Coords coords);
-        Coords GetCoordsOfPiece(IPiece piece);
-        ISquare[,] GetSquares();
-        ISquare GetSquareAt(Coords coords);
-
+        List<Piece> GetPieces(PieceColour colour);
+        Piece GetPieceAt(Coords coords);
+        Coords GetCoordsOfPiece(Piece piece);
     }
 
     public interface ISetupBoard 
     { 
         void SetupBoard();
         void PlaceStartingPieces();
-        void PlacePiece(IPiece piece, Coords coords);
+        void PlacePiece(Piece piece, Coords coords);
     }
 
 
