@@ -8,7 +8,7 @@
         }
         public Pawn LinkedPawn { get; }
 
-        public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
             return false;
         }

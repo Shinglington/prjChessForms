@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -28,10 +29,12 @@ namespace prjChessForms.MyChessLibrary
         }
         public int X { get; }
         public int Y { get; }
-
         public bool IsNull => this.Equals(Null);
+        public static implicit operator Coords(string str) => new Coords(str);
 
         public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
+
+        
 
         public override bool Equals(object obj)
         {

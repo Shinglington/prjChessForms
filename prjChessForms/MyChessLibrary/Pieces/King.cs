@@ -6,7 +6,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public King(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;

@@ -64,6 +64,7 @@
     <Compile Include="Controller\ChessController.cs" />
     <Compile Include="Controller\IModelObserver.cs" />
     <Compile Include="MyChessLibrary\Board.cs" />
+    <Compile Include="MyChessLibrary\BoardCreator.cs" />
     <Compile Include="MyChessLibrary\Chess.cs" />
     <Compile Include="MyChessLibrary\Chess.Designer.cs">
       <DependentUpon>Chess.cs</DependentUpon>
@@ -71,7 +72,9 @@
     <Compile Include="MyChessLibrary\ChessMove.cs" />
     <Compile Include="MyChessLibrary\Coords.cs" />
     <Compile Include="MyChessLibrary\ChessEventArgs.cs" />
-    <Compile Include="MyChessLibrary\IPiece.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\IBoard.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\IBoardCreator.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\IPiece.cs" />
     <Compile Include="MyChessLibrary\Pieces\Bishop.cs" />
     <Compile Include="MyChessLibrary\Pieces\GhostPawn.cs" />
     <Compile Include="MyChessLibrary\Pieces\King.cs" />

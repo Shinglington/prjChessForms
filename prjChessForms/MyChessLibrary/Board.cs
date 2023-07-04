@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using prjChessForms.MyChessLibrary.Pieces;
+using prjChessForms.MyChessLibrary.Interfaces;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class Board
+    class Board : IBoard
     {
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
-
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private Square[,] _squares;
