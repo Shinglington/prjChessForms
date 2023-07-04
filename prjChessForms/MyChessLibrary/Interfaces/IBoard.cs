@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary.Interfaces
 {
-    internal class IBoard
+    public interface IBoard
     {
+        int ColumnCount { get; }
+        int RowCount { get; }
+        ISquare[,] GetSquares();
+        void SetSquares(ISquare[,] squares);
+        ISquare GetSquareAt(Coords coords);
     }
+
+
+
+
+
+
+
+
 }

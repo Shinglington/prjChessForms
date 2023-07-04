@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary.Interfaces
 {
-    internal class ISquaresFromBoardProvider
+    public interface ISquareProvider
     {
+        ISquare GetSquareAt(Coords coords);
+        IPiece GetPieceAt(Coords coords);
     }
+
 }

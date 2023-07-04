@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prjChessForms.MyChessLibrary
+namespace prjChessForms.MyChessLibrary.BoardComponents
 {
     public class BoardCreator : IBoardCreator
     {

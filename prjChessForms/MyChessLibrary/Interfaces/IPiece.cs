@@ -1,14 +1,14 @@
 ﻿using System.Drawing;
 
-namespace prjChessForms.MyChessLibrary
+namespace prjChessForms.MyChessLibrary.Interfaces
 {
-    interface IPiece
+    public interface IPiece
     {
         bool HasMoved { get; set; }
         Image Image { get; }
         PieceColour Colour { get; }
         string Name { get; }
         string Fullname { get; } 
-        bool CanMove(Board board, Coords startCoords, Coords endCoords);
+        bool CanMove(IBoard board, Coords startCoords, Coords endCoords);
     }
 }
