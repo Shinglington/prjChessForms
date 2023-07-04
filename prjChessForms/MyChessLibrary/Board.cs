@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using prjChessForms.MyChessLibrary.Pieces;
 using prjChessForms.MyChessLibrary.Interfaces;
+using prjChessForms.MyChessLibrary.BoardComponents;
 
 namespace prjChessForms.MyChessLibrary
 {
     class Board : IBoard
     {
         private readonly IBoardCreator _boardCreator;
+        private readonly ISquareProvider _squareProvider;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
         private const int ROW_COUNT = 8;
