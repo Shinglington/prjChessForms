@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using prjChessForms.MyChessLibrary.Interfaces;
+using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
     class PieceChangedEventArgs : EventArgs
     {
-        public PieceChangedEventArgs(ISquare square, IPiece newPiece)
+        public PieceChangedEventArgs(Square square, Piece newPiece)
         {
             NewPiece = newPiece;
             Square = square;
@@ -16,25 +16,25 @@ namespace prjChessForms.MyChessLibrary
 
     class PieceSelectionChangedEventArgs : EventArgs
     {
-        public PieceSelectionChangedEventArgs(IPiece piece, Coords selectedPieceCoords, List<Coords> validMoves)
+        public PieceSelectionChangedEventArgs(Piece piece, Coords selectedPieceCoords, List<Coords> validMoves)
         {
             SelectedPiece = piece;
             SelectedPieceCoords = selectedPieceCoords;
             PossibleEndCoords = validMoves;
         }
-        public IPiece SelectedPiece { get; set; }
+        public Piece SelectedPiece { get; set; }
         public Coords SelectedPieceCoords { get; set; }
         public List<Coords> PossibleEndCoords { get; set; }
     }
 
     class PlayerTimerTickEventArgs : EventArgs
     {
-        public PlayerTimerTickEventArgs(IPlayer player)
+        public PlayerTimerTickEventArgs(Player player)
         {
             CurrentPlayer = player;
             PlayerRemainingTime = player.RemainingTime;
         }
-        public IPlayer CurrentPlayer { get; set; }
+        public Player CurrentPlayer { get; set; }
         public TimeSpan PlayerRemainingTime { get; set; }
     }
 

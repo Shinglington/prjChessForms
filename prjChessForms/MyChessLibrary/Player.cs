@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using prjChessForms.MyChessLibrary.Interfaces;
+
 namespace prjChessForms.MyChessLibrary
 {
-    abstract class Player : IPlayer
+    abstract class Player
     {
         public Player(PieceColour colour, TimeSpan initialTime)
         {
             Colour = colour;
             RemainingTime = initialTime;
-            CapturedPieces = new List<IPiece>();
+            CapturedPieces = new List<Piece>();
         }
         public TimeSpan RemainingTime { get; private set; }
         public PieceColour Colour { get; }
-        public List<IPiece> CapturedPieces { get; private set; }
+        public List<Piece> CapturedPieces { get; private set; }
 
         public void TickTime(TimeSpan time)
         {
             RemainingTime = RemainingTime.Subtract(time);
         }
 
-        public void AddCapturedPiece(IPiece piece)
+        public void AddCapturedPiece(Piece piece)
         {
             CapturedPieces.Add(piece);
         }

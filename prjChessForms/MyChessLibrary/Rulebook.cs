@@ -11,15 +11,6 @@ namespace prjChessForms.MyChessLibrary
         Stalemate,
         Time
     }
-
-    public interface IRulebook
-    {
-        public Piece MakeMove(PieceColour colour, ChessMove move);
-
-    }
-
-
-
     class Rulebook
     {
         public static Piece MakeMove(Board board, PieceColour colour, ChessMove move)

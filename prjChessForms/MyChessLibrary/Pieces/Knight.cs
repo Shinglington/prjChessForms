@@ -1,12 +1,12 @@
 ﻿using System;
-using prjChessForms.MyChessLibrary.Interfaces;
+
 namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Knight : Piece
     {
         public Knight(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
+        public override bool CanMove(Board board, Coords startCoords, Coords endCoords)
         {
             bool allowed = false;
             int xChange = Math.Abs(endCoords.X - startCoords.X);

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using prjChessForms.MyChessLibrary.Interfaces;
 using prjChessForms.MyChessLibrary.Pieces;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class Board : IBoard
+    class Board
     {
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
 
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
-        private ISquare[,] _squares;
+        private Square[,] _squares;
         public Board()
         {
             SetupBoard();
@@ -23,7 +22,7 @@ namespace prjChessForms.MyChessLibrary
         {
             Coords StartCoords = Move.StartCoords;
             Coords EndCoords = Move.EndCoords;
-            IPiece p = GetPieceAt(StartCoords);
+            Piece p = GetPieceAt(StartCoords);
             if (p != null)
             {
                 GetSquareAt(EndCoords).Piece = p;
@@ -46,9 +45,9 @@ namespace prjChessForms.MyChessLibrary
             return king;
         }
 
-        public List<IPiece> GetPieces(PieceColour colour)
+        public List<Piece> GetPieces(PieceColour colour)
         {
-            List<IPiece> pieces = new List<IPiece>();
+            List<Piece> pieces = new List<Piece>();
             Piece p;
             for (int y = 0; y < ROW_COUNT; y++)
             {
@@ -64,12 +63,12 @@ namespace prjChessForms.MyChessLibrary
             return pieces;
         }
 
-        public IPiece GetPieceAt(Coords coords)
+        public Piece GetPieceAt(Coords coords)
         {
             return (GetSquareAt(coords).Piece);
         }
 
-        public Coords GetCoordsOfPiece(IPiece piece)
+        public Coords GetCoordsOfPiece(Piece piece)
         {
             if (piece == null)
             {
@@ -85,19 +84,19 @@ namespace prjChessForms.MyChessLibrary
             throw new Exception("Piece could not be located");
         }
 
-        public ISquare[,] GetSquares()
+        public Square[,] GetSquares()
         {
             return _squares;
         }
 
-        public ISquare GetSquareAt(Coords coords)
+        public Square GetSquareAt(Coords coords)
         {
             return _squares[coords.X, coords.Y];
         }
 
         public void RemoveGhostPawns()
         {
-            foreach (ISquare s in GetSquares())
+            foreach (Square s in GetSquares())
             {
                 if (s.GetGhostPawn() != null)
                 {
@@ -111,7 +110,7 @@ namespace prjChessForms.MyChessLibrary
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
             bool startPieceHasMoved = GetPieceAt(start).HasMoved;
-            IPiece originalEndPiece = GetPieceAt(end);
+            Piece originalEndPiece = GetPieceAt(end);
 
             MakeMove(move);
             bool SelfCheck = Rulebook.IsInCheck(this, colour);
@@ -125,13 +124,13 @@ namespace prjChessForms.MyChessLibrary
 
         private void SetupBoard()
         {
-            _squares = new ISquare[COL_COUNT, ROW_COUNT];
-            ISquare s;
+            _squares = new Square[COL_COUNT, ROW_COUNT];
+            Square s;
             for (int y = 0; y < ROW_COUNT; y++)
             {
                 for (int x = 0; x < COL_COUNT; x++)
                 {
-                    s = new ISquare(x, y);
+                    s = new Square(x, y);
                     s.PieceChanged += OnPieceInSquareChanged;
                     _squares[x, y] = s;
                 }
@@ -179,9 +178,9 @@ namespace prjChessForms.MyChessLibrary
             PlacePiece(new Rook(col), new Coords(7, 0));
         }
 
-        private void PlacePiece(IPiece piece, Coords coords)
+        private void PlacePiece(Piece piece, Coords coords)
         {
-            ISquare square = GetSquareAt(coords);
+            Square square = GetSquareAt(coords);
             square.Piece = piece;
         }
 
