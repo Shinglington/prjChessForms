@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace prjChessForms.MyChessLibrary.Pieces
 {
     class Bishop : Piece

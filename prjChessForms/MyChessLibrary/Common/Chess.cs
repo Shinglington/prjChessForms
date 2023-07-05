@@ -7,20 +7,9 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using prjChessForms.MyChessLibrary.Pieces;
+
 namespace prjChessForms.MyChessLibrary
 {
-    public enum PieceColour
-    {
-        White,
-        Black
-    }
-    enum PromotionOption
-    {
-        Queen,
-        Rook,
-        Knight,
-        Bishop,
-    }
 
     class Chess
     {
@@ -30,7 +19,7 @@ namespace prjChessForms.MyChessLibrary
         public event EventHandler<PromotionEventArgs> PlayerPromotion; 
         public event EventHandler<GameOverEventArgs> GameOver;
 
-        private Board _board;
+        private IBoard _board;
         private System.Timers.Timer _timer;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -43,10 +32,10 @@ namespace prjChessForms.MyChessLibrary
         private Coords _clickedCoords;
         private PromotionOption _selectedPromotion;
         private bool _waitingForClick, _waitingForPromotion;
-        public Chess()
+        public Chess(IBoard board)
         {
             CreatePlayers(new TimeSpan(0, 10, 0));
-            _board = new Board();
+            _board = board;
             _timer = new System.Timers.Timer(1000);
             _waitingForClick = false;
         }

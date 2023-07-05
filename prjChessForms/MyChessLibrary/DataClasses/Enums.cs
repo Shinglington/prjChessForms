@@ -1,4 +1,4 @@
-﻿namespace prjChessForms.MyChessLibrary.DataClasses
+﻿namespace prjChessForms.MyChessLibrary
 {
     public enum PieceColour
     {
