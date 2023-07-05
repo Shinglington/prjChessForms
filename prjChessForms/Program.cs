@@ -19,11 +19,11 @@ namespace prjChessForms
             Application.SetCompatibleTextRenderingDefault(false);
 
             IBoard board;
-            IPiecePlacer piecePlacer = new PiecePlacer(board);
-            IStartingPositionSetup startingPositionSetup = new StartingPositionSetup(board, piecePlacer);
-            IBoardCreator boardCreator = new BoardCreator(board, startingPositionSetup, piecePlacer);
-            ISquareProvider squareProvider = new SquareProvider(board);
-            IMoveMaker moveMaker = new MoveMaker(board);
+            IPiecePlacer piecePlacer = new PiecePlacer();
+            IStartingPositionSetup startingPositionSetup = new StartingPositionSetup(piecePlacer);
+            IBoardCreator boardCreator = new BoardCreator(startingPositionSetup, piecePlacer);
+            ISquareProvider squareProvider = new SquareProvider();
+            IMoveMaker moveMaker = new MoveMaker();
             board = new Board(boardCreator, squareProvider);
                 
 

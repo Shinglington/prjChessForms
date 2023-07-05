@@ -3,13 +3,9 @@ namespace prjChessForms.MyChessLibrary
 {
     class PieceProvider : IPieceProvider
     {
-        private readonly IBoard _board;
-        public PieceProvider(IBoard board)
-        {
-            _board = board;
-        }
+        private IBoard _board;
+        public void SetBoard(IBoard board) => _board = board;
         public IPiece GetPieceAt(Coords coords) => _board.GetSquareAt(coords).Piece;
-
         public ICollection<IPiece> GetPieces(PieceColour colour)
         {
             ICollection<IPiece> pieces = new List<IPiece>();

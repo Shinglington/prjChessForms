@@ -4,16 +4,16 @@ namespace prjChessForms.MyChessLibrary
 {
     class BoardCreator : IBoardCreator
     {
-        private readonly IBoard _board;
+        private IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
         private readonly IPiecePlacer _piecePlacer;
-        public BoardCreator(IBoard board, IStartingPositionSetup startingPositionSetup, IPiecePlacer piecePlacer)
+        public BoardCreator(IStartingPositionSetup startingPositionSetup, IPiecePlacer piecePlacer)
         {
-            _board = board;
             _startingPositionSetup = startingPositionSetup;
             _piecePlacer = piecePlacer;
         }
-        public void SetupBoard()
+        public void SetBoard(IBoard board) => _board = board;
+        public void CreateBoard()
         {
             _board.SetSquares(new Square[_board.ColumnCount, _board.RowCount]);
             Square s;
@@ -32,11 +32,16 @@ namespace prjChessForms.MyChessLibrary
 
     class StartingPositionSetup : IStartingPositionSetup
     {
-        private readonly IBoard _board;
+        private IBoard _board;
         private readonly IPiecePlacer _piecePlacer;
-        public StartingPositionSetup(IBoard board, IPiecePlacer piecePlacer)
+        public StartingPositionSetup(IPiecePlacer piecePlacer)
         {
             _piecePlacer = piecePlacer;
+        }
+        public void SetBoard(IBoard board)
+        {
+            _board = board;
+            _piecePlacer.SetBoard(_board);
         }
         public void PlaceStartingPieces()
         {
@@ -75,16 +80,13 @@ namespace prjChessForms.MyChessLibrary
             _piecePlacer.PlacePiece(new Bishop(col), new Coords(5, 0));
             _piecePlacer.PlacePiece(new Knight(col), new Coords(6, 0));
             _piecePlacer.PlacePiece(new Rook(col), new Coords(7, 0));
-        }
+        }   
     }
 
     class PiecePlacer : IPiecePlacer
     {
-        private readonly IBoard _board;
-        public PiecePlacer(IBoard board)
-        {
-            _board = board;
-        }
+        private IBoard _board;
+        public void SetBoard(IBoard board) => _board = board;
         public void PlacePiece(IPiece piece, Coords coords)
         {
             ISquare square = _board.GetSquareAt(coords);

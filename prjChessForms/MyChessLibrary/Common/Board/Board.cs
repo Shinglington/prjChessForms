@@ -22,20 +22,21 @@ namespace prjChessForms.MyChessLibrary
             _pieceProvider = pieceProvider;
             _moveMaker = moveMaker;
 
-            _boardCreator.SetupBoard();
+            _boardCreator.SetBoard(this);
+            _squareProvider.SetBoard(this);
+            _pieceProvider.SetBoard(this);
+            _moveMaker.SetBoard(this);
+
+            _boardCreator.CreateBoard();
         }
         public int RowCount { get { return ROW_COUNT; } }
         public int ColumnCount { get { return COL_COUNT; } }
 
         public ISquare[,] GetSquares() => _squares;
-
         public void SetSquares(ISquare[,] squares) => _squares = squares;
-
         public ISquare GetSquareAt(Coords coords) => _squareProvider.GetSquareAt(coords);
-
         public IPiece GetPieceAt(Coords coords) => _pieceProvider.GetPieceAt(coords);
         public ICollection<IPiece> GetPieces(PieceColour colour) => _pieceProvider.GetPieces(colour);
-
         public void MakeMove(ChessMove move) => _moveMaker.MakeMove(move);
 
         public King GetKing(PieceColour colour)

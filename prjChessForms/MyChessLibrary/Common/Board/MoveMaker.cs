@@ -2,11 +2,8 @@
 {
     class MoveMaker : IMoveMaker
     {
-        private readonly IBoard _board;
-        public MoveMaker(IBoard board)
-        {
-            _board = board;
-        }
+        private IBoard _board;
+        public void SetBoard(IBoard board) => _board = board;
         public void MakeMove(ChessMove move)
         {
             Coords StartCoords = move.StartCoords;
