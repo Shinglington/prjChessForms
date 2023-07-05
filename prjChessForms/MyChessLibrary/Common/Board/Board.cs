@@ -8,17 +8,19 @@ namespace prjChessForms.MyChessLibrary
     {
         private readonly IBoardCreator _boardCreator;
         private readonly ISquareProvider _squareProvider;
+        private readonly IPieceProvider _pieceProvider;
         private readonly IMoveMaker _moveMaker;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
-        public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IMoveMaker moveMaker)
+        public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IPieceProvider pieceProvider, IMoveMaker moveMaker)
         {
             _boardCreator = boardCreator;
             _squareProvider = squareProvider;
-            _moveMaker = moveMaker
+            _pieceProvider = pieceProvider;
+            _moveMaker = moveMaker;
 
             _boardCreator.SetupBoard();
         }
@@ -31,20 +33,10 @@ namespace prjChessForms.MyChessLibrary
 
         public ISquare GetSquareAt(Coords coords) => _squareProvider.GetSquareAt(coords);
 
-        public IPiece GetPieceAt(Coords coords) => _squareProvider.GetPieceAt(coords);
+        public IPiece GetPieceAt(Coords coords) => _pieceProvider.GetPieceAt(coords);
+        public ICollection<IPiece> GetPieces(PieceColour colour) => _pieceProvider.GetPieces(colour);
 
-        public void MakeMove(ChessMove move)
-        {
-            Coords StartCoords = move.StartCoords;
-            Coords EndCoords = move.EndCoords;
-            IPiece p = GetPieceAt(StartCoords);
-            if (p != null)
-            {
-                GetSquareAt(EndCoords).Piece = p;
-                GetSquareAt(StartCoords).Piece = null;
-                p.HasMoved = true;
-            }
-        }
+        public void MakeMove(ChessMove move) => _moveMaker.MakeMove(move);
 
         public King GetKing(PieceColour colour)
         {
@@ -58,24 +50,6 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             return king;
-        }
-
-        public List<IPiece> GetPieces(PieceColour colour)
-        {
-            List<IPiece> pieces = new List<IPiece>();
-            IPiece p;
-            for (int y = 0; y < ROW_COUNT; y++)
-            {
-                for (int x = 0; x < COL_COUNT; x++)
-                {
-                    p = GetPieceAt(new Coords(x, y));
-                    if (p != null && p.Colour == colour)
-                    {
-                        pieces.Add(p);
-                    }
-                }
-            }
-            return pieces;
         }
 
         public Coords GetCoordsOfPiece(IPiece piece)

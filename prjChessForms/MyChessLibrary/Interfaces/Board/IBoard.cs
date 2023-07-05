@@ -7,6 +7,7 @@
         ISquare[,] GetSquares();
         void SetSquares(ISquare[,] squares);
         ISquare GetSquareAt(Coords coords);
+        IPiece GetPieceAt(Coords coords);
     }
 
 

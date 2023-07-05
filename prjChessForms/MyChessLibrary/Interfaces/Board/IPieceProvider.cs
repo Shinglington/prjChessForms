@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prjChessForms.MyChessLibrary.Interfaces.Board
+namespace prjChessForms.MyChessLibrary
 {
-    internal class IPieceProvider
+    public interface IPieceProvider
     {
+        IPiece GetPieceAt(Coords coords);
+        ICollection<IPiece> GetPieces(PieceColour colour);
     }
 }

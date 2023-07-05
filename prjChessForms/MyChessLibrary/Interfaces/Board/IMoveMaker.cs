@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary.Interfaces.Board
+﻿namespace prjChessForms.MyChessLibrary
 {
-    internal class IMoveMaker
+    public interface IMoveMaker
     {
+        void MakeMove(ChessMove Move);
     }
 }

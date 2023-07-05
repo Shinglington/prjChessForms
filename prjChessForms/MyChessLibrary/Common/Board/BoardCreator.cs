@@ -1,14 +1,8 @@
-﻿using prjChessForms.MyChessLibrary.Interfaces;
-using prjChessForms.MyChessLibrary.Pieces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using prjChessForms.MyChessLibrary.Pieces;
 
-namespace prjChessForms.MyChessLibrary.BoardComponents
+namespace prjChessForms.MyChessLibrary
 {
-    public class BoardCreator : IBoardCreator
+    class BoardCreator : IBoardCreator
     {
         private readonly IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
@@ -36,7 +30,7 @@ namespace prjChessForms.MyChessLibrary.BoardComponents
         }
     }
 
-    public class StartingPositionSetup : IStartingPositionSetup
+    class StartingPositionSetup : IStartingPositionSetup
     {
         private readonly IBoard _board;
         private readonly IPiecePlacer _piecePlacer;
@@ -84,7 +78,7 @@ namespace prjChessForms.MyChessLibrary.BoardComponents
         }
     }
 
-    public class PiecePlacer : IPiecePlacer
+    class PiecePlacer : IPiecePlacer
     {
         private readonly IBoard _board;
         public PiecePlacer(IBoard board)

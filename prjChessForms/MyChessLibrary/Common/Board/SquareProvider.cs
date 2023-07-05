@@ -1,8 +1,6 @@
-﻿using prjChessForms.MyChessLibrary.Interfaces;
-
-namespace prjChessForms.MyChessLibrary.BoardComponents
+﻿namespace prjChessForms.MyChessLibrary
 {
-    public class SquareProvider : ISquareProvider
+    class SquareProvider : ISquareProvider
     {
         private readonly IBoard _board;
         public SquareProvider(IBoard board) 
