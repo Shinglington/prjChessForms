@@ -63,15 +63,16 @@
   <ItemGroup>
     <Compile Include="Controller\ChessController.cs" />
     <Compile Include="Controller\IModelObserver.cs" />
-    <Compile Include="MyChessLibrary\Board.cs" />
-    <Compile Include="MyChessLibrary\BoardComponents\BoardCreator.cs" />
-    <Compile Include="MyChessLibrary\Chess.cs" />
-    <Compile Include="MyChessLibrary\Chess.Designer.cs">
+    <Compile Include="MyChessLibrary\Common\Board\Board.cs" />
+    <Compile Include="MyChessLibrary\Common\Board\BoardCreator.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess.Designer.cs">
       <DependentUpon>Chess.cs</DependentUpon>
     </Compile>
-    <Compile Include="MyChessLibrary\ChessMove.cs" />
-    <Compile Include="MyChessLibrary\Coords.cs" />
-    <Compile Include="MyChessLibrary\ChessEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\ChessMove.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\Coords.cs" />
+    <Compile Include="MyChessLibrary\Common\ChessEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\Enums.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IBoard.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IBoardCreator.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPiece.cs" />
@@ -82,38 +83,38 @@
     <Compile Include="MyChessLibrary\Pieces\King.cs" />
     <Compile Include="MyChessLibrary\Pieces\Knight.cs" />
     <Compile Include="MyChessLibrary\Pieces\Pawn.cs" />
-    <Compile Include="MyChessLibrary\Piece.cs" />
+    <Compile Include="MyChessLibrary\Common\Piece.cs" />
     <Compile Include="MyChessLibrary\Pieces\Queen.cs" />
     <Compile Include="MyChessLibrary\Pieces\Rook.cs" />
-    <Compile Include="MyChessLibrary\Player.cs" />
-    <Compile Include="MyChessLibrary\Square.cs" />
-    <Compile Include="MyChessLibrary\BoardComponents\SquareProvider.cs" />
-    <Compile Include="PresentationUI\BoardTableLayoutPanel.cs">
+    <Compile Include="MyChessLibrary\Common\Player.cs" />
+    <Compile Include="MyChessLibrary\Common\Square.cs" />
+    <Compile Include="MyChessLibrary\Common\Board\SquareProvider.cs" />
+    <Compile Include="UserInterface\BoardTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PresentationUI\CapturedPiecesPanel.cs">
+    <Compile Include="UserInterface\CapturedPiecesPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PresentationUI\ChessForm.cs">
+    <Compile Include="UserInterface\ChessForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentationUI\ChessForm.Designer.cs">
+    <Compile Include="UserInterface\ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PresentationUI\PlayerInformationPanel.cs">
+    <Compile Include="UserInterface\PlayerInformationPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PresentationUI\PresentationEventArgs.cs" />
-    <Compile Include="PresentationUI\PromotionSelectionPanel.cs">
+    <Compile Include="UserInterface\PresentationEventArgs.cs" />
+    <Compile Include="UserInterface\PromotionSelectionPanel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MyChessLibrary\Rulebook.cs" />
-    <EmbeddedResource Include="MyChessLibrary\Chess.resx">
+    <Compile Include="MyChessLibrary\Common\Rulebook.cs" />
+    <EmbeddedResource Include="MyChessLibrary\Common\Chess.resx">
       <DependentUpon>Chess.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PresentationUI\ChessForm.resx">
+    <EmbeddedResource Include="UserInterface\ChessForm.resx">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+    <Folder Include="MyChessLibrary\BoardComponents\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

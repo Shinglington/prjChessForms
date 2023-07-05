@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary.Interfaces
+﻿namespace prjChessForms.MyChessLibrary
 {
     public interface IBoardCreator
     {
@@ -16,7 +10,7 @@ namespace prjChessForms.MyChessLibrary.Interfaces
         void PlaceStartingPieces();
     }
 
-    public interface IPiecePlacer 
+    public interface IPiecePlacer
     {
         void PlacePiece(IPiece piece, Coords coords);
     }

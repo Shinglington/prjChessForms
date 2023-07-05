@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
-
-namespace prjChessForms.MyChessLibrary.Interfaces
+namespace prjChessForms.MyChessLibrary
 {
     public interface IPiece
     {
@@ -8,7 +7,7 @@ namespace prjChessForms.MyChessLibrary.Interfaces
         Image Image { get; }
         PieceColour Colour { get; }
         string Name { get; }
-        string Fullname { get; } 
+        string Fullname { get; }
         bool CanMove(IBoard board, Coords startCoords, Coords endCoords);
     }
 }
