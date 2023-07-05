@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using prjChessForms.MyChessLibrary.Pieces;
-using prjChessForms.MyChessLibrary.Interfaces;
-using prjChessForms.MyChessLibrary.BoardComponents;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -10,25 +8,35 @@ namespace prjChessForms.MyChessLibrary
     {
         private readonly IBoardCreator _boardCreator;
         private readonly ISquareProvider _squareProvider;
+        private readonly IMoveMaker _moveMaker;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
-        public Board(IBoardCreator boardCreator)
+        public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IMoveMaker moveMaker)
         {
             _boardCreator = boardCreator;
-
+            _squareProvider = squareProvider;
+            _moveMaker = moveMaker
 
             _boardCreator.SetupBoard();
         }
         public int RowCount { get { return ROW_COUNT; } }
         public int ColumnCount { get { return COL_COUNT; } }
 
-        public void MakeMove(ChessMove Move)
+        public ISquare[,] GetSquares() => _squares;
+
+        public void SetSquares(ISquare[,] squares) => _squares = squares;
+
+        public ISquare GetSquareAt(Coords coords) => _squareProvider.GetSquareAt(coords);
+
+        public IPiece GetPieceAt(Coords coords) => _squareProvider.GetPieceAt(coords);
+
+        public void MakeMove(ChessMove move)
         {
-            Coords StartCoords = Move.StartCoords;
-            Coords EndCoords = Move.EndCoords;
+            Coords StartCoords = move.StartCoords;
+            Coords EndCoords = move.EndCoords;
             IPiece p = GetPieceAt(StartCoords);
             if (p != null)
             {
@@ -70,11 +78,6 @@ namespace prjChessForms.MyChessLibrary
             return pieces;
         }
 
-        public IPiece GetPieceAt(Coords coords)
-        {
-            return GetSquareAt(coords).Piece;
-        }
-
         public Coords GetCoordsOfPiece(IPiece piece)
         {
             if (piece == null)
@@ -91,20 +94,6 @@ namespace prjChessForms.MyChessLibrary
             throw new Exception("Piece could not be located");
         }
 
-        public ISquare[,] GetSquares()
-        {
-            return _squares;
-        }
-
-        public void SetSquares(ISquare[,] squares)
-        {
-            _squares = squares;
-        }
-
-        public ISquare GetSquareAt(Coords coords)
-        {
-            return _squares[coords.X, coords.Y];
-        }
 
         public void RemoveGhostPawns()
         {

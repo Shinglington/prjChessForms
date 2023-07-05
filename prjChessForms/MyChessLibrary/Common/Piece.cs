@@ -1,5 +1,4 @@
-﻿using prjChessForms.MyChessLibrary.Interfaces;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace prjChessForms.MyChessLibrary
 {

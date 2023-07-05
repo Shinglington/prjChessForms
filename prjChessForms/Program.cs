@@ -2,6 +2,7 @@
 using prjChessForms.MyChessLibrary;
 using prjChessForms.PresentationUI;
 using System;
+using System.Net.Http.Headers;
 using System.Windows.Forms;
 
 namespace prjChessForms
@@ -17,7 +18,16 @@ namespace prjChessForms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Chess game = new Chess();
+            IBoard board;
+            IPiecePlacer piecePlacer = new PiecePlacer(board);
+            IStartingPositionSetup startingPositionSetup = new StartingPositionSetup(board, piecePlacer);
+            IBoardCreator boardCreator = new BoardCreator(board, startingPositionSetup, piecePlacer);
+            ISquareProvider squareProvider = new SquareProvider(board);
+            IMoveMaker moveMaker = new MoveMaker(board);
+            board = new Board(boardCreator, squareProvider);
+                
+
+            Chess game = new Chess(board);
             ChessForm form = new ChessForm();
             ChessController controller = new ChessController(game, form);
             Application.Run(form);
