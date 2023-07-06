@@ -4,13 +4,17 @@
     {
         public ChessMove(IPiece piece, Coords startCoords, Coords endCoords)
         {
-            Piece = piece;
+            MovedPiece = piece;
+            CapturedPiece = null;
             StartCoords = startCoords;
             EndCoords = endCoords;
         }
-        public IPiece Piece { get; }
+        public IPiece MovedPiece { get; }
+        public IPiece CapturedPiece { get; }
         public Coords StartCoords { get; }
         public Coords EndCoords { get; }
+        public bool IsCastle { get; }
+        public 
         public override string ToString()
         {
             return StartCoords.ToString() + " -> " + EndCoords.ToString();

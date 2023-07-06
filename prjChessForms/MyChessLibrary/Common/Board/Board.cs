@@ -11,7 +11,7 @@ namespace prjChessForms.MyChessLibrary
         private readonly IPieceProvider _pieceProvider;
         private readonly IMoveMaker _moveMaker;
 
-        public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
+
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
@@ -100,13 +100,7 @@ namespace prjChessForms.MyChessLibrary
             return SelfCheck;
         }
 
-        private void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
-        {
-            if (PieceInSquareChanged != null)
-            {
-                PieceInSquareChanged.Invoke(this, e);
-            }
-        }
+
 
     }
 }

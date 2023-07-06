@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,20 +16,21 @@ namespace prjChessForms.MyChessLibrary
         }
         public void MakeMove(ChessMove move)
         {
-            Coords StartCoords = move.StartCoords;
-            Coords EndCoords = move.EndCoords;
-            IPiece p = _board.GetPieceAt(StartCoords);
-            if (p != null)
+            try
             {
-                _board.GetSquareAt(EndCoords).Piece = p;
-                _board.GetSquareAt(StartCoords).Piece = null;
-                p.HasMoved = true;
+                MovePiece(move);
+                _moveStack.Push(move);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
         public void UndoLastMove()
         {
-            throw new System.NotImplementedException();
+            ChessMove lastMove = _moveStack.Pop();
+            MovePiece(new ChessMove(lastMove.MovedPiece, lastMove.EndCoords, lastMove.StartCoords));
         }
 
         public ChessMove GetLastMove(ChessMove move) => _moveStack.Peek();
@@ -36,6 +38,21 @@ namespace prjChessForms.MyChessLibrary
         private void ResetMoveStack()
         {
             _moveStack = new Stack<ChessMove>();
+        }
+
+        private void MovePiece(ChessMove move)
+        {
+            Coords StartCoords = move.StartCoords;
+            Coords EndCoords = move.EndCoords;
+            IPiece p = move.MovedPiece;
+            if (p != null)
+            {
+                _board.GetSquareAt(EndCoords).Piece = p;
+                _board.GetSquareAt(StartCoords).Piece = null;
+                p.HasMoved = true;
+                return;
+            }
+            throw new ArgumentException(string.Format("Invalid move {0}", move));
         }
     }
 }

@@ -3,53 +3,53 @@ using System.Collections.Generic;
 using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
-    class PieceChangedEventArgs : EventArgs
+    public class PieceChangedEventArgs : EventArgs
     {
-        public PieceChangedEventArgs(Square square, Piece newPiece)
+        public PieceChangedEventArgs(ISquare square, IPiece newPiece)
         {
             NewPiece = newPiece;
             Square = square;
         }
-        public Square Square { get; set; }
-        public Piece NewPiece { get; set; }
+        public ISquare Square { get; set; }
+        public IPiece NewPiece { get; set; }
     }
 
-    class PieceSelectionChangedEventArgs : EventArgs
+    public class PieceSelectionChangedEventArgs : EventArgs
     {
-        public PieceSelectionChangedEventArgs(Piece piece, Coords selectedPieceCoords, List<Coords> validMoves)
+        public PieceSelectionChangedEventArgs(IPiece piece, Coords selectedPieceCoords, List<Coords> validMoves)
         {
             SelectedPiece = piece;
             SelectedPieceCoords = selectedPieceCoords;
             PossibleEndCoords = validMoves;
         }
-        public Piece SelectedPiece { get; set; }
+        public IPiece SelectedPiece { get; set; }
         public Coords SelectedPieceCoords { get; set; }
         public List<Coords> PossibleEndCoords { get; set; }
     }
 
-    class PlayerTimerTickEventArgs : EventArgs
+    public class PlayerTimerTickEventArgs : EventArgs
     {
-        public PlayerTimerTickEventArgs(Player player)
+        public PlayerTimerTickEventArgs(IPlayer player)
         {
             CurrentPlayer = player;
             PlayerRemainingTime = player.RemainingTime;
         }
-        public Player CurrentPlayer { get; set; }
+        public IPlayer CurrentPlayer { get; set; }
         public TimeSpan PlayerRemainingTime { get; set; }
     }
 
-    class PlayerCapturedPiecesChangedEventArgs : EventArgs
+    public class PlayerCapturedPiecesChangedEventArgs : EventArgs
     {
-        public PlayerCapturedPiecesChangedEventArgs(Player player, Piece capturedPiece)
+        public PlayerCapturedPiecesChangedEventArgs(IPlayer player, IPiece capturedPiece)
         {
             Player = player;
             CapturedPiece = capturedPiece;
         }
-        public Player Player { get; set; }
-        public Piece CapturedPiece { get; set; }
+        public IPlayer Player { get; set; }
+        public IPiece CapturedPiece { get; set; }
     }
 
-    class PromotionEventArgs : EventArgs
+    public class PromotionEventArgs : EventArgs
     {
         public PromotionEventArgs(PieceColour colour, Coords coords)
         {
@@ -60,14 +60,14 @@ namespace prjChessForms.MyChessLibrary
         public PieceColour PromotingColour { get; set; } 
     }
 
-    class GameOverEventArgs : EventArgs
+    public class GameOverEventArgs : EventArgs
     {
-        public GameOverEventArgs(GameResult result, Player winner)
+        public GameOverEventArgs(GameResult result, IPlayer winner)
         {
             Result = result;
             Winner = winner;
         }
         public GameResult Result { get; set; }
-        public Player Winner { get; set; }
+        public IPlayer Winner { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using prjChessForms.MyChessLibrary.Pieces;
+using System;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -7,6 +8,8 @@ namespace prjChessForms.MyChessLibrary
         private IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
         private readonly IPiecePlacer _piecePlacer;
+
+        public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
         public BoardCreator(IStartingPositionSetup startingPositionSetup, IPiecePlacer piecePlacer)
         {
             _startingPositionSetup = startingPositionSetup;
@@ -27,6 +30,13 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             _startingPositionSetup.PlaceStartingPieces();
+        }
+        private void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        {
+            if (PieceInSquareChanged != null)
+            {
+                PieceInSquareChanged.Invoke(this, e);
+            }
         }
     }
 
