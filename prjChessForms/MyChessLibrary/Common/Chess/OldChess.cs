@@ -11,7 +11,7 @@ using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
 
-    class Chess
+    class OldChess
     {
         public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
         public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
@@ -32,7 +32,7 @@ namespace prjChessForms.MyChessLibrary
         private Coords _clickedCoords;
         private PromotionOption _selectedPromotion;
         private bool _waitingForClick, _waitingForPromotion;
-        public Chess(IBoard board)
+        public OldChess(IBoard board)
         {
             CreatePlayers(new TimeSpan(0, 10, 0));
             _board = board;
@@ -98,14 +98,14 @@ namespace prjChessForms.MyChessLibrary
                 try
                 {
                     ChessMove move = await GetChessMove(cToken);
-                    CapturePiece(Rulebook.MakeMove(_board, CurrentPlayer.Colour, move));
+                    CapturePiece(FullRulebook.MakeMove(_board, CurrentPlayer.Colour, move));
                     ChangeSelection(null);
-                    if (Rulebook.RequiresPromotion(_board, move.EndCoords))
+                    if (FullRulebook.RequiresPromotion(_board, move.EndCoords))
                     {
                         await Promotion(move.EndCoords, cToken);
                     }
                     _turnCount++;
-                    _result = Rulebook.GetGameResult(_board, CurrentPlayer);
+                    _result = FullRulebook.GetGameResult(_board, CurrentPlayer);
                 }
                 catch when (cToken.IsCancellationRequested)
                 {
@@ -143,7 +143,7 @@ namespace prjChessForms.MyChessLibrary
                     toCoords = _clickedCoords;
                 }
                 // Check if move is valid now
-                if (!toCoords.IsNull && !fromCoords.IsNull && Rulebook.CheckLegalMove(_board, CurrentPlayer.Colour, new ChessMove(fromCoords, toCoords)))
+                if (!toCoords.IsNull && !fromCoords.IsNull && FullRulebook.CheckLegalMove(_board, CurrentPlayer.Colour, new ChessMove(fromCoords, toCoords)))
                 {
                     move = new ChessMove(fromCoords, toCoords);
                     completeInput = true;
@@ -218,7 +218,7 @@ namespace prjChessForms.MyChessLibrary
                 if (selectedPiece != null)
                 {
                     selectedCoords = GetCoordsOf(selectedPiece);
-                    foreach (ChessMove m in Rulebook.GetPossibleMoves(_board, selectedPiece))
+                    foreach (ChessMove m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
                     {
                         endCoords.Add(m.EndCoords);
                     }

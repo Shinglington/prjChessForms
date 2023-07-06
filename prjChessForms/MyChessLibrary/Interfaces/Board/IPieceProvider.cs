@@ -11,5 +11,6 @@ namespace prjChessForms.MyChessLibrary
         void SetBoard(IBoard board);
         IPiece GetPieceAt(Coords coords);
         ICollection<IPiece> GetPieces(PieceColour colour);
+        Coords GetCoordsOfPiece(IPiece piece);
     }
 }

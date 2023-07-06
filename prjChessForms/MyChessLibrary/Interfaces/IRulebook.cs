@@ -6,6 +6,6 @@ namespace prjChessForms.MyChessLibrary
     {
         bool CheckLegalMove(ChessMove move);
         void MakeMove(ChessMove move);
-        ICollection<ChessMove> GetPossibleMoves(IPiece p);
+        ICollection<ChessMove> GetPossibleMovesForPiece(IPiece piece);
     }
 }

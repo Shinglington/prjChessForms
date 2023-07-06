@@ -89,7 +89,7 @@ namespace prjChessForms.MyChessLibrary
             IPiece originalEndPiece = GetPieceAt(end);
 
             MakeMove(move);
-            bool SelfCheck = Rulebook.IsInCheck(this, colour);
+            bool SelfCheck = FullRulebook.IsInCheck(this, colour);
             MakeMove(new ChessMove(end, start));
 
             GetSquareAt(start).Piece.HasMoved = startPieceHasMoved;

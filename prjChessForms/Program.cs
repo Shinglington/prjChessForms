@@ -28,7 +28,7 @@ namespace prjChessForms
             board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker);
                 
 
-            Chess game = new Chess(board);
+            OldChess game = new OldChess(board);
             ChessForm form = new ChessForm();
             ChessController controller = new ChessController(game, form);
             Application.Run(form);

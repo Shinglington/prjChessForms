@@ -5,10 +5,10 @@ namespace prjChessForms.Controller
 {
     class ChessController
     {
-        private Chess _chessModel;
+        private OldChess _chessModel;
         private ChessForm _chessView;
 
-        public ChessController(Chess chessModel, ChessForm chessView)
+        public ChessController(OldChess chessModel, ChessForm chessView)
         {
             _chessModel = chessModel;
             _chessView = chessView;
