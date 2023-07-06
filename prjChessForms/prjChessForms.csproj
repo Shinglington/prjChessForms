@@ -89,6 +89,7 @@
     <Compile Include="MyChessLibrary\Interfaces\Board\IMoveMaker.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Board\IPieceProvider.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPiece.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\IPlayer.cs" />
     <Compile Include="MyChessLibrary\Interfaces\ISquare.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Board\ISquareProvider.cs" />
     <Compile Include="MyChessLibrary\Common\Pieces\Bishop.cs" />

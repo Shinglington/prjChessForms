@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
 {
-    abstract class Player
+    abstract class Player : IPlayer
     {
         public Player(PieceColour colour, TimeSpan initialTime)
         {
             Colour = colour;
             RemainingTime = initialTime;
-            CapturedPieces = new List<Piece>();
+            CapturedPieces = new List<IPiece>();
         }
-        public TimeSpan RemainingTime { get; private set; }
         public PieceColour Colour { get; }
-        public List<Piece> CapturedPieces { get; private set; }
+        public TimeSpan RemainingTime { get; private set; }
+        public ICollection<IPiece> CapturedPieces { get; private set; }
 
         public void TickTime(TimeSpan time)
         {
             RemainingTime = RemainingTime.Subtract(time);
         }
 
-        public void AddCapturedPiece(Piece piece)
+        public void AddCapturedPiece(IPiece piece)
         {
             CapturedPieces.Add(piece);
         }

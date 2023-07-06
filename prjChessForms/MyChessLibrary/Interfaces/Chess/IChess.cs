@@ -8,5 +8,6 @@ namespace prjChessForms.MyChessLibrary
 {
     public interface IChess
     {
+        IPlayer GetPlayer(PieceColour colour);
     }
 }
