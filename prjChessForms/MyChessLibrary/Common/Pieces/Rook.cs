@@ -1,5 +1,4 @@
-﻿using prjChessForms.MyChessLibrary.Interfaces;
-using System;
+﻿using System;
 
 namespace prjChessForms.MyChessLibrary.Pieces
 {
@@ -7,8 +6,10 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public Rook(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
+        public override bool CanMove(IBoard board, ChessMove move)
         {
+            Coords startCoords = move.StartCoords;
+            Coords endCoords = move.EndCoords;
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;

@@ -71,6 +71,9 @@
     <Compile Include="MyChessLibrary\Common\Chess.Designer.cs">
       <DependentUpon>Chess.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyChessLibrary\Common\Rulebook\CastlingRulebook.cs" />
+    <Compile Include="MyChessLibrary\Common\Rulebook\NormalMovesRulebook.cs" />
+    <Compile Include="MyChessLibrary\Common\Rulebook\EnPassantRulebook.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMove.cs" />
     <Compile Include="MyChessLibrary\DataClasses\Coords.cs" />
     <Compile Include="MyChessLibrary\Common\ChessEventArgs.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="MyChessLibrary\Common\Player.cs" />
     <Compile Include="MyChessLibrary\Common\Square.cs" />
     <Compile Include="MyChessLibrary\Common\Board\SquareProvider.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Rulebook\IRulebook.cs" />
     <Compile Include="UserInterface\BoardTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -114,7 +118,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MyChessLibrary\Common\Rulebook.cs" />
+    <Compile Include="MyChessLibrary\Common\Rulebook\Rulebook.cs" />
     <EmbeddedResource Include="MyChessLibrary\Common\Chess.resx">
       <DependentUpon>Chess.cs</DependentUpon>
     </EmbeddedResource>

@@ -5,11 +5,18 @@
         White,
         Black
     }
-    enum PromotionOption
+    public enum PromotionOption
     {
         Queen,
         Rook,
         Knight,
         Bishop,
+    }
+    public enum GameResult
+    {
+        Unfinished,
+        Checkmate,
+        Stalemate,
+        Time
     }
 }

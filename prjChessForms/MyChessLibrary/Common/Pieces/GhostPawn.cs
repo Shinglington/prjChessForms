@@ -8,9 +8,6 @@
         }
         public Pawn LinkedPawn { get; }
 
-        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
-        {
-            return false;
-        }
+        public override bool CanMove(IBoard board, ChessMove move) => false;
     }
 }

@@ -27,6 +27,6 @@ namespace prjChessForms.MyChessLibrary
         {
             return Fullname;
         }
-        public abstract bool CanMove(IBoard board, Coords startCoords, Coords endCoords);
+        public abstract bool CanMove(IBoard board, ChessMove move);
     }
 }
