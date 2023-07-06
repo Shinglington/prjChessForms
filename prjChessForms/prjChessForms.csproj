@@ -75,6 +75,7 @@
     <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IGameFinishedChecker.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\IPlayerHandler.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IPromotionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\PromotionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\CastlingRulebook.cs" />

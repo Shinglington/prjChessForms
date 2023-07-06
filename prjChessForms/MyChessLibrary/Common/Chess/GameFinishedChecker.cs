@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prjChessForms.MyChessLibrary.Common.Chess
+namespace prjChessForms.MyChessLibrary
 {
     class GameFinishedChecker : IGameFinishedChecker
     {

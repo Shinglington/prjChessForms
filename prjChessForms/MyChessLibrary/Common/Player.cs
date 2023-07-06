@@ -24,7 +24,6 @@ namespace prjChessForms.MyChessLibrary
         {
             CapturedPieces.Add(piece);
         }
-
     }
     class HumanPlayer : Player
     {
