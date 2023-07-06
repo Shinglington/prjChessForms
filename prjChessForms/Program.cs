@@ -24,7 +24,8 @@ namespace prjChessForms
             IBoardCreator boardCreator = new BoardCreator(startingPositionSetup, piecePlacer);
             ISquareProvider squareProvider = new SquareProvider();
             IMoveMaker moveMaker = new MoveMaker();
-            board = new Board(boardCreator, squareProvider);
+            IPieceProvider pieceProvider = new PieceProvider();
+            board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker);
                 
 
             Chess game = new Chess(board);

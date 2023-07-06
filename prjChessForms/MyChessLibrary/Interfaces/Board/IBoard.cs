@@ -1,4 +1,6 @@
-﻿namespace prjChessForms.MyChessLibrary
+﻿using System.Collections.Generic;
+
+namespace prjChessForms.MyChessLibrary
 {
     public interface IBoard
     {
@@ -8,6 +10,8 @@
         void SetSquares(ISquare[,] squares);
         ISquare GetSquareAt(Coords coords);
         IPiece GetPieceAt(Coords coords);
+        ICollection<IPiece> GetPieces(PieceColour colour);
+        void MakeMove(ChessMove move);
     }
 
 
