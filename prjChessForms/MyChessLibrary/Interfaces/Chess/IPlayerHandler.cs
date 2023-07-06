@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary
+﻿namespace prjChessForms.MyChessLibrary
 {
     public interface IPlayerHandler
     {
+        void SetupPlayers();
         IPlayer GetPlayer(PieceColour color);
-
     }
 }

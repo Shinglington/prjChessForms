@@ -14,12 +14,4 @@ namespace prjChessForms.MyChessLibrary
         Coords GetCoordsOfPiece(IPiece piece);
         void MakeMove(ChessMove move);
     }
-
-
-
-
-
-
-
-
 }

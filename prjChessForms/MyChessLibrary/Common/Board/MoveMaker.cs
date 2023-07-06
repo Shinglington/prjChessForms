@@ -1,9 +1,18 @@
-﻿namespace prjChessForms.MyChessLibrary
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace prjChessForms.MyChessLibrary
 {
     class MoveMaker : IMoveMaker
     {
         private IBoard _board;
-        public void SetBoard(IBoard board) => _board = board;
+        private Stack<ChessMove> _moveStack;
+        public void SetBoard(IBoard board)
+        {
+            _board = board;
+            ResetMoveStack();
+        }
         public void MakeMove(ChessMove move)
         {
             Coords StartCoords = move.StartCoords;
@@ -15,6 +24,18 @@
                 _board.GetSquareAt(StartCoords).Piece = null;
                 p.HasMoved = true;
             }
+        }
+
+        public void UndoLastMove()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ChessMove GetLastMove(ChessMove move) => _moveStack.Peek();
+
+        private void ResetMoveStack()
+        {
+            _moveStack = new Stack<ChessMove>();
         }
     }
 }

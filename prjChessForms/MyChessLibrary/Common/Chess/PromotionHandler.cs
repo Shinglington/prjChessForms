@@ -8,5 +8,9 @@ namespace prjChessForms.MyChessLibrary
 {
     class PromotionHandler : IPromotionHandler
     {
+        bool PromotionNeeded(ChessMove move)
+        {
+
+        }
     }
 }

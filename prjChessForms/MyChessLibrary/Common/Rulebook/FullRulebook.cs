@@ -93,6 +93,5 @@ namespace prjChessForms.MyChessLibrary
             }
             return check;
         }
-
     }
 }

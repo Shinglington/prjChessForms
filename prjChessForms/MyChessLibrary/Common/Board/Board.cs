@@ -15,6 +15,7 @@ namespace prjChessForms.MyChessLibrary
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
+        private IEnumerable<ChessMove> _moveStack;
         public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IPieceProvider pieceProvider, IMoveMaker moveMaker)
         {
             _boardCreator = boardCreator;
@@ -38,6 +39,7 @@ namespace prjChessForms.MyChessLibrary
         public IPiece GetPieceAt(Coords coords) => _pieceProvider.GetPieceAt(coords);
         public ICollection<IPiece> GetPieces(PieceColour colour) => _pieceProvider.GetPieces(colour);
         public void MakeMove(ChessMove move) => _moveMaker.MakeMove(move);
+        public void UndoLastMove() => _moveMaker.UndoLastMove();
 
         public King GetKing(PieceColour colour)
         {

@@ -73,6 +73,7 @@
       <DependentUpon>OldChess.cs</DependentUpon>
     </Compile>
     <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\PlayerHandler.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IGameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IPlayerHandler.cs" />

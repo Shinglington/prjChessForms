@@ -8,8 +8,6 @@ namespace prjChessForms.MyChessLibrary
 {
     class GameFinishedChecker : IGameFinishedChecker
     {
-
-
         public static GameResult GetGameResult(Board board, Player current)
         {
             if (IsInStalemate(board, current.Colour))

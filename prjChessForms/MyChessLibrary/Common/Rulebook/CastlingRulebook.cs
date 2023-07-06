@@ -1,9 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary.Pieces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -14,6 +11,7 @@ namespace prjChessForms.MyChessLibrary
         {
             _board = board;
         }
+
         public bool CheckLegalMove(ChessMove move)
         {
             return IsCastle(move);
@@ -28,6 +26,7 @@ namespace prjChessForms.MyChessLibrary
         {
             throw new NotImplementedException();
         }
+
         private bool IsCastle(ChessMove move)
         {
             bool isCastleMove = false;
