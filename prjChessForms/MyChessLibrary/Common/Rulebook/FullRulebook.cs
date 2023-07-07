@@ -15,7 +15,7 @@ namespace prjChessForms.MyChessLibrary
             _rulebooks = rulebooks;
         }
 
-        public bool CheckLegalMove(ChessMove move)
+        public bool CheckLegalMove(Move move)
         {
             foreach(IRulebook rulebook in _rulebooks)
             {
@@ -27,12 +27,12 @@ namespace prjChessForms.MyChessLibrary
             return false;
         }
 
-        public ICollection<ChessMove> GetPossibleMovesForPiece(IPiece piece)
+        public ICollection<Move> GetPossibleMovesForPiece(IPiece piece)
         {
-            ICollection<ChessMove> PossibleMoves = new List<ChessMove>();
+            ICollection<Move> PossibleMoves = new List<Move>();
             foreach (IRulebook rulebook in _rulebooks)
             {
-                foreach(ChessMove move in rulebook.GetPossibleMovesForPiece(piece))
+                foreach(Move move in rulebook.GetPossibleMovesForPiece(piece))
                 {
                     PossibleMoves.Add(move);
                 }
@@ -40,7 +40,7 @@ namespace prjChessForms.MyChessLibrary
             return PossibleMoves;
         }
 
-        public void MakeMove(ChessMove move)
+        public void MakeMove(Move move)
         {
             foreach (IRulebook rulebook in _rulebooks)
             {
@@ -60,7 +60,7 @@ namespace prjChessForms.MyChessLibrary
         public bool RequiresPromotion(Coords pieceCoords)
         {
             bool requiresPromotion = false;
-            IPiece p = _board.GetPieceAt(pieceCoords);
+            IPiece p = _board.GetSquareAt(pieceCoords).Piece;
             if (p.GetType() == typeof(Pawn))
             {
                 if (pieceCoords.Y == 0 || pieceCoords.Y == _board.RowCount - 1)

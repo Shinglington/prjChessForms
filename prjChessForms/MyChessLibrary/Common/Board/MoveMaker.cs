@@ -8,13 +8,13 @@ namespace prjChessForms.MyChessLibrary
     class MoveMaker : IMoveMaker
     {
         private IBoard _board;
-        private Stack<ChessMove> _moveStack;
+        private Stack<Move> _moveStack;
         public void SetBoard(IBoard board)
         {
             _board = board;
             ResetMoveStack();
         }
-        public void MakeMove(ChessMove move)
+        public void MakeMove(Move move)
         {
             try
             {
@@ -29,18 +29,18 @@ namespace prjChessForms.MyChessLibrary
 
         public void UndoLastMove()
         {
-            ChessMove lastMove = _moveStack.Pop();
-            MovePiece(new ChessMove(lastMove.MovedPiece, lastMove.EndCoords, lastMove.StartCoords));
+            Move lastMove = _moveStack.Pop();
+            MovePiece(new Move(lastMove.MovedPiece, lastMove.EndCoords, lastMove.StartCoords));
         }
 
-        public ChessMove GetLastMove(ChessMove move) => _moveStack.Peek();
+        public Move GetLastMove(Move move) => _moveStack.Peek();
 
         private void ResetMoveStack()
         {
-            _moveStack = new Stack<ChessMove>();
+            _moveStack = new Stack<Move>();
         }
 
-        private void MovePiece(ChessMove move)
+        private void MovePiece(Move move)
         {
             Coords StartCoords = move.StartCoords;
             Coords EndCoords = move.EndCoords;

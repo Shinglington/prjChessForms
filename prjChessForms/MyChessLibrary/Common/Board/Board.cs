@@ -15,7 +15,7 @@ namespace prjChessForms.MyChessLibrary
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
-        private IEnumerable<ChessMove> _moveStack;
+        private IEnumerable<Move> _moveStack;
         public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IPieceProvider pieceProvider, IMoveMaker moveMaker)
         {
             _boardCreator = boardCreator;
@@ -36,9 +36,8 @@ namespace prjChessForms.MyChessLibrary
         public ISquare[,] GetSquares() => _squares;
         public void SetSquares(ISquare[,] squares) => _squares = squares;
         public ISquare GetSquareAt(Coords coords) => _squareProvider.GetSquareAt(coords);
-        public IPiece GetPieceAt(Coords coords) => _pieceProvider.GetPieceAt(coords);
         public ICollection<IPiece> GetPieces(PieceColour colour) => _pieceProvider.GetPieces(colour);
-        public void MakeMove(ChessMove move) => _moveMaker.MakeMove(move);
+        public void MakeMove(Move move) => _moveMaker.MakeMove(move);
         public void UndoLastMove() => _moveMaker.UndoLastMove();
 
         public King GetKing(PieceColour colour)
@@ -83,12 +82,12 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        public bool CheckMoveInCheck(PieceColour colour, ChessMove move)
+        public bool CheckMoveInCheck(PieceColour colour, Move move)
         {
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
-            bool startPieceHasMoved = GetPieceAt(start).HasMoved;
-            IPiece originalEndPiece = GetPieceAt(end);
+            bool startPieceHasMoved = GetSquareAt(start).Piece.HasMoved;
+            IPiece originalEndPiece = GetSquareAt(end).Piece;
 
             MakeMove(move);
             bool SelfCheck = FullRulebook.IsInCheck(this, colour);

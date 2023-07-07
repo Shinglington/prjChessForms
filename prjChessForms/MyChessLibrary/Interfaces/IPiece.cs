@@ -8,6 +8,6 @@ namespace prjChessForms.MyChessLibrary
         PieceColour Colour { get; }
         string Name { get; }
         string Fullname { get; }
-        bool CanMove(IBoard board, ChessMove move);
+        bool CanMove(IBoard board, Move move);
     }
 }

@@ -42,8 +42,8 @@ namespace prjChessForms.MyChessLibrary
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }
-        public Square[,] BoardSquares { get { return _board.GetSquares(); } }
-        public Piece GetPieceAt(Coords coords) => _board.GetPieceAt(coords);
+        public ISquare[,] BoardSquares { get { return _board.GetSquares(); } }
+        public IPiece GetPieceAt(Coords coords) => _board.GetSquareAt(coords).Piece;
         public Coords GetCoordsOf(Piece piece) => _board.GetCoordsOfPiece(piece);
 
         public async Task StartGame()
@@ -97,7 +97,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 try
                 {
-                    ChessMove move = await GetChessMove(cToken);
+                    Move move = await GetChessMove(cToken);
                     CapturePiece(FullRulebook.MakeMove(_board, CurrentPlayer.Colour, move));
                     ChangeSelection(null);
                     if (FullRulebook.RequiresPromotion(_board, move.EndCoords))
@@ -118,11 +118,11 @@ namespace prjChessForms.MyChessLibrary
             cts.Cancel();
         }
 
-        private async Task<ChessMove> GetChessMove(CancellationToken cToken)
+        private async Task<Move> GetChessMove(CancellationToken cToken)
         {
             Coords fromCoords = Coords.Null;
             Coords toCoords = Coords.Null;
-            ChessMove move = new ChessMove();
+            Move move = new ChessMove();
             bool completeInput = false;
             _waitingForClick = true;
             _timer.Start();
@@ -218,7 +218,7 @@ namespace prjChessForms.MyChessLibrary
                 if (selectedPiece != null)
                 {
                     selectedCoords = GetCoordsOf(selectedPiece);
-                    foreach (ChessMove m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
+                    foreach (Move m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
                     {
                         endCoords.Add(m.EndCoords);
                     }

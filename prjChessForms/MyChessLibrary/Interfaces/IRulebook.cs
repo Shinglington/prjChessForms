@@ -4,8 +4,8 @@ namespace prjChessForms.MyChessLibrary
 {
     public interface IRulebook
     {
-        bool CheckLegalMove(ChessMove move);
-        void MakeMove(ChessMove move);
-        ICollection<ChessMove> GetPossibleMovesForPiece(IPiece piece);
+        bool CheckLegalMove(Move move);
+        void MakeMove(Move move);
+        ICollection<Move> GetPossibleMovesForPiece(IPiece piece);
     }
 }

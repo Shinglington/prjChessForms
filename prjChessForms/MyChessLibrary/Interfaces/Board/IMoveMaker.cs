@@ -3,8 +3,8 @@
     public interface IMoveMaker
     {
         void SetBoard(IBoard board);
-        void MakeMove(ChessMove move);
+        void MakeMove(Move move);
         void UndoLastMove();
-        ChessMove GetLastMove(ChessMove move);
+        Move GetLastMove(Move move);
     }
 }

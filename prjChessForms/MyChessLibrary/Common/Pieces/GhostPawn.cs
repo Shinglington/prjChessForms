@@ -8,6 +8,6 @@
         }
         public Pawn LinkedPawn { get; }
 
-        public override bool CanMove(IBoard board, ChessMove move) => false;
+        public override bool CanMove(IBoard board, Move move) => false;
     }
 }

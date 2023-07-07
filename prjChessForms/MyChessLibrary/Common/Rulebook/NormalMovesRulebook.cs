@@ -11,12 +11,12 @@ namespace prjChessForms.MyChessLibrary
             _board = board;
         }
 
-        public bool CheckLegalMove(ChessMove move)
+        public bool CheckLegalMove(Move move)
         {
             Coords start = move.StartCoords;
             Coords end = move.EndCoords;
-            IPiece movedPiece = _board.GetPieceAt(move.StartCoords);
-            IPiece capturedPiece = _board.GetPieceAt(move.EndCoords);
+            IPiece movedPiece = _board.GetSquareAt(move.StartCoords).Piece;
+            IPiece capturedPiece = _board.GetSquareAt(move.EndCoords).Piece;
             bool legal = false;
             if (movedPiece != null && !start.Equals(end))
             {
@@ -35,7 +35,7 @@ namespace prjChessForms.MyChessLibrary
             return legal;
         }
 
-        public void MakeMove(ChessMove move)
+        public void MakeMove(Move move)
         {
             if (!CheckLegalMove(move))
             {
@@ -44,11 +44,11 @@ namespace prjChessForms.MyChessLibrary
             _board.MakeMove(move);
         }
 
-        public ICollection<ChessMove> GetPossibleMovesForPiece(IPiece piece)
+        public ICollection<Move> GetPossibleMovesForPiece(IPiece piece)
         {
-            ICollection<ChessMove> possibleMoves = new List<ChessMove>();
+            ICollection<Move> possibleMoves = new List<Move>();
             Coords pieceCoords = _board.GetCoordsOfPiece(piece);
-            ChessMove move;
+            Move move;
             for (int y = 0; y < _board.RowCount; y++)
             {
                 for (int x = 0; x < _board.ColumnCount; x++)

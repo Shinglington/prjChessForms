@@ -13,7 +13,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
             _bishopMovement = new Bishop(colour);
         }
 
-        public override bool CanMove(IBoard board, ChessMove move)
+        public override bool CanMove(IBoard board, Move move)
         {
             return _rookMovement.CanMove(board, move) || _bishopMovement.CanMove(board, move);
         }

@@ -11,25 +11,25 @@ namespace prjChessForms.MyChessLibrary
         {
             _board = board;
         }
-        public bool CheckLegalMove(ChessMove move)
+        public bool CheckLegalMove(Move move)
         {
             return IsEnPassant(move);
         }
 
-        public ICollection<ChessMove> GetPossibleMovesForPiece(IPiece p)
+        public ICollection<Move> GetPossibleMovesForPiece(IPiece p)
         {
             throw new NotImplementedException();
         }
 
-        public void MakeMove(ChessMove move)
+        public void MakeMove(Move move)
         {
             throw new NotImplementedException();
         }
-        private bool IsEnPassant(ChessMove move)
+        private bool IsEnPassant(Move move)
         {
-            if (_board.GetPieceAt(move.StartCoords).GetType() == typeof(Pawn))
+            if (_board.GetSquareAt(move.StartCoords).Piece.GetType() == typeof(Pawn))  
             {
-                Pawn piece = (Pawn)_board.GetPieceAt(move.StartCoords);
+                Pawn piece = (Pawn)_board.GetSquareAt(move.StartCoords).Piece;
                 int legalDirection = (piece.Colour == PieceColour.White ? 1 : -1);
                 if (Math.Abs(move.EndCoords.X - move.StartCoords.X) == 1 && move.EndCoords.Y - move.StartCoords.Y == legalDirection)
                 {

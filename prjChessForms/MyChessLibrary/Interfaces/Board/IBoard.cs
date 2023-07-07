@@ -9,9 +9,8 @@ namespace prjChessForms.MyChessLibrary
         ISquare[,] GetSquares();
         void SetSquares(ISquare[,] squares);
         ISquare GetSquareAt(Coords coords);
-        IPiece GetPieceAt(Coords coords);
         ICollection<IPiece> GetPieces(PieceColour colour);
         Coords GetCoordsOfPiece(IPiece piece);
-        void MakeMove(ChessMove move);
+        void MakeMove(Move move);
     }
 }

@@ -47,7 +47,7 @@ namespace prjChessForms.MyChessLibrary
             bool anyLegalMoves = false;
             foreach (Piece p in board.GetPieces(colour))
             {
-                List<ChessMove> moves = GetPossibleMoves(board, p);
+                List<Move> moves = GetPossibleMoves(board, p);
                 if (moves.Count > 0)
                 {
                     anyLegalMoves = true;

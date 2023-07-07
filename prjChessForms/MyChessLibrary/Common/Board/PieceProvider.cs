@@ -7,7 +7,6 @@ namespace prjChessForms.MyChessLibrary
     {
         private IBoard _board;
         public void SetBoard(IBoard board) => _board = board;
-        public IPiece GetPieceAt(Coords coords) => _board.GetSquareAt(coords).Piece;
         public ICollection<IPiece> GetPieces(PieceColour colour)
         {
             ICollection<IPiece> pieces = new List<IPiece>();
@@ -16,7 +15,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 for (int x = 0; x < _board.ColumnCount; x++)
                 {
-                    p = GetPieceAt(new Coords(x, y));
+                    p = _board.GetSquareAt(new Coords(x, y)).Piece;
                     if (p != null && p.Colour == colour)
                     {
                         pieces.Add(p);

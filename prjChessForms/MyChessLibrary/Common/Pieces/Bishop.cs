@@ -5,7 +5,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public Bishop(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, ChessMove move)
+        public override bool CanMove(IBoard board, Move move)
         {
             Coords startCoords = move.StartCoords;
             Coords endCoords = move.EndCoords;
