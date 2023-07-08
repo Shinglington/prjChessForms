@@ -18,7 +18,7 @@ namespace prjChessForms.MyChessLibrary
         {
             if (board.GetSquareAt(StartCoords).Piece != MovedPiece)
             {
-                throw new InvalidOperationException("Piece was not in expected position");
+                throw new Exception("Piece was not in expected position");
             }
             board.GetSquareAt(StartCoords).Piece = null;
             board.GetSquareAt(EndCoords).Piece = MovedPiece;
@@ -28,7 +28,7 @@ namespace prjChessForms.MyChessLibrary
         {
             if (board.GetSquareAt(EndCoords).Piece != MovedPiece)
             {
-                throw new InvalidOperationException("Piece was not in expected position");
+                throw new Exception("Piece was not in expected position");
             }
             board.GetSquareAt(EndCoords).Piece = null;
             board.GetSquareAt(StartCoords).Piece = MovedPiece;

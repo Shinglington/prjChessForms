@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary.DataClasses.ChessMoves
 {
@@ -10,7 +6,7 @@ namespace prjChessForms.MyChessLibrary.DataClasses.ChessMoves
     {
         public Capture(IPiece capturedPiece, Coords originalCoords)
         {
-            CapturedPiece= capturedPiece;
+            CapturedPiece = capturedPiece;
             OriginalCoords = originalCoords;
         }
         public IPiece CapturedPiece { get; }
@@ -18,12 +14,20 @@ namespace prjChessForms.MyChessLibrary.DataClasses.ChessMoves
 
         public void ExecuteMove(IBoard board)
         {
-            if (board.GetSquareAt())
+            if (board.GetSquareAt(OriginalCoords).Piece != CapturedPiece)
+            {
+                throw new Exception("Piece was not in expected position");
+            }
+            board.GetSquareAt(OriginalCoords).Piece = null;
         }
 
         public void ReverseMove(IBoard board)
         {
-            throw new NotImplementedException();
+            if (board.GetSquareAt(OriginalCoords).Piece != null)
+            {
+                throw new Exception("Position is not empty, so cannot place Piece");
+            }
+            board.GetSquareAt(OriginalCoords).Piece = CapturedPiece;
         }
     }
 }
