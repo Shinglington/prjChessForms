@@ -15,46 +15,31 @@ namespace prjChessForms.MyChessLibrary
             _rulebooks = rulebooks;
         }
 
-        public bool CheckLegalMove(Move move)
+        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
         {
-            foreach(IRulebook rulebook in _rulebooks)
-            {
-                if (rulebook.CheckLegalMove(move))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public ICollection<Move> GetPossibleMovesForPiece(IPiece piece)
-        {
-            ICollection<Move> PossibleMoves = new List<Move>();
+            IChessMove processedMove = null;
             foreach (IRulebook rulebook in _rulebooks)
             {
-                foreach(Move move in rulebook.GetPossibleMovesForPiece(piece))
+                processedMove = rulebook.ProcessChessMove(StartCoords, EndCoords);
+                if (processedMove != null)
+                {
+                    break;
+                }
+            }
+            return processedMove;
+        }
+
+        ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
+        {
+            ICollection<IChessMove> PossibleMoves = new List<IChessMove>();
+            foreach (IRulebook rulebook in _rulebooks)
+            {
+                foreach (IChessMove move in rulebook.GetPossibleMovesForPiece(piece))
                 {
                     PossibleMoves.Add(move);
                 }
             }
             return PossibleMoves;
-        }
-
-        public void MakeMove(Move move)
-        {
-            foreach (IRulebook rulebook in _rulebooks)
-            {
-                if (rulebook.CheckLegalMove(move))
-                {
-                    try
-                    {
-                        rulebook.MakeMove(move);
-                        return;
-                    }
-                    catch { }
-                }
-            }
-            throw new ArgumentException(string.Format("{0} is not a legal move", move));
         }
 
         public bool RequiresPromotion(Coords pieceCoords)
@@ -71,7 +56,7 @@ namespace prjChessForms.MyChessLibrary
             return requiresPromotion;
         }
 
-        public static bool IsInCheck(Board board, PieceColour colour)
+        public bool IsInCheck(IBoard board, PieceColour colour)
         {
             bool check = false;
             King king = board.GetKing(colour);
@@ -84,7 +69,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 if (square.Piece != null && square.Piece.Colour != colour)
                 {
-                    if (CheckLegalMove(board, square.Piece.Colour, new ChessMove(square.Coords, kingCoords)))
+                    if (ProcessChessMove(square.Coords, kingCoords) != null)
                     {
                         check = true;
                         break;
@@ -93,5 +78,6 @@ namespace prjChessForms.MyChessLibrary
             }
             return check;
         }
+
     }
 }

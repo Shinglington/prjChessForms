@@ -8,21 +8,36 @@ namespace prjChessForms.MyChessLibrary.DataClasses.ChessMoves
 {
     public class ChessMove : IChessMove
     {
-        public ChessMove(IBoard board, IPiece movingPiece, ) 
+        private List<IChessMove> _moveSequence;
+        public ChessMove(List<IChessMove> moveSequence) 
         {
-
+            _moveSequence = moveSequence;
         }
-
-        public 
 
         public void ExecuteMove(IBoard board)
         {
-            throw new NotImplementedException();
+            try
+            {
+                for (int i = 0; i < _moveSequence.Count; i++)
+                    _moveSequence[i].ExecuteMove(board);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public void ReverseMove(IBoard board)
         {
-            throw new NotImplementedException();    
+            try
+            {
+                for (int i = _moveSequence.Count - 1; i >= 0; i--)
+                    _moveSequence[i].ReverseMove(board);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }
