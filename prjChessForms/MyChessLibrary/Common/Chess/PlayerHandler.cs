@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class PlayerHandler : IPlayerHandler
+    class PlayerHandler : IPlayerManager
     {
         private ICollection<IPlayer> _players;
 

@@ -2,6 +2,7 @@
 using prjChessForms.MyChessLibrary;
 using prjChessForms.PresentationUI;
 using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Windows.Forms;
 
@@ -18,19 +19,38 @@ namespace prjChessForms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            IBoard board;
             IPiecePlacer piecePlacer = new PiecePlacer();
             IStartingPositionSetup startingPositionSetup = new StartingPositionSetup(piecePlacer);
             IBoardCreator boardCreator = new BoardCreator(startingPositionSetup, piecePlacer);
             ISquareProvider squareProvider = new SquareProvider();
             IMoveMaker moveMaker = new MoveMaker();
             IPieceProvider pieceProvider = new PieceProvider();
-            board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker);
-                
+            IBoard board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker);
+
+            List<IRulebook> subRulebooks = new List<IRulebook>()
+            {
+                new NormalMovesRulebook(board),
+                new CastlingRulebook(board),
+                new EnPassantRulebook(board)
+            };
+            IRulebook fullRulebook = new FullRulebook(board, subRulebooks);
+
+            IPlayerManager playerHandler = new PlayerHandler();
+            IMoveInputHandler moveInputHandler = new MoveInputHandler(fullRulebook);
+
+            IChess chess = new Chess(board, playerHandler, moveInputHandler);
+
+
+            
+
+
+
+
+
 
             OldChess game = new OldChess(board);
             ChessForm form = new ChessForm();
-            ChessController controller = new ChessController(game, form);
+            ChessInputController controller = new ChessInputController(game, form);
             Application.Run(form);
         }
     }

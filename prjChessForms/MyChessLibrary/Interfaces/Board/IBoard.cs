@@ -12,6 +12,7 @@ namespace prjChessForms.MyChessLibrary
         ICollection<IPiece> GetPieces(PieceColour colour);
         Coords GetCoordsOfPiece(IPiece piece);
         void MakeMove(IChessMove move);
+        void UndoLastMove();
         IChessMove GetPreviousMove();
 
     }

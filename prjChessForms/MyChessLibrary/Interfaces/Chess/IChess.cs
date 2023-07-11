@@ -9,5 +9,8 @@ namespace prjChessForms.MyChessLibrary
     public interface IChess
     {
         IPlayer GetPlayer(PieceColour colour);
+        Task PlayGame();
+        void SendCoords(Coords coords);
+        void SendPromotion(PromotionOption option);
     }
 }

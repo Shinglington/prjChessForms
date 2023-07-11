@@ -2,5 +2,6 @@
 {
     public interface IGameFinishedChecker
     {
+        GameResult GetGameResult();
     }
 }

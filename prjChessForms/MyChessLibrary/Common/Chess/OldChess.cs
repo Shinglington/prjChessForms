@@ -42,7 +42,6 @@ namespace prjChessForms.MyChessLibrary
         public Player CurrentPlayer { get { return _players[_turnCount % 2]; } }
         public Player WhitePlayer { get { return _players[0]; } }
         public Player BlackPlayer { get { return _players[1]; } }
-        public ISquare[,] BoardSquares { get { return _board.GetSquares(); } }
         public IPiece GetPieceAt(Coords coords) => _board.GetSquareAt(coords).Piece;
         public Coords GetCoordsOf(Piece piece) => _board.GetCoordsOfPiece(piece);
 

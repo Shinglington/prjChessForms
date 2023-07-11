@@ -1,8 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using prjChessForms.MyChessLibrary.Pieces;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace prjChessForms.MyChessLibrary
 {
+    public class SquareClickedEventArgs : EventArgs
+    {
+        public SquareClickedEventArgs(Coords coords)
+        {
+            ClickedCoords = coords;
+        }
+        public Coords ClickedCoords { get; set; }
+    }
+
+    public class PromotionSelectedEventArgs : EventArgs
+    {
+        public PromotionSelectedEventArgs(PromotionOption option)
+        {
+            SelectedOption = option;
+        }
+
+        public PromotionOption SelectedOption { get; set; }
+    }
+
     public class PieceChangedEventArgs : EventArgs
     {
         public PieceChangedEventArgs(ISquare square, IPiece newPiece)
@@ -16,7 +38,7 @@ namespace prjChessForms.MyChessLibrary
 
     public class PieceSelectionChangedEventArgs : EventArgs
     {
-        public PieceSelectionChangedEventArgs(IPiece piece, Coords selectedPieceCoords, List<Coords> validMoves)
+        public PieceSelectionChangedEventArgs(IPiece piece, Coords selectedPieceCoords, ICollection<Coords> validMoves)
         {
             SelectedPiece = piece;
             SelectedPieceCoords = selectedPieceCoords;
@@ -24,7 +46,7 @@ namespace prjChessForms.MyChessLibrary
         }
         public IPiece SelectedPiece { get; set; }
         public Coords SelectedPieceCoords { get; set; }
-        public List<Coords> PossibleEndCoords { get; set; }
+        public ICollection<Coords> PossibleEndCoords { get; set; }
     }
 
     public class PlayerTimerTickEventArgs : EventArgs
@@ -57,7 +79,7 @@ namespace prjChessForms.MyChessLibrary
             PromotingColour = colour;
         }
         public Coords PromotingCoords { get; set; }
-        public PieceColour PromotingColour { get; set; } 
+        public PieceColour PromotingColour { get; set; }
     }
 
     public class GameOverEventArgs : EventArgs

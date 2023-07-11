@@ -28,6 +28,7 @@ namespace prjChessForms.MyChessLibrary
                 {
                     PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
                     PieceRemoval capture = new PieceRemoval(capturedPiece, _board.GetCoordsOfPiece(capturedPiece));
+                    chessMove = new ChessMove(new List<IChessMove> { capture, movement });
                 }
             }
             return chessMove;
@@ -41,6 +42,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 IChessMove move;
                 int changeY = piece.Colour == PieceColour.White ? 1 : -1;
+                // Only possible En Passant moves would be diagonal captures, so check only them
                 for (int changeX = -1; changeX <= 1; changeX+=2)
                 {
                     move = ProcessChessMove(pieceCoords, new Coords(pieceCoords.X + changeX, pieceCoords.Y + changeY));
@@ -49,8 +51,8 @@ namespace prjChessForms.MyChessLibrary
                         possibleMoves.Add(move);
                     }
                 }
-                return possibleMoves;
             }
+            return possibleMoves;
         }
 
         private bool CheckMovementVector(PieceColour colour, Coords StartCoords, Coords EndCoords)

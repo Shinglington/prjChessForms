@@ -32,8 +32,6 @@ namespace prjChessForms.MyChessLibrary
 
         public override string ToString() => $"{(char)('a' + X)}{Y + 1}";
 
-
-
         public override bool Equals(object obj)
         {
             if (obj == null || obj.GetType() != typeof(Coords))
