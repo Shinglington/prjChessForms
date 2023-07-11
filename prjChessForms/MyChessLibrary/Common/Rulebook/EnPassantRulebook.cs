@@ -7,24 +7,21 @@ namespace prjChessForms.MyChessLibrary
     class EnPassantRulebook : IRulebook
     {
         private readonly IBoard _board;
-        public EnPassantRulebook(IBoard board) 
+        public EnPassantRulebook(IBoard board)
         {
             _board = board;
         }
-        public bool CheckLegalMove(Move move)
-        {
-            return IsEnPassant(move);
-        }
 
-        public ICollection<Move> GetPossibleMovesForPiece(IPiece p)
+        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
         {
             throw new NotImplementedException();
         }
 
-        public void MakeMove(Move move)
+        ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
         {
             throw new NotImplementedException();
         }
+
         private bool IsEnPassant(Move move)
         {
             if (_board.GetSquareAt(move.StartCoords).Piece.GetType() == typeof(Pawn))  

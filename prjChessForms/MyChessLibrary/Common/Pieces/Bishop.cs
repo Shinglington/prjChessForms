@@ -5,10 +5,8 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public Bishop(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, Move move)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
-            Coords startCoords = move.StartCoords;
-            Coords endCoords = move.EndCoords;
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
@@ -20,7 +18,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
                 for (int delta = 1; delta < Math.Abs(xChange); delta += 1)
                 {
                     Coords checkCoords = new Coords(startCoords.X + delta * xDirection, startCoords.Y + delta * yDirection);
-                    if (board.GetPieceAt(checkCoords) != null)
+                    if (board.GetSquareAt(checkCoords).Piece != null)
                     {
                         allowed = false;
                         break;

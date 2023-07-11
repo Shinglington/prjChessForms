@@ -6,10 +6,8 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public Pawn(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, Move move)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
-            Coords startCoords = move.StartCoords;
-            Coords endCoords = move.EndCoords;
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
@@ -18,21 +16,21 @@ namespace prjChessForms.MyChessLibrary.Pieces
             {
                 return false;
             }
-            if (xChange == 0 && board.GetPieceAt(endCoords) == null)
+            if (xChange == 0 && board.GetSquareAt(endCoords).Piece == null)
             {
                 if (Math.Abs(yChange) == 1)
                 {
                     allowed = true;
                 }
                 else if (Math.Abs(yChange) == 2 && !HasMoved
-                    && board.GetPieceAt(new Coords(startCoords.X, startCoords.Y + direction)) == null)
+                    && board.GetSquareAt(new Coords(startCoords.X, startCoords.Y + direction)).Piece == null)
                 {
                     allowed = true;
                 }
             }
             if (Math.Abs(xChange) == 1 && Math.Abs(yChange) == 1)
             {
-                if (board.GetPieceAt(endCoords) != null)
+                if (board.GetSquareAt(endCoords).Piece != null)
                 {
                     allowed = true;
                 }

@@ -6,10 +6,8 @@ namespace prjChessForms.MyChessLibrary.Pieces
     {
         public Rook(PieceColour colour) : base(colour) { }
 
-        public override bool CanMove(IBoard board, Move move)
+        public override bool CanMove(IBoard board, Coords startCoords, Coords endCoords)
         {
-            Coords startCoords = move.StartCoords;
-            Coords endCoords = move.EndCoords;
             bool allowed = false;
             int xChange = endCoords.X - startCoords.X;
             int yChange = endCoords.Y - startCoords.Y;
@@ -20,7 +18,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
                 for (int deltaY = 1; deltaY < Math.Abs(yChange); deltaY += 1)
                 {
                     Coords checkCoords = new Coords(startCoords.X, startCoords.Y + deltaY * direction);
-                    if (board.GetPieceAt(checkCoords) != null)
+                    if (board.GetSquareAt(checkCoords).Piece != null)
                     {
                         allowed = false;
                         break;
@@ -34,7 +32,7 @@ namespace prjChessForms.MyChessLibrary.Pieces
                 for (int deltaX = 1; deltaX < Math.Abs(xChange); deltaX += 1)
                 {
                     Coords checkCoords = new Coords(startCoords.X + deltaX * direction, startCoords.Y);
-                    if (board.GetPieceAt(checkCoords) != null)
+                    if (board.GetSquareAt(checkCoords).Piece != null)
                     {
                         allowed = false;
                         break;

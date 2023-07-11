@@ -12,17 +12,12 @@ namespace prjChessForms.MyChessLibrary
             _board = board;
         }
 
-        public bool CheckLegalMove(Move move)
-        {
-            return IsCastle(move);
-        }
-
-        public ICollection<Move> GetPossibleMovesForPiece(IPiece piece)
+        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
         {
             throw new NotImplementedException();
         }
 
-        public void MakeMove(Move move)
+        ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
         {
             throw new NotImplementedException();
         }

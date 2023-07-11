@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjChessForms.MyChessLibrary.DataClasses.ChessMoves;
+using System;
 using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
@@ -11,50 +12,38 @@ namespace prjChessForms.MyChessLibrary
             _board = board;
         }
 
-        public bool CheckLegalMove(Move move)
+        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
         {
-            Coords start = move.StartCoords;
-            Coords end = move.EndCoords;
-            IPiece movedPiece = _board.GetSquareAt(move.StartCoords).Piece;
-            IPiece capturedPiece = _board.GetSquareAt(move.EndCoords).Piece;
-            bool legal = false;
-            if (movedPiece != null && !start.Equals(end))
+            IPiece movedPiece = _board.GetSquareAt(StartCoords).Piece;
+            IPiece capturedPiece = _board.GetSquareAt(EndCoords).Piece;
+            IChessMove chessMove = null;
+
+            if (movedPiece != null) 
             {
-                PieceColour colour = movedPiece.Colour;
-                if (movedPiece.CanMove(_board, move))
+                if (capturedPiece != null)
                 {
-                    if (capturedPiece == null || capturedPiece.Colour != colour)
-                    {
-                        if (!_board.CheckMoveInCheck(colour, move))
-                        {
-                            legal = true;
-                        }
-                    }
+                    chessMove = ProcessCapture(StartCoords, EndCoords);
+                }
+                else
+                {
+                    chessMove = ProcessMove(StartCoords, EndCoords);
                 }
             }
-            return legal;
+
+            return chessMove;
         }
 
-        public void MakeMove(Move move)
+        public ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
         {
-            if (!CheckLegalMove(move))
-            {
-                throw new ArgumentException(string.Format("Move {0} is not a valid move", move));
-            }
-            _board.MakeMove(move);
-        }
-
-        public ICollection<Move> GetPossibleMovesForPiece(IPiece piece)
-        {
-            ICollection<Move> possibleMoves = new List<Move>();
+            ICollection<IChessMove> possibleMoves = new List<IChessMove>();
             Coords pieceCoords = _board.GetCoordsOfPiece(piece);
-            Move move;
+            IChessMove move;
             for (int y = 0; y < _board.RowCount; y++)
             {
                 for (int x = 0; x < _board.ColumnCount; x++)
                 {
-                    move = new ChessMove(pieceCoords, new Coords(x, y));
-                    if (CheckLegalMove(move))
+                    move = ProcessChessMove(pieceCoords, new Coords(x, y));
+                    if (move != null)
                     {
                         possibleMoves.Add(move);
                     }
@@ -62,5 +51,34 @@ namespace prjChessForms.MyChessLibrary
             }
             return possibleMoves;
         }
+
+        private IChessMove ProcessCapture(Coords StartCoords, Coords EndCoords)
+        {
+            ChessMove chessMove = null; 
+            Capture capture = null;
+            Move move = null;
+            PieceColour colour = movedPiece.Colour;
+            if (movedPiece.CanMove(_board, move))
+            {
+                if (capturedPiece == null || capturedPiece.Colour != colour)
+                {
+                    if (!_board.CheckMoveInCheck(colour, move))
+                    {
+                        legal = true;
+                    }
+                }
+            }
+            return chessMove;
+        }
+
+        private IChessMove ProcessMove(Coords StartCoords, Coords EndCoords)
+        {
+            ChessMove chessMove = null;
+
+
+
+            return chessMove;
+        }
+
     }
 }
