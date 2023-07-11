@@ -74,7 +74,7 @@
     </Compile>
     <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\PlayerHandler.cs" />
-    <Compile Include="MyChessLibrary\DataClasses\ChessMoves\Capture.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\ChessMoves\PieceRemoval.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\ChessMove.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IGameFinishedChecker.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="MyChessLibrary\Common\Rulebook\CastlingRulebook.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\NormalMovesRulebook.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\EnPassantRulebook.cs" />
-    <Compile Include="MyChessLibrary\DataClasses\ChessMoves\Move.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\ChessMoves\PieceMovement.cs" />
     <Compile Include="MyChessLibrary\DataClasses\Coords.cs" />
     <Compile Include="MyChessLibrary\Common\ChessEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\Enums.cs" />

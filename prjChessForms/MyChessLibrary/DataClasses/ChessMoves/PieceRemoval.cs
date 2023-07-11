@@ -2,9 +2,9 @@
 
 namespace prjChessForms.MyChessLibrary.DataClasses.ChessMoves
 {
-    public class Capture : IChessMove
+    public class PieceRemoval : IChessMove
     {
-        public Capture(IPiece capturedPiece, Coords originalCoords)
+        public PieceRemoval(IPiece capturedPiece, Coords originalCoords)
         {
             CapturedPiece = capturedPiece;
             OriginalCoords = originalCoords;

@@ -22,7 +22,7 @@ namespace prjChessForms.MyChessLibrary
             throw new NotImplementedException();
         }
 
-        private bool IsCastle(Move move)
+        private bool IsCastle(PieceMovement move)
         {
             bool isCastleMove = false;
             if (_board.GetSquareAt(move.StartCoords).Piece.GetType() == typeof(King) && !_board.GetSquareAt(move.StartCoords).Piece.HasMoved)

@@ -1,4 +1,5 @@
-﻿using prjChessForms.MyChessLibrary.Pieces;
+﻿using prjChessForms.MyChessLibrary.DataClasses.ChessMoves;
+using prjChessForms.MyChessLibrary.Pieces;
 using System;
 using System.Collections.Generic;
 
@@ -14,30 +15,70 @@ namespace prjChessForms.MyChessLibrary
 
         public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
         {
-            throw new NotImplementedException();
-        }
-
-        ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool IsEnPassant(Move move)
-        {
-            if (_board.GetSquareAt(move.StartCoords).Piece.GetType() == typeof(Pawn))  
+            IChessMove chessMove = null;
+            IPiece movingPiece = _board.GetSquareAt(StartCoords).Piece;
+            if (movingPiece != null && movingPiece.GetType() == typeof(Pawn))
             {
-                Pawn piece = (Pawn)_board.GetSquareAt(move.StartCoords).Piece;
-                int legalDirection = (piece.Colour == PieceColour.White ? 1 : -1);
-                if (Math.Abs(move.EndCoords.X - move.StartCoords.X) == 1 && move.EndCoords.Y - move.StartCoords.Y == legalDirection)
+                IPiece capturedPiece = GetCapturedPawn(StartCoords, EndCoords);
+                if (CheckMovementVector(movingPiece.Colour, StartCoords, EndCoords)
+                    && capturedPiece != null
+                    && capturedPiece.Colour != movingPiece.Colour
+                    && CheckPreviousMoveWasDoubleByCapturedPawn(capturedPiece, _board.GetCoordsOfPiece(capturedPiece)))
                 {
-                    GhostPawn ghostPawn = _board.GetSquareAt(move.EndCoords).GetGhostPawn();
-                    if (ghostPawn != null && ghostPawn.Colour != piece.Colour)
-                    {
-                        return true;
-                    }
+                    PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
+                    PieceRemoval capture = new PieceRemoval(capturedPiece, _board.GetCoordsOfPiece(capturedPiece));
                 }
             }
-            return false;
+            return chessMove;
         }
+
+        public ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CheckMovementVector(PieceColour colour, Coords StartCoords, Coords EndCoords)
+        {
+            bool verifiedVector = false;
+            int ChangeX = EndCoords.X - StartCoords.X;
+            int ChangeY = EndCoords.Y - StartCoords.Y;
+
+            int expectedYDirection = (colour == PieceColour.White ? 1 : -1);
+            if (Math.Abs(ChangeX) == 1 && ChangeY == expectedYDirection)
+            {
+                verifiedVector = true;
+            }
+            return verifiedVector;
+        }
+
+        private IPiece GetCapturedPawn(Coords StartCoords, Coords EndCoords)
+        {
+            Coords ExpectedCapturePawnCoords = new Coords(EndCoords.X, StartCoords.Y);
+            IPiece capturedPiece = _board.GetSquareAt(ExpectedCapturePawnCoords).Piece;
+            if (capturedPiece != null && capturedPiece.GetType() == typeof(Pawn))
+            {
+                return capturedPiece;
+            }
+            return null;
+        }
+
+        private bool CheckPreviousMoveWasDoubleByCapturedPawn(IPiece capturedPawn, Coords currentCapturedPawnCoords)
+        {
+            bool wasDoubleByCapturedPawn = false;
+            IChessMove previousMove = _board.GetPreviousMove();
+            if (previousMove != null) 
+            {
+                _board.UndoLastMove();
+                Coords previousCapturedPawnCoords = _board.GetCoordsOfPiece(capturedPawn);
+                _board.MakeMove(previousMove);
+
+                if (Math.Abs(currentCapturedPawnCoords.Y - previousCapturedPawnCoords.Y) == 2)
+                {
+                    wasDoubleByCapturedPawn = true;
+                }
+            }
+            return wasDoubleByCapturedPawn;
+        }
+
     }
 }

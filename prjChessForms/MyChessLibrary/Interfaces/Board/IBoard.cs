@@ -11,6 +11,8 @@ namespace prjChessForms.MyChessLibrary
         ISquare GetSquareAt(Coords coords);
         ICollection<IPiece> GetPieces(PieceColour colour);
         Coords GetCoordsOfPiece(IPiece piece);
-        void MakeMove(Move move);
+        void MakeMove(IChessMove move);
+        IChessMove GetPreviousMove();
+
     }
 }

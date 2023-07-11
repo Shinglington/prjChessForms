@@ -57,8 +57,8 @@ namespace prjChessForms.MyChessLibrary
             {
                 if (movingPiece.CanMove(_board, StartCoords, EndCoords))
                 {
-                    Move movement = new Move(movingPiece, StartCoords, EndCoords);
-                    Capture capture = new Capture(capturedPiece, EndCoords);
+                    PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
+                    PieceRemoval capture = new PieceRemoval(capturedPiece, EndCoords);
                     chessMove = new ChessMove(new List<IChessMove>() { capture, movement });
                 }
             }
@@ -71,7 +71,7 @@ namespace prjChessForms.MyChessLibrary
 
             if (movingPiece.CanMove(_board, StartCoords, EndCoords))
             {
-                Move movement = new Move(movingPiece, StartCoords, EndCoords);
+                PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
                 chessMove = new ChessMove(new List<IChessMove>() { movement });
             }
             return chessMove;

@@ -97,7 +97,7 @@ namespace prjChessForms.MyChessLibrary
             {
                 try
                 {
-                    Move move = await GetChessMove(cToken);
+                    PieceMovement move = await GetChessMove(cToken);
                     CapturePiece(FullRulebook.MakeMove(_board, CurrentPlayer.Colour, move));
                     ChangeSelection(null);
                     if (FullRulebook.RequiresPromotion(_board, move.EndCoords))
@@ -118,11 +118,11 @@ namespace prjChessForms.MyChessLibrary
             cts.Cancel();
         }
 
-        private async Task<Move> GetChessMove(CancellationToken cToken)
+        private async Task<PieceMovement> GetChessMove(CancellationToken cToken)
         {
             Coords fromCoords = Coords.Null;
             Coords toCoords = Coords.Null;
-            Move move = new ChessMove();
+            PieceMovement move = new ChessMove();
             bool completeInput = false;
             _waitingForClick = true;
             _timer.Start();
@@ -218,7 +218,7 @@ namespace prjChessForms.MyChessLibrary
                 if (selectedPiece != null)
                 {
                     selectedCoords = GetCoordsOf(selectedPiece);
-                    foreach (Move m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
+                    foreach (PieceMovement m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
                     {
                         endCoords.Add(m.EndCoords);
                     }

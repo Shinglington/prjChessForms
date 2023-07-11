@@ -2,9 +2,9 @@
 
 namespace prjChessForms.MyChessLibrary
 {
-    public class Move : IChessMove
+    public class PieceMovement : IChessMove
     {
-        public Move(IPiece piece, Coords startCoords, Coords endCoords)
+        public PieceMovement(IPiece piece, Coords startCoords, Coords endCoords)
         {
             MovedPiece = piece;
             StartCoords = startCoords;
