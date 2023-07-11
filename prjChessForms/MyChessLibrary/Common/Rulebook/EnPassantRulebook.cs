@@ -2,6 +2,7 @@
 using prjChessForms.MyChessLibrary.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -34,7 +35,22 @@ namespace prjChessForms.MyChessLibrary
 
         public ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece)
         {
-            throw new NotImplementedException();
+            ICollection<IChessMove> possibleMoves = new List<IChessMove>();
+            Coords pieceCoords = _board.GetCoordsOfPiece(piece);
+            if (piece.GetType() == typeof(Pawn))
+            {
+                IChessMove move;
+                int changeY = piece.Colour == PieceColour.White ? 1 : -1;
+                for (int changeX = -1; changeX <= 1; changeX+=2)
+                {
+                    move = ProcessChessMove(pieceCoords, new Coords(pieceCoords.X + changeX, pieceCoords.Y + changeY));
+                    if (move != null)
+                    {
+                        possibleMoves.Add(move);
+                    }
+                }
+                return possibleMoves;
+            }
         }
 
         private bool CheckMovementVector(PieceColour colour, Coords StartCoords, Coords EndCoords)
@@ -43,7 +59,7 @@ namespace prjChessForms.MyChessLibrary
             int ChangeX = EndCoords.X - StartCoords.X;
             int ChangeY = EndCoords.Y - StartCoords.Y;
 
-            int expectedYDirection = (colour == PieceColour.White ? 1 : -1);
+            int expectedYDirection = colour == PieceColour.White ? 1 : -1;
             if (Math.Abs(ChangeX) == 1 && ChangeY == expectedYDirection)
             {
                 verifiedVector = true;
