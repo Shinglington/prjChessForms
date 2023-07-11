@@ -8,17 +8,17 @@ namespace prjChessForms.MyChessLibrary
     class MoveMaker : IMoveMaker
     {
         private IBoard _board;
-        private Stack<Move> _moveStack;
+        private Stack<IChessMove> _moveStack;
         public void SetBoard(IBoard board)
         {
             _board = board;
             ResetMoveStack();
         }
-        public void MakeMove(Move move)
+        public void MakeMove(IChessMove move)
         {
             try
             {
-                MovePiece(move);
+                move.ExecuteMove(_board);
                 _moveStack.Push(move);
             }
             catch (Exception e)
@@ -29,30 +29,15 @@ namespace prjChessForms.MyChessLibrary
 
         public void UndoLastMove()
         {
-            Move lastMove = _moveStack.Pop();
-            MovePiece(new Move(lastMove.MovedPiece, lastMove.EndCoords, lastMove.StartCoords));
+            IChessMove lastMove = _moveStack.Pop();
+            lastMove.ReverseMove(_board);
         }
 
-        public Move GetLastMove(Move move) => _moveStack.Peek();
+        public IChessMove GetLastMove() => _moveStack.Peek();
 
         private void ResetMoveStack()
         {
-            _moveStack = new Stack<Move>();
-        }
-
-        private void MovePiece(Move move)
-        {
-            Coords StartCoords = move.StartCoords;
-            Coords EndCoords = move.EndCoords;
-            IPiece p = move.MovedPiece;
-            if (p != null)
-            {
-                _board.GetSquareAt(EndCoords).Piece = p;
-                _board.GetSquareAt(StartCoords).Piece = null;
-                p.HasMoved = true;
-                return;
-            }
-            throw new ArgumentException(string.Format("Invalid move {0}", move));
+            _moveStack = new Stack<IChessMove>();
         }
     }
 }

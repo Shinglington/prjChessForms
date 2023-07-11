@@ -3,8 +3,8 @@
     public interface IMoveMaker
     {
         void SetBoard(IBoard board);
-        void MakeMove(Move move);
+        void MakeMove(IChessMove move);
         void UndoLastMove();
-        Move GetLastMove(Move move);
+        IChessMove GetLastMove();
     }
 }
