@@ -1,5 +1,4 @@
 ﻿using prjChessForms.MyChessLibrary.DataClasses.ChessMoves;
-using System;
 using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
@@ -18,22 +17,21 @@ namespace prjChessForms.MyChessLibrary
             IPiece capturedPiece = _board.GetSquareAt(EndCoords).Piece;
             IChessMove chessMove = null;
 
-            if (movedPiece != null) 
+            if (movedPiece != null)
             {
                 if (capturedPiece != null)
                 {
-                    chessMove = ProcessCapture(StartCoords, EndCoords);
+                    chessMove = ProcessCapture(movedPiece, capturedPiece, StartCoords, EndCoords);
                 }
                 else
                 {
-                    chessMove = ProcessMove(StartCoords, EndCoords);
+                    chessMove = ProcessMove(movedPiece, StartCoords, EndCoords);
                 }
             }
-
             return chessMove;
         }
 
-        public ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
+        public ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece)
         {
             ICollection<IChessMove> possibleMoves = new List<IChessMove>();
             Coords pieceCoords = _board.GetCoordsOfPiece(piece);
@@ -52,31 +50,30 @@ namespace prjChessForms.MyChessLibrary
             return possibleMoves;
         }
 
-        private IChessMove ProcessCapture(Coords StartCoords, Coords EndCoords)
+        private IChessMove ProcessCapture(IPiece movingPiece, IPiece capturedPiece, Coords StartCoords, Coords EndCoords)
         {
-            ChessMove chessMove = null; 
-            Capture capture = null;
-            Move move = null;
-            PieceColour colour = movedPiece.Colour;
-            if (movedPiece.CanMove(_board, move))
+            ChessMove chessMove = null;
+            if (movingPiece.Colour != capturedPiece.Colour)
             {
-                if (capturedPiece == null || capturedPiece.Colour != colour)
+                if (movingPiece.CanMove(_board, StartCoords, EndCoords))
                 {
-                    if (!_board.CheckMoveInCheck(colour, move))
-                    {
-                        legal = true;
-                    }
+                    Move movement = new Move(movingPiece, StartCoords, EndCoords);
+                    Capture capture = new Capture(capturedPiece, EndCoords);
+                    chessMove = new ChessMove(new List<IChessMove>() { capture, movement });
                 }
             }
             return chessMove;
         }
 
-        private IChessMove ProcessMove(Coords StartCoords, Coords EndCoords)
+        private IChessMove ProcessMove(IPiece movingPiece, Coords StartCoords, Coords EndCoords)
         {
             ChessMove chessMove = null;
 
-
-
+            if (movingPiece.CanMove(_board, StartCoords, EndCoords))
+            {
+                Move movement = new Move(movingPiece, StartCoords, EndCoords);
+                chessMove = new ChessMove(new List<IChessMove>() { movement });
+            }
             return chessMove;
         }
 
