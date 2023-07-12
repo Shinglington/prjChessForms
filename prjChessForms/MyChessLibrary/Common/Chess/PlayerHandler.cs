@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
 {
-    class PlayerHandler : IPlayerManager
+    class PlayerHandler : IPlayerHandler
     {
         private ICollection<IPlayer> _players;
 
-        public void SetupPlayers()
+        public void SetupPlayers(TimeSpan gameTime)
         {
             _players = new List<IPlayer>();
             foreach (PieceColour colour in Enum.GetValues(typeof(PieceColour)))
             {
-                _players.Add(new HumanPlayer(colour, new TimeSpan(0, 3, 0)));
+                _players.Add(new HumanPlayer(colour, gameTime));
             }
         }
 

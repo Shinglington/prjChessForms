@@ -1,16 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary
+﻿namespace prjChessForms.MyChessLibrary
 {
     class PromotionHandler : IPromotionHandler
     {
-        bool PromotionNeeded(PieceMovement move)
-        {
+        private bool _awaitingPromotionInput;
+        private PromotionOption _selectedPromotion;
 
+        public PromotionHandler()
+        {
+            _awaitingPromotionInput = false;
+        }
+        public bool PromotionNeeded(IChessMove move)
+        {
+            return false;
+        }
+
+        public void SendPromotion(PromotionOption option)
+        {
+            if (_awaitingPromotionInput)
+            {
+                Debug.WriteLine("Promotion received to {0}", option.ToString());
+                _selectedPromotion = option;
+                _semaphoreReceiveClick.Release();
+            }
         }
     }
 }

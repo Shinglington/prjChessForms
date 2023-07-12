@@ -68,7 +68,7 @@
     <Compile Include="MyChessLibrary\Common\Board\PieceProvider.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\Chess.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\GameHandler.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\MoveInputHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\MoveHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.Designer.cs">
       <DependentUpon>OldChess.cs</DependentUpon>
@@ -76,15 +76,16 @@
     <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\PlayerHandler.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\ChessGameDetails.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\PieceRemoval.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\ChessMove.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChessInputController.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IGameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IGameHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IInputHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IMoveInputHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IPlayerManager.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\IMoveChecker.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\IMoveHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\IPlayerHandler.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IPromotionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\PromotionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\CastlingRulebook.cs" />

@@ -9,6 +9,6 @@ namespace prjChessForms.MyChessLibrary
     public interface IGameHandler
     {
         void SetupNewGame(IChess chess);
-        GameResult PlayGame();
+        Task<GameOverEventArgs> PlayGame();
     }
 }

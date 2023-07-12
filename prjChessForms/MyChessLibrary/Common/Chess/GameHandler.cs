@@ -11,9 +11,10 @@ namespace prjChessForms.MyChessLibrary
     {
         private IChess _chess;
         private readonly ITimeManager _timeManager;
-        private readonly IPlayerManager _playerManager;
+        private readonly IPlayerHandler _playerManager;
         private readonly IGameFinishedChecker _gameFinishedChecker;
-        public GameHandler(IPlayerManager playerManager, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
+        private readonly IMoveHandler _moveHandler;
+        public GameHandler(IPlayerHandler playerManager, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
         {
             _timeManager = timeManager;
             _playerManager = playerManager;
@@ -26,16 +27,15 @@ namespace prjChessForms.MyChessLibrary
             _timeManager.SetupWithPlayers(_playerManager);
         }
 
-        public GameResult PlayGame()
+        public async Task<GameOverEventArgs> PlayGame()
         {
             GameResult result = GameResult.Unfinished;
             _timeManager.StartTimer();
             while (result == GameResult.Unfinished)
             {
-
                 try
                 {
-                    PieceMovement move = await _inputHandler.GetChessMove(cToken);
+                    IChessMove move = await _inputHandler.GetChessMove(cToken);
                     CapturePiece(FullRulebook.MakeMove(_board, CurrentPlayer.Colour, move));
                     ChangeSelection(null);
                     if (FullRulebook.RequiresPromotion(_board, move.EndCoords))

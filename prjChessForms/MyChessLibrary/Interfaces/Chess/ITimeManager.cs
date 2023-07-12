@@ -8,7 +8,7 @@ namespace prjChessForms.MyChessLibrary
 {
     public interface ITimeManager
     {
-        void SetupWithPlayers(IPlayerManager playerManager);
+        void SetupWithPlayers(IPlayerHandler playerManager);
         void StartTimer();
         void StopTimer();
     }

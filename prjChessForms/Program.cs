@@ -35,8 +35,8 @@ namespace prjChessForms
             };
             IRulebook fullRulebook = new FullRulebook(board, subRulebooks);
 
-            IPlayerManager playerHandler = new PlayerHandler();
-            IMoveInputHandler moveInputHandler = new MoveInputHandler(fullRulebook);
+            IPlayerHandler playerHandler = new PlayerHandler();
+            IMoveHandler moveInputHandler = new MoveHandler(fullRulebook);
 
             IChess chess = new Chess(board, playerHandler, moveInputHandler);
 

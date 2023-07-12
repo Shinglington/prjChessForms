@@ -1,6 +1,6 @@
 ﻿namespace prjChessForms.MyChessLibrary
 {
-    public interface IPlayerManager
+    public interface IPlayerHandler
     {
         void SetupPlayers();
         IPlayer GetPlayer(PieceColour color);

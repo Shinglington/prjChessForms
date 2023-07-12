@@ -1,6 +1,6 @@
 ﻿namespace prjChessForms.MyChessLibrary
 {
-    public interface IMoveInputHandler
+    public interface IMoveHandler
     {
         void AttemptMakeMove(IBoard board, Coords StartCoords, Coords EndCoords);
     }

@@ -29,7 +29,7 @@ namespace prjChessForms.MyChessLibrary
             return processedMove;
         }
 
-        ICollection<IChessMove> IRulebook.GetPossibleMovesForPiece(IPiece piece)
+        public ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece)
         {
             ICollection<IChessMove> PossibleMoves = new List<IChessMove>();
             foreach (IRulebook rulebook in _rulebooks)
@@ -41,6 +41,21 @@ namespace prjChessForms.MyChessLibrary
             }
             return PossibleMoves;
         }
+
+        public bool CheckFirstSelectedCoords(Coords coords)
+        {
+            bool validFirstSelection = false;
+            foreach (IRulebook rulebook in _rulebooks)
+            {
+                validFirstSelection = rulebook.CheckFirstSelectedCoords(coords);
+                if (validFirstSelection)
+                {
+                    break;
+                }
+            }
+            return validFirstSelection;
+        }
+
 
         public bool RequiresPromotion(Coords pieceCoords)
         {
@@ -78,6 +93,5 @@ namespace prjChessForms.MyChessLibrary
             }
             return check;
         }
-
     }
 }

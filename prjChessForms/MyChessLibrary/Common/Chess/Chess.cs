@@ -9,11 +9,10 @@ namespace prjChessForms.MyChessLibrary
     {
         private readonly IBoard _board;
         private readonly IGameHandler _gameHandler;
-        private readonly IPlayerManager _playerHandler;
-        private readonly IMoveInputHandler _moveInputHandler;
+        private readonly IPlayerHandler _playerHandler;
+        private readonly IMoveHandler _moveInputHandler;
         private readonly IChessChangesObserver _userInterfaceObserver;
         private readonly IChessInputController _chessInputController;
-        private readonly IInputHandler _inputHandler;
         private readonly ITimeManager _timeManager;
         private readonly IGameFinishedChecker _gameFinishedChecker;
 
@@ -22,9 +21,9 @@ namespace prjChessForms.MyChessLibrary
             _userInterfaceObserver = userInterfaceObserver;
         }
 
-        public Chess(IBoard board, IGameHandler gameHandler, IPlayerManager playerHandler, IMoveInputHandler moveInputHandler,
+        public Chess(IBoard board, IGameHandler gameHandler, IPlayerHandler playerHandler, IMoveHandler moveInputHandler,
             IChessChangesObserver userInterfaceObserver, IChessInputController chessInputController,
-            IInputHandler inputHandler, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
+            ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
         {
             _board = board;
             _gameHandler = _gameHandler;
@@ -33,12 +32,11 @@ namespace prjChessForms.MyChessLibrary
             _moveInputHandler = moveInputHandler;
             _userInterfaceObserver = userInterfaceObserver;
             _chessInputController = chessInputController;
-            _inputHandler = inputHandler;
             _timeManager = timeManager;
         }
         public IPlayer GetPlayer(PieceColour colour) => _playerHandler.GetPlayer(colour);
 
-        public async Task PlayGame() => _gameHandler.PlayGame();
+        public Task<GameOverEventArgs> PlayGame() => _gameHandler.PlayGame();
 
         public void SendCoords(Coords coords)
         {
