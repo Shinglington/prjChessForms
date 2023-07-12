@@ -15,12 +15,12 @@ namespace prjChessForms.MyChessLibrary
             _rulebooks = rulebooks;
         }
 
-        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
+        public IChessMove ProcessChessMove(PieceColour colourOfMover, Coords startCoords, Coords endCoords)
         {
             IChessMove processedMove = null;
             foreach (IRulebook rulebook in _rulebooks)
             {
-                processedMove = rulebook.ProcessChessMove(StartCoords, EndCoords);
+                processedMove = rulebook.ProcessChessMove(colourOfMover, startCoords, endCoords);
                 if (processedMove != null)
                 {
                     break;
@@ -42,12 +42,12 @@ namespace prjChessForms.MyChessLibrary
             return PossibleMoves;
         }
 
-        public bool CheckFirstSelectedCoords(Coords coords)
+        public bool CheckFirstSelectedCoords(PieceColour colourOfMover, Coords coords)
         {
             bool validFirstSelection = false;
             foreach (IRulebook rulebook in _rulebooks)
             {
-                validFirstSelection = rulebook.CheckFirstSelectedCoords(coords);
+                validFirstSelection = rulebook.CheckFirstSelectedCoords(colourOfMover, coords);
                 if (validFirstSelection)
                 {
                     break;

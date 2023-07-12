@@ -3,8 +3,8 @@ namespace prjChessForms.MyChessLibrary
 {
     public interface IRulebook
     {
-        IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords);
+        IChessMove ProcessChessMove(PieceColour colourOfMover, Coords startCoords, Coords endCoords);
         ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece);
-        bool CheckFirstSelectedCoords(Coords coords);
+        bool CheckFirstSelectedCoords(PieceColour colourOfMover, Coords coords);
     }
 }

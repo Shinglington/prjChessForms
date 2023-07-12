@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary.Interfaces.Chess
+﻿namespace prjChessForms.MyChessLibrary
 {
-    internal class IMoveChecker
+    public interface IMoveChecker
     {
+        bool CheckCanMove(IPlayer player, Coords coords);
+
     }
 }

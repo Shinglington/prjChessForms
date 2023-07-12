@@ -2,7 +2,6 @@
 using prjChessForms.MyChessLibrary.Pieces;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -14,16 +13,17 @@ namespace prjChessForms.MyChessLibrary
             _board = board;
         }
 
-        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
+        public IChessMove ProcessChessMove(PieceColour colourOfMover, Coords startCoords, Coords endCoords)
         {
             IChessMove chessMove = null;
-            IPiece movingPiece = _board.GetSquareAt(StartCoords).Piece;
-            if (movingPiece != null && movingPiece.GetType() == typeof(Pawn))
+            // Below only true if the piece at startCoords is a pawn
+            if (CheckFirstSelectedCoords(colourOfMover, startCoords))
             {
-                IPiece capturedPiece = GetCapturedPawn(StartCoords, EndCoords);
-                if (IsValidEnPassant(movingPiece, capturedPiece, StartCoords, EndCoords))
+                IPiece movingPiece = _board.GetSquareAt(startCoords).Piece;
+                IPiece capturedPiece = GetCapturedPawn(startCoords, endCoords);
+                if (IsValidEnPassant(movingPiece, capturedPiece, startCoords, endCoords))
                 {
-                    PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
+                    PieceMovement movement = new PieceMovement(movingPiece, startCoords, endCoords);
                     PieceRemoval capture = new PieceRemoval(capturedPiece, _board.GetCoordsOfPiece(capturedPiece));
                     chessMove = new ChessMove(new List<IChessMove> { capture, movement });
                 }
@@ -40,9 +40,9 @@ namespace prjChessForms.MyChessLibrary
                 IChessMove move;
                 int changeY = piece.Colour == PieceColour.White ? 1 : -1;
                 // Only possible En Passant moves would be diagonal captures, so check only them
-                for (int changeX = -1; changeX <= 1; changeX+=2)
+                for (int changeX = -1; changeX <= 1; changeX += 2)
                 {
-                    move = ProcessChessMove(pieceCoords, new Coords(pieceCoords.X + changeX, pieceCoords.Y + changeY));
+                    move = ProcessChessMove(piece.Colour, pieceCoords, new Coords(pieceCoords.X + changeX, pieceCoords.Y + changeY));
                     if (move != null)
                     {
                         possibleMoves.Add(move);
@@ -52,10 +52,10 @@ namespace prjChessForms.MyChessLibrary
             return possibleMoves;
         }
 
-        public bool CheckFirstSelectedCoords(Coords coords)
+        public bool CheckFirstSelectedCoords(PieceColour colourOfMover, Coords coords)
         {
             IPiece pawn = _board.GetSquareAt(coords).Piece;
-            return pawn != null && pawn.GetType() == typeof(Pawn);
+            return pawn != null && pawn.GetType() == typeof(Pawn) && pawn.Colour == colourOfMover;
         }
 
         private bool IsValidEnPassant(IPiece movingPiece, IPiece capturedPiece, Coords StartCoords, Coords EndCoords)
@@ -95,7 +95,7 @@ namespace prjChessForms.MyChessLibrary
         {
             bool wasDoubleByCapturedPawn = false;
             IChessMove previousMove = _board.GetPreviousMove();
-            if (previousMove != null) 
+            if (previousMove != null)
             {
                 _board.UndoLastMove();
                 Coords previousCapturedPawnCoords = _board.GetCoordsOfPiece(capturedPawn);

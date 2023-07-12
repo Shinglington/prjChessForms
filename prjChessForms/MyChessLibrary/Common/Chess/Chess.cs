@@ -38,17 +38,9 @@ namespace prjChessForms.MyChessLibrary
 
         public Task<GameOverEventArgs> PlayGame() => _gameHandler.PlayGame();
 
-        public void SendCoords(Coords coords)
-        {
-            if (_waitingForClick)
-            {
-                Debug.WriteLine("Model received coords input of {0}", coords);
-                _clickedCoords = coords;
-                _semaphoreReceiveClick.Release();
-            }
-        }
+        public void SendCoords(Coords coords) => _moveInputHandler.ReceiveMoveInput(coords);
 
-        public void SendPromotion(PromotionOption option)
+        public void SendPromotion(PromotionOption option) => _promotionHandler.ReceivePromotionInput(option);
         {
             if (_waitingForPromotion)
             {

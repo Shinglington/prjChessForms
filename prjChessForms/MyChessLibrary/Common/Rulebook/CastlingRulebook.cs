@@ -15,21 +15,26 @@ namespace prjChessForms.MyChessLibrary
             _board = board;
         }
 
-        public IChessMove ProcessChessMove(Coords StartCoords, Coords EndCoords)
+        public IChessMove ProcessChessMove(PieceColour colourOfMover, Coords startCoords, Coords endCoords)
         {
             IChessMove chessMove = null;
-            IPiece king = _board.GetSquareAt(StartCoords).Piece;
-            if (king != null && king.GetType() == typeof(King) && CheckMovementVector(StartCoords, EndCoords))
+            // This only true if the first coord has a king
+            if (CheckFirstSelectedCoords(colourOfMover, startCoords))
             {
-                Coords rookStartCoords = GetRookStartCoords(StartCoords, EndCoords);
-                Coords rookEndCoords = GetRookEndCoords(StartCoords, EndCoords);
-                IPiece rook = _board.GetSquareAt(rookStartCoords).Piece;
-                if (IsValidCastling(StartCoords, EndCoords, rookStartCoords, rookEndCoords))
+                IPiece king = _board.GetSquareAt(startCoords).Piece;
+                if (CheckMovementVector(startCoords, endCoords))
                 {
-                    PieceMovement kingMovement = new PieceMovement(king, StartCoords, EndCoords);
-                    PieceMovement rookMovement = new PieceMovement(rook, rookStartCoords, rookEndCoords);
-                    chessMove = new ChessMove(new List<IChessMove> { rookMovement, kingMovement });
+                    Coords rookStartCoords = GetRookStartCoords(startCoords, endCoords);
+                    Coords rookEndCoords = GetRookEndCoords(startCoords, endCoords);
+                    IPiece rook = _board.GetSquareAt(rookStartCoords).Piece;
+                    if (IsValidCastling(startCoords, endCoords, rookStartCoords, rookEndCoords))
+                    {
+                        PieceMovement kingMovement = new PieceMovement(king, startCoords, endCoords);
+                        PieceMovement rookMovement = new PieceMovement(rook, rookStartCoords, rookEndCoords);
+                        chessMove = new ChessMove(new List<IChessMove> { rookMovement, kingMovement });
+                    }
                 }
+
             }
             return chessMove;
         }
@@ -40,15 +45,24 @@ namespace prjChessForms.MyChessLibrary
             Coords pieceCoords = _board.GetCoordsOfPiece(piece);
             if (piece.GetType() == typeof(King))
             {
-
+                IChessMove move;
+                // Only 2 possible castles, either side of king so changeX -2 or 2
+                for (int changeX = -2; changeX <= 2; changeX += 4)
+                {
+                    move = ProcessChessMove(piece.Colour, pieceCoords, new Coords(pieceCoords.X + changeX, pieceCoords.Y));
+                    if (move != null)
+                    {
+                        possibleMoves.Add(move);
+                    }
+                }
             }
             return possibleMoves;
         }
 
-        public bool CheckFirstSelectedCoords(Coords coords)
+        public bool CheckFirstSelectedCoords(PieceColour colourOfMover, Coords coords)
         {
             IPiece king = _board.GetSquareAt(coords).Piece;
-            return king != null && king.GetType() == typeof(King) && !king.HasMoved;
+            return king != null && king.Colour == colourOfMover && !king.HasMoved && king.GetType() == typeof(King);
         }
 
         private bool IsValidCastling(Coords kingStart, Coords kingEnd, Coords rookStart, Coords rookEnd)
@@ -57,7 +71,6 @@ namespace prjChessForms.MyChessLibrary
             IPiece king = _board.GetSquareAt(kingStart).Piece;
             return CheckClearPath(kingStart, kingEnd) && rook != null && rook.GetType() == typeof(Rook) && !king.HasMoved && !rook.HasMoved;
         }
-
 
         private Coords GetRookStartCoords(Coords KingStartCoords, Coords KingEndCoords)
         {

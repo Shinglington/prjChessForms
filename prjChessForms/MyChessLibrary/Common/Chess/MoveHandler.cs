@@ -1,5 +1,6 @@
 ﻿using prjChessForms.MyChessLibrary.DataClasses.ChessMoves;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,20 +10,36 @@ namespace prjChessForms.MyChessLibrary
     class MoveHandler : IMoveHandler
     {
         private readonly IRulebook _rulebook;
+        private readonly IMoveChecker _moveChecker;
 
+        private SemaphoreSlim _semaphoreReceiveClick;
         private bool _awaitingClick;
-        public MoveHandler(IRulebook rulebook)
+        private Coords _clickedCoords;
+        public MoveHandler(IRulebook rulebook, IMoveChecker moveChecker)
         {
             _rulebook = rulebook;
+            _moveChecker = moveChecker;
+
+            _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
+            _awaitingClick = false;
         }
 
-        public Task<IChessMove> GetChessMove(CancellationToken cToken)
+        public void ReceiveMoveInput(Coords coords)
+        {
+            if (_awaitingClick)
+            {
+                Debug.WriteLine("Model received coords input of {0}", coords);
+                _clickedCoords = coords;
+                _semaphoreReceiveClick.Release();
+            }
+        }
+
+        public async Task<IChessMove> GetChessMove(CancellationToken cToken)
         {
             Coords fromCoords = Coords.Null;
             Coords toCoords = Coords.Null;
             bool completeInput = false;
             _awaitingClick = true;
-            _timer.Start();
             while (!completeInput)
             {
                 Debug.WriteLine("Waiting for click");
@@ -51,9 +68,7 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             _awaitingClick = false;
-            _timer.Stop();
             return move;
-
         }
 
         public void AttemptMakeMove(IBoard board, Coords StartCoords, Coords EndCoords)
@@ -66,6 +81,24 @@ namespace prjChessForms.MyChessLibrary
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        private void ChangeSelection(Piece selectedPiece)
+        {
+            if (PieceSelectionChanged != null)
+            {
+                List<Coords> endCoords = new List<Coords>();
+                Coords selectedCoords = new Coords();
+                if (selectedPiece != null)
+                {
+                    selectedCoords = GetCoordsOf(selectedPiece);
+                    foreach (PieceMovement m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
+                    {
+                        endCoords.Add(m.EndCoords);
+                    }
+                }
+                PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(selectedPiece, selectedCoords, endCoords));
             }
         }
     }
