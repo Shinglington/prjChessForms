@@ -7,7 +7,7 @@ namespace prjChessForms.MyChessLibrary
     {
         void ReceiveMoveInput(Coords clickedCoords);
         Task<IChessMove> GetChessMove(CancellationToken cToken);
-        void AttemptMakeMove(IBoard board, Coords StartCoords, Coords EndCoords);
+        void AttemptMakeMove(IBoard board, IChessMove move);
 
     }
 }

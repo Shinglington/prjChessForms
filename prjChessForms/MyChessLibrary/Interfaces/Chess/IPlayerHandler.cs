@@ -6,5 +6,7 @@ namespace prjChessForms.MyChessLibrary
     {
         void SetupPlayers(TimeSpan gameTime);
         IPlayer GetPlayer(PieceColour color);
+        IPlayer GetCurrentPlayer();
+        void NextPlayerTurn();
     }
 }

@@ -3,6 +3,6 @@
     public interface IPromotionHandler
     {
         bool PromotionNeeded(IChessMove move);
-        void SendPromotion(PromotionOption option);
+        void ReceivePromotion(PromotionOption option);
     }
 }

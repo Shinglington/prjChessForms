@@ -6,11 +6,11 @@ namespace prjChessForms.Controller
     class ChessInputController : IChessInputController
     {
         private IChess _chess;
-        private IInputChangesObserver _userInterface;
-        public ChessInputController(IChess chess, IInputChangesObserver _chessUserInterface)
+        private IChessInterface _userInterface;
+        public ChessInputController(IChess chess, IChessInterface chessInterface)
         {
             _chess = chess;
-            _userInterface= _chessUserInterface;
+            _userInterface= chessInterface;
 
             _userInterface.SquareClicked += OnBoardClickReceived;
             _userInterface.PromotionSelected += OnPromotionReceived;

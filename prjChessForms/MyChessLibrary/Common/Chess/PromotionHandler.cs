@@ -14,7 +14,7 @@
             return false;
         }
 
-        public void SendPromotion(PromotionOption option)
+        public void ReceivePromotion(PromotionOption option)
         {
             if (_awaitingPromotionInput)
             {

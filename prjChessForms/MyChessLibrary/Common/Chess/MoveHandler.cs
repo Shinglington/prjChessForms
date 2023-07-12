@@ -10,15 +10,15 @@ namespace prjChessForms.MyChessLibrary
     class MoveHandler : IMoveHandler
     {
         private readonly IRulebook _rulebook;
-        private readonly IMoveChecker _moveChecker;
+        private readonly ICoordSelectionHandler _coordsSelectionHandler;
 
         private SemaphoreSlim _semaphoreReceiveClick;
         private bool _awaitingClick;
         private Coords _clickedCoords;
-        public MoveHandler(IRulebook rulebook, IMoveChecker moveChecker)
+        public MoveHandler(IRulebook rulebook, ICoordSelectionHandler coordSelectionHandler)
         {
             _rulebook = rulebook;
-            _moveChecker = moveChecker;
+            _coordsSelectionHandler = coordSelectionHandler;
 
             _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
             _awaitingClick = false;
@@ -34,46 +34,43 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        public async Task<IChessMove> GetChessMove(CancellationToken cToken)
+        public async Task<IChessMove> GetChessMove(PieceColour colourOfMover, CancellationToken cToken)
         {
             Coords fromCoords = Coords.Null;
-            Coords toCoords = Coords.Null;
+
+            IChessMove chessMove = null;
             bool completeInput = false;
             _awaitingClick = true;
-            while (!completeInput)
+            while (chessMove == null)
             {
                 Debug.WriteLine("Waiting for click");
                 await _semaphoreReceiveClick.WaitAsync(cToken);
                 Debug.WriteLine("Received click at {0}", _clickedCoords);
 
-                if (GetPieceAt(_clickedCoords) != null && GetPieceAt(_clickedCoords).Colour.Equals(CurrentPlayer.Colour))
+                if (_rulebook.CheckFirstSelectedCoords(colourOfMover, _clickedCoords))
                 {
-                    ChangeSelection(GetPieceAt(_clickedCoords));
+                    _coordsSelectionHandler.ChangeCoordsSelection(_clickedCoords);
                     fromCoords = _clickedCoords;
-                    toCoords = Coords.Null;
                 }
                 else if (!fromCoords.Equals(Coords.Null))
                 {
-                    toCoords = _clickedCoords;
-                }
-                // Check if move is valid now
-                if (!toCoords.IsNull && !fromCoords.IsNull && FullRulebook.CheckLegalMove(_board, CurrentPlayer.Colour, new ChessMove(fromCoords, toCoords)))
-                {
-                    move = new ChessMove(fromCoords, toCoords);
-                    completeInput = true;
-                }
-                else
-                {
-                    toCoords = Coords.Null;
+                    chessMove = _rulebook.ProcessChessMove(colourOfMover, fromCoords, _clickedCoords);
+
+                    // if still null, invalid move, so assume player wants to deselect piece
+                    if (chessMove == null)
+                    {
+                        fromCoords = null;
+                        _coordsSelectionHandler.ChangeCoordsSelection(fromCoords);
+                    }
                 }
             }
+            _coordsSelectionHandler.ChangeCoordsSelection(null);
             _awaitingClick = false;
-            return move;
+            return chessMove;
         }
 
-        public void AttemptMakeMove(IBoard board, Coords StartCoords, Coords EndCoords)
+        public void AttemptMakeMove(IBoard board, IChessMove move)
         {
-            IChessMove move = _rulebook.ProcessChessMove(StartCoords, EndCoords);
             try
             {
                 move.ExecuteMove(board);
@@ -81,24 +78,6 @@ namespace prjChessForms.MyChessLibrary
             catch (Exception e)
             {
                 throw e;
-            }
-        }
-
-        private void ChangeSelection(Piece selectedPiece)
-        {
-            if (PieceSelectionChanged != null)
-            {
-                List<Coords> endCoords = new List<Coords>();
-                Coords selectedCoords = new Coords();
-                if (selectedPiece != null)
-                {
-                    selectedCoords = GetCoordsOf(selectedPiece);
-                    foreach (PieceMovement m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
-                    {
-                        endCoords.Add(m.EndCoords);
-                    }
-                }
-                PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(selectedPiece, selectedCoords, endCoords));
             }
         }
     }

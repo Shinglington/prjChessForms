@@ -10,11 +10,13 @@ namespace prjChessForms.MyChessLibrary
         private readonly IBoard _board;
         private readonly IGameHandler _gameHandler;
         private readonly IPlayerHandler _playerHandler;
-        private readonly IMoveHandler _moveInputHandler;
+        private readonly IMoveHandler _moveHandler;
         private readonly IChessChangesObserver _userInterfaceObserver;
         private readonly IChessInputController _chessInputController;
         private readonly ITimeManager _timeManager;
         private readonly IGameFinishedChecker _gameFinishedChecker;
+        private readonly IPromotionHandler _promotionHandler;
+        private readonly ICoordSelectionHandler _coordsSelectionHandler;
 
         public Chess(IChessChangesObserver userInterfaceObserver)
         {
@@ -23,31 +25,23 @@ namespace prjChessForms.MyChessLibrary
 
         public Chess(IBoard board, IGameHandler gameHandler, IPlayerHandler playerHandler, IMoveHandler moveInputHandler,
             IChessChangesObserver userInterfaceObserver, IChessInputController chessInputController,
-            ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
+            ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker, IPromotionHandler promotionHandler,
+            ICoordSelectionHandler coordSelectionHandler)
         {
             _board = board;
-            _gameHandler = _gameHandler;
+            _gameHandler = gameHandler;
             _playerHandler = playerHandler;
-            _playerHandler.SetupPlayers();
-            _moveInputHandler = moveInputHandler;
+            _playerHandler.SetupPlayers(new System.TimeSpan(0, 3, 0));
+            _moveHandler = moveInputHandler;
             _userInterfaceObserver = userInterfaceObserver;
             _chessInputController = chessInputController;
             _timeManager = timeManager;
+            _promotionHandler = promotionHandler;
         }
         public IPlayer GetPlayer(PieceColour colour) => _playerHandler.GetPlayer(colour);
-
+        public IPlayer GetCurrentPlayer() => _playerHandler.GetCurrentPlayer();
         public Task<GameOverEventArgs> PlayGame() => _gameHandler.PlayGame();
-
-        public void SendCoords(Coords coords) => _moveInputHandler.ReceiveMoveInput(coords);
-
-        public void SendPromotion(PromotionOption option) => _promotionHandler.ReceivePromotionInput(option);
-        {
-            if (_waitingForPromotion)
-            {
-                Debug.WriteLine("Promotion received to {0}", option.ToString());
-                _selectedPromotion = option;
-                _semaphoreReceiveClick.Release();
-            }
-        }
+        public void SendCoords(Coords coords) => _moveHandler.ReceiveMoveInput(coords);
+        public void SendPromotion(PromotionOption option) => _promotionHandler.ReceivePromotion(option);
     }
 }
