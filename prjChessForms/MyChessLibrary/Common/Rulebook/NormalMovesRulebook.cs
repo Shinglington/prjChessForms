@@ -50,6 +50,12 @@ namespace prjChessForms.MyChessLibrary
             return possibleMoves;
         }
 
+        public bool CheckFirstSelectedCoords(Coords coords)
+        {
+            IPiece piece = _board.GetSquareAt(coords).Piece;
+            return piece != null;
+        }
+
         private IChessMove ProcessCapture(IPiece movingPiece, IPiece capturedPiece, Coords StartCoords, Coords EndCoords)
         {
             ChessMove chessMove = null;
@@ -76,6 +82,5 @@ namespace prjChessForms.MyChessLibrary
             }
             return chessMove;
         }
-
     }
 }

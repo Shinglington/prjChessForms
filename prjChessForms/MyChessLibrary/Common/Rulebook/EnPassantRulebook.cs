@@ -21,10 +21,7 @@ namespace prjChessForms.MyChessLibrary
             if (movingPiece != null && movingPiece.GetType() == typeof(Pawn))
             {
                 IPiece capturedPiece = GetCapturedPawn(StartCoords, EndCoords);
-                if (CheckMovementVector(movingPiece.Colour, StartCoords, EndCoords)
-                    && capturedPiece != null
-                    && capturedPiece.Colour != movingPiece.Colour
-                    && CheckPreviousMoveWasDoubleByCapturedPawn(capturedPiece, _board.GetCoordsOfPiece(capturedPiece)))
+                if (IsValidEnPassant(movingPiece, capturedPiece, StartCoords, EndCoords))
                 {
                     PieceMovement movement = new PieceMovement(movingPiece, StartCoords, EndCoords);
                     PieceRemoval capture = new PieceRemoval(capturedPiece, _board.GetCoordsOfPiece(capturedPiece));
@@ -53,6 +50,20 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             return possibleMoves;
+        }
+
+        public bool CheckFirstSelectedCoords(Coords coords)
+        {
+            IPiece pawn = _board.GetSquareAt(coords).Piece;
+            return pawn != null && pawn.GetType() == typeof(Pawn);
+        }
+
+        private bool IsValidEnPassant(IPiece movingPiece, IPiece capturedPiece, Coords StartCoords, Coords EndCoords)
+        {
+            return CheckMovementVector(movingPiece.Colour, StartCoords, EndCoords)
+                    && capturedPiece != null
+                    && capturedPiece.Colour != movingPiece.Colour
+                    && CheckPreviousMoveWasDoubleByCapturedPawn(capturedPiece, _board.GetCoordsOfPiece(capturedPiece));
         }
 
         private bool CheckMovementVector(PieceColour colour, Coords StartCoords, Coords EndCoords)
@@ -97,6 +108,5 @@ namespace prjChessForms.MyChessLibrary
             }
             return wasDoubleByCapturedPawn;
         }
-
     }
 }

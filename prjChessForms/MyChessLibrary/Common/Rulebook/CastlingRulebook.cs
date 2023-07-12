@@ -2,6 +2,7 @@
 using prjChessForms.MyChessLibrary.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -23,9 +24,7 @@ namespace prjChessForms.MyChessLibrary
                 Coords rookStartCoords = GetRookStartCoords(StartCoords, EndCoords);
                 Coords rookEndCoords = GetRookEndCoords(StartCoords, EndCoords);
                 IPiece rook = _board.GetSquareAt(rookStartCoords).Piece;
-                if (CheckClearPath(StartCoords, EndCoords)
-                    && rook != null && rook.GetType() == typeof(Rook)
-                    && !king.HasMoved && !rook.HasMoved)
+                if (IsValidCastling(StartCoords, EndCoords, rookStartCoords, rookEndCoords))
                 {
                     PieceMovement kingMovement = new PieceMovement(king, StartCoords, EndCoords);
                     PieceMovement rookMovement = new PieceMovement(rook, rookStartCoords, rookEndCoords);
@@ -46,34 +45,19 @@ namespace prjChessForms.MyChessLibrary
             return possibleMoves;
         }
 
-        private bool IsCastle(PieceMovement move)
+        public bool CheckFirstSelectedCoords(Coords coords)
         {
-            bool isCastleMove = false;
-            if (_board.GetSquareAt(move.StartCoords).Piece.GetType() == typeof(King) && !_board.GetSquareAt(move.StartCoords).Piece.HasMoved)
-            {
-                if (Math.Abs(move.EndCoords.Y - move.StartCoords.Y) == 0 && Math.Abs(move.EndCoords.X - move.StartCoords.X) == 2)
-                {
-                    int direction = move.EndCoords.X - move.StartCoords.X > 0 ? 1 : -1;
-                    Coords rookCoords = direction > 0 ? new Coords(_board.ColumnCount - 1, move.StartCoords.Y) : new Coords(0, move.StartCoords.Y);
-                    IPiece p = _board.GetSquareAt(rookCoords).Piece;
-                    if (p != null && p.GetType() == typeof(Rook) && !p.HasMoved)
-                    {
-                        isCastleMove = true;
-                        Coords currCoords = new Coords(move.StartCoords.X + direction, move.StartCoords.Y);
-                        while (!currCoords.Equals(rookCoords))
-                        {
-                            if (_board.GetSquareAt(currCoords).Piece != null || _board.CheckMoveInCheck(p.Colour, new ChessMove(move.StartCoords, currCoords)))
-                            {
-                                isCastleMove = false;
-                                break;
-                            }
-                            currCoords = new Coords(currCoords.X + direction, currCoords.Y);
-                        }
-                    }
-                }
-            }
-            return isCastleMove;
+            IPiece king = _board.GetSquareAt(coords).Piece;
+            return king != null && king.GetType() == typeof(King) && !king.HasMoved;
         }
+
+        private bool IsValidCastling(Coords kingStart, Coords kingEnd, Coords rookStart, Coords rookEnd)
+        {
+            IPiece rook = _board.GetSquareAt(rookStart).Piece;
+            IPiece king = _board.GetSquareAt(kingStart).Piece;
+            return CheckClearPath(kingStart, kingEnd) && rook != null && rook.GetType() == typeof(Rook) && !king.HasMoved && !rook.HasMoved;
+        }
+
 
         private Coords GetRookStartCoords(Coords KingStartCoords, Coords KingEndCoords)
         {
@@ -84,12 +68,14 @@ namespace prjChessForms.MyChessLibrary
             int RookXCoord = kingXMovement > 0 ? _board.ColumnCount - 1 : 0;
             return new Coords(RookXCoord, KingStartCoords.Y);
         }
+
         private Coords GetRookEndCoords(Coords KingStartCoords, Coords KingEndCoords)
         {
             int kingXDirection = KingEndCoords.X - KingStartCoords.X > 0 ? 1 : -1;
             // Rook new location is adjacent to new king location (or adjacent to old king location)
             return new Coords(KingStartCoords.X + kingXDirection, KingStartCoords.Y);
         }
+
         private bool CheckMovementVector(Coords StartCoords, Coords EndCoords)
         {
             bool verifiedVector = false;
@@ -114,7 +100,5 @@ namespace prjChessForms.MyChessLibrary
             }
             return clearPath;
         }
-
-
     }
 }
