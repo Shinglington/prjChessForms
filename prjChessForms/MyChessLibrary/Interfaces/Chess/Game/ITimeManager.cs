@@ -5,7 +5,7 @@ namespace prjChessForms.MyChessLibrary
     public interface ITimeManager
     {
         event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
-        void SetupWithPlayers(IPlayerHandler playerManager);
+        event EventHandler<TimeExpiredEventArgs> TimeExpired;
         void StartTimer();
         void StopTimer();
     }

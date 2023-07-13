@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace prjChessForms.MyChessLibrary
 {
@@ -6,6 +7,7 @@ namespace prjChessForms.MyChessLibrary
     {
         void SetupPlayers(TimeSpan gameTime);
         IPlayer GetCurrentPlayer();
+        IPlayer GetPlayer(PieceColour colour);
         void NextPlayerTurn();
     }
 }

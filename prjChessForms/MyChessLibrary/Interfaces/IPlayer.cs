@@ -8,7 +8,6 @@ namespace prjChessForms.MyChessLibrary
         PieceColour Colour { get; }
         TimeSpan RemainingTime { get; }
         ICollection<IPiece> CapturedPieces { get; }
-
         void TickTime(TimeSpan time);
         void AddCapturedPiece(IPiece piece);
     }

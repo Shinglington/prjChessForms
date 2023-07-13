@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary
@@ -12,12 +13,20 @@ namespace prjChessForms.MyChessLibrary
 
         private readonly IBoard _board;
         private readonly IPlayerHandler _playerHandler;
+        private readonly ITimeManager _timeManager;
         private readonly IRulebook _rulebook;
-        public GameFinishedChecker(IBoard board, IPlayerHandler playerHandler, IRulebook rulebook)
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
+        public GameFinishedChecker(IBoard board, IPlayerHandler playerHandler, IRulebook rulebook, ITimeManager timeManager)
         {
             _board = board;
             _playerHandler = playerHandler;
+            _timeManager = timeManager;
+
+            GameOver += (sender, e) => cts.Cancel();
+            timeManager.TimeExpired += HandleTimeExpiration;
         }
+        public CancellationToken cToken { get; set; }
         public GameOverEventArgs GetGameResult()
         {
             IPlayer currentPlayer = _playerHandler.GetCurrentPlayer();
@@ -32,12 +41,28 @@ namespace prjChessForms.MyChessLibrary
                 result = GameResult.Checkmate;
                 winner = currentPlayer;
             }
-            GameOverEventArgs gameOverEventArgs = new GameOverEventArgs() { Result = result, Winner = winner };
-            if (result != GameResult.Unfinished && GameOver != null)
+            GameOverEventArgs gameOverEventArgs = new GameOverEventArgs(result, winner);
+            if (result != GameResult.Unfinished)
             {
-                GameOver.Invoke(this, gameOverEventArgs);
+                InvokeGameOver(this, gameOverEventArgs);
             }
             return gameOverEventArgs;
+        }
+
+        private void InvokeGameOver(object sender, GameOverEventArgs e)
+        {
+            if (GameOver != null)
+            {
+                GameOver.Invoke(this, e);
+            }
+        }
+
+        private void HandleTimeExpiration(object sender, TimeExpiredEventArgs e)
+        {
+            PieceColour winnerColour = (e.PlayerWhoseTimeExpired.Colour == PieceColour.White ? PieceColour.Black : PieceColour.White);
+            IPlayer winner = _playerHandler.GetPlayer(winnerColour);
+            GameOverEventArgs gameOverEventArgs = new GameOverEventArgs(GameResult.Time, winner);
+            InvokeGameOver(this, gameOverEventArgs);
         }
 
         private bool IsInCheckmate(IPlayer player)

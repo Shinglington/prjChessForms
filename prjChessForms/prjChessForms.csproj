@@ -71,6 +71,7 @@
     <Compile Include="MyChessLibrary\Common\Chess\Game\CoordsSelectionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\Game\GameHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\Game\MoveHandler.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\TimeExpiredEventArgs.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\Game\TimeManager.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.Designer.cs">

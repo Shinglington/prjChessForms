@@ -51,24 +51,6 @@ namespace prjChessForms.MyChessLibrary
             observer.OnPlayerTimerTick(this, new PlayerTimerTickEventArgs(BlackPlayer));
         }
 
-        private void OnPlayerTimerTick(object sender, ElapsedEventArgs e)
-        {
-            TimeSpan interval = new TimeSpan(0, 0, 1);
-            if (CurrentPlayer.RemainingTime.Subtract(interval) < TimeSpan.Zero)
-            {
-                _timer.Elapsed -= OnPlayerTimerTick;
-                cts.Cancel();
-            }
-            else
-            {
-                CurrentPlayer.TickTime(interval);
-                if (PlayerTimerTick != null)
-                {
-                    PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(CurrentPlayer));
-                }
-            }
-        }
-
 
 
         private void CapturePiece(Piece p)

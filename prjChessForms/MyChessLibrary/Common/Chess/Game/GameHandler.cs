@@ -20,7 +20,6 @@ namespace prjChessForms.MyChessLibrary
         private readonly ICoordSelectionHandler _coordsSelectionHandler;
         private readonly IPromotionHandler _promotionHandler;
 
-        private CancellationToken _cToken;
 
         public GameHandler(IBoard board,
             IChessEventManager chessEventManager, IChessInputController chessInputController,

@@ -1,24 +1,45 @@
 ﻿using System;
-
+using System.Runtime.InteropServices.ComTypes;
+using System.Timers;
 namespace prjChessForms.MyChessLibrary
 {
     class TimeManager : ITimeManager
     {
         public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
+        public event EventHandler<TimeExpiredEventArgs> TimeExpired;
+        private readonly IPlayerHandler _playerHandler;
 
-        public void SetupWithPlayers(IPlayerHandler playerManager)
+        private Timer _timer;
+        private TimeSpan _interval;
+        public TimeManager(IPlayerHandler playerHandler, int tickInterval)
         {
-            throw new NotImplementedException();
+            _playerHandler = playerHandler;
+            _interval = new TimeSpan(tickInterval);
+            _timer = new Timer(tickInterval);
+            _timer.Elapsed += TickCurrentPlayer;
         }
 
-        public void StartTimer()
-        {
-            throw new NotImplementedException();
-        }
+        public void StartTimer() => _timer.Start();
+        public void StopTimer() => _timer.Stop();
 
-        public void StopTimer()
+        private void TickCurrentPlayer(object sender, ElapsedEventArgs e)
         {
-            throw new NotImplementedException();
+            IPlayer currentPlayer = _playerHandler.GetCurrentPlayer();
+            currentPlayer.TickTime(_interval);
+            if (PlayerTimerTick != null)
+            {
+                PlayerTimerTick.Invoke(this, new PlayerTimerTickEventArgs(currentPlayer));
+            }
+
+            if (currentPlayer.RemainingTime < TimeSpan.Zero)
+            {
+                StopTimer();
+                if (TimeExpired != null)
+                {
+                    TimeExpired.Invoke(this, new TimeExpiredEventArgs(currentPlayer));
+                }
+            }
+
         }
     }
 }
