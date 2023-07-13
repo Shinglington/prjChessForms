@@ -1,6 +1,4 @@
-﻿using prjChessForms.MyChessLibrary
-
-namespace prjChessForms.MyChessLibrary
+﻿namespace prjChessForms.MyChessLibrary
 {
     public interface IChessEventManager
     {

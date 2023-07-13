@@ -36,49 +36,34 @@ namespace prjChessForms.MyChessLibrary
             _playerManager = playerManager;
             _coordsSelectionHandler = coordSelectionHandler;
 
-
             _moveHandler = moveHandler;
             _promotionHandler = promotionHandler;
 
+            _chessInputController.ConnectHandlers(_moveHandler, _promotionHandler);
             _chessEventManager.ConnectEvents(_chessChangesObserver, _coordsSelectionHandler, _timeManager, _gameFinishedChecker);
         }
 
         public async Task<GameOverEventArgs> PlayGame(TimeSpan playerTime)
         {
-            SetupNewGame(playerTime);
-            _cToken = new CancellationToken();
+            _playerManager.SetupPlayers(playerTime);
             GameOverEventArgs e = _gameFinishedChecker.GetGameResult();
             _timeManager.StartTimer();
             while (e.Result == GameResult.Unfinished)
             {
                 try
                 {
-                    IChessMove move = await _moveHandler.GetChessMove(_playerManager.GetCurrentPlayer().Colour, _cToken);
+                    IChessMove move = await _moveHandler.GetChessMove(_playerManager.GetCurrentPlayer().Colour, _gameFinishedChecker.cToken);
                     _moveHandler.AttemptMakeMove(_board, move);
                     _playerManager.NextPlayerTurn();
                 }
-                catch when (_cToken.IsCancellationRequested)
+                catch when (_gameFinishedChecker.cToken.IsCancellationRequested)
                 {
                     Debug.WriteLine("Cancelled Play");
                 }
                 e = _gameFinishedChecker.GetGameResult();
             }
             _timeManager.StopTimer();
-            cts.Cancel();
             return e;
-        }
-
-        private void SetupNewGame(TimeSpan playerTime)
-        {
-            _playerManager.SetupPlayers(playerTime);
-            _timeManager.SetupWithPlayers(_playerManager);
-        }
-
-        private void SetupHelperClasses()
-        {
-            _timeManager.SetupWithPlayers(_playerManager);
-
-            _chessInputController.ConnectHandlers(_moveHandler, _promotionHandler);
         }
     }
 }

@@ -16,31 +16,13 @@ namespace prjChessForms.MyChessLibrary
 
         public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
         public event EventHandler<PromotionEventArgs> PlayerPromotion; 
-        public event EventHandler<GameOverEventArgs> GameOver;
 
-        private IBoard _board;
-        private System.Timers.Timer _timer;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
-        private GameResult _result;
-
-        private Player[] _players;
-        private int _turnCount;
-
-
-        private PromotionOption _selectedPromotion;
-        private bool _waitingForClick, _waitingForPromotion;
-        public OldChess(IBoard board)
-        {
-            CreatePlayers(new TimeSpan(0, 10, 0));
-            _board = board;
-            _timer = new System.Timers.Timer(1000);
-            _waitingForClick = false;
-        }
 
         public void AttachModelObserver(IModelObserver observer)
         {
-            _board.PieceInSquareChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
+
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
             PlayerPromotion += new EventHandler<PromotionEventArgs>(observer.OnPromotion);
             foreach(Square s in _board.GetSquares())

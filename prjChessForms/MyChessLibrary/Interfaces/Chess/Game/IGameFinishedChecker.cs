@@ -6,7 +6,7 @@ namespace prjChessForms.MyChessLibrary
     public interface IGameFinishedChecker
     {
         event EventHandler<GameOverEventArgs> GameOver;
-        CancellationTokenSource cts { get; set; }
+        CancellationToken cToken { get; set; }
         GameOverEventArgs GetGameResult();
     }
 }
