@@ -10,7 +10,7 @@ namespace prjChessForms.MyChessLibrary.Interfaces.Chess
     public interface IChessChangesObserver
     {
         void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e);
-        void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e);
+        void OnPieceSelectionChanged(object sender, CoordsSelectionChangedEventArgs e);
         void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e);
         void OnPromotion(object sender, PromotionEventArgs e);
         void OnGameOver(object sender, GameOverEventArgs e);

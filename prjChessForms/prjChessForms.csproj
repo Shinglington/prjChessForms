@@ -76,10 +76,17 @@
     </Compile>
     <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\PlayerHandler.cs" />
-    <Compile Include="MyChessLibrary\DataClasses\ChessEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\GameOverEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessGameDetails.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\PieceRemoval.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\ChessMove.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\CoordsSelectionChangedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\PieceChangedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\PlayerCapturedPiecesChangedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\PlayerTimerTickEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionSelectedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\DataClasses\EventArgs\SquareClickedEventArgs.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\ICoordSelectionHandler.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChessInputController.cs" />

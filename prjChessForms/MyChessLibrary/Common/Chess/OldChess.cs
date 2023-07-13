@@ -13,7 +13,7 @@ namespace prjChessForms.MyChessLibrary
 
     class OldChess
     {
-        public event EventHandler<PieceSelectionChangedEventArgs> PieceSelectionChanged;
+
         public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
         public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
         public event EventHandler<PromotionEventArgs> PlayerPromotion; 
@@ -42,7 +42,7 @@ namespace prjChessForms.MyChessLibrary
         public void AttachModelObserver(IModelObserver observer)
         {
             _board.PieceInSquareChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
-            PieceSelectionChanged += new EventHandler<PieceSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
+            PieceSelectionChanged += new EventHandler<CoordsSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
             PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
             PlayerPromotion += new EventHandler<PromotionEventArgs>(observer.OnPromotion);

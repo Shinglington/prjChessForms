@@ -9,30 +9,22 @@ namespace prjChessForms.MyChessLibrary.Common.Chess
     class CoordsSelectionHandler : ICoordSelectionHandler
     {
         private IChess _chess;
+        public event EventHandler<CoordsSelectionChangedEventArgs> CoordsSelectionChanged;
         public CoordsSelectionHandler() 
         { 
 
         }
         public void SetChessConnection(IChess chess)
         {
-            _chess= chess;
+            _chess = chess;
         }
 
         public void ChangeCoordsSelection(Coords selectedCoords)
         {
-            if (PieceSelectionChanged != null)
+            if (CoordsSelectionChanged != null)
             {
                 List<Coords> endCoords = new List<Coords>();
-                Coords selectedCoords = new Coords();
-                if (selectedPiece != null)
-                {
-                    selectedCoords = GetCoordsOf(selectedPiece);
-                    foreach (PieceMovement m in FullRulebook.GetPossibleMoves(_board, selectedPiece))
-                    {
-                        endCoords.Add(m.EndCoords);
-                    }
-                }
-                PieceSelectionChanged.Invoke(this, new PieceSelectionChangedEventArgs(selectedPiece, selectedCoords, endCoords));
+                CoordsSelectionChanged.Invoke(this, new CoordsSelectionChangedEventArgs(selectedCoords));
             }
         }
     }

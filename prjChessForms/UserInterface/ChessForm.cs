@@ -29,7 +29,7 @@ namespace prjChessForms.PresentationUI
             _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece);
         }
 
-        public void OnPieceSelectionChanged(object sender, PieceSelectionChangedEventArgs e)
+        public void OnPieceSelectionChanged(object sender, CoordsSelectionChangedEventArgs e)
         {
             _boardPanel.UpdateHighlights(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
         }
