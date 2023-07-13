@@ -14,7 +14,6 @@ namespace prjChessForms.MyChessLibrary
     class OldChess
     {
 
-        public event EventHandler<PlayerTimerTickEventArgs> PlayerTimerTick;
         public event EventHandler<PlayerCapturedPiecesChangedEventArgs> PlayerCapturedPiecesChanged;
         public event EventHandler<PromotionEventArgs> PlayerPromotion; 
         public event EventHandler<GameOverEventArgs> GameOver;
@@ -42,11 +41,8 @@ namespace prjChessForms.MyChessLibrary
         public void AttachModelObserver(IModelObserver observer)
         {
             _board.PieceInSquareChanged += new EventHandler<PieceChangedEventArgs>(observer.OnPieceInSquareChanged);
-            PieceSelectionChanged += new EventHandler<CoordsSelectionChangedEventArgs>(observer.OnPieceSelectionChanged);
-            PlayerTimerTick += new EventHandler<PlayerTimerTickEventArgs>(observer.OnPlayerTimerTick);
             PlayerCapturedPiecesChanged += new EventHandler<PlayerCapturedPiecesChangedEventArgs>(observer.OnPlayerCapturedPiecesChanged);
             PlayerPromotion += new EventHandler<PromotionEventArgs>(observer.OnPromotion);
-            GameOver += new EventHandler<GameOverEventArgs>(observer.OnGameOver);
             foreach(Square s in _board.GetSquares())
             {
                 observer.OnPieceInSquareChanged(this, new PieceChangedEventArgs(s, s.Piece));
@@ -73,19 +69,7 @@ namespace prjChessForms.MyChessLibrary
             }
         }
 
-        private void OnGameOver()
-        {
-            cts.Cancel();
-            Player winner = null;
-            if (_result == GameResult.Checkmate || _result == GameResult.Time)
-            {
-                winner = CurrentPlayer == _players[0] ? _players[1] : _players[0];
-            }
-            if (GameOver != null)
-            {
-                GameOver.Invoke(this, new GameOverEventArgs(_result, winner));
-            }
-        }
+
 
         private void CapturePiece(Piece p)
         {

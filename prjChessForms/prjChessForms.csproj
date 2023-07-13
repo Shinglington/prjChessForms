@@ -61,21 +61,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyChessLibrary\Common\Chess\ChessInputController.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\ChessEventManager.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\ChessInputController.cs" />
     <Compile Include="MyChessLibrary\Common\Board\Board.cs" />
     <Compile Include="MyChessLibrary\Common\Board\BoardCreator.cs" />
     <Compile Include="MyChessLibrary\Common\Board\MoveMaker.cs" />
     <Compile Include="MyChessLibrary\Common\Board\PieceProvider.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\Chess.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\CoordsSelectionHandler.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\GameHandler.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\MoveHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\CoordsSelectionHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\GameHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\MoveHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\TimeManager.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.cs" />
     <Compile Include="MyChessLibrary\Common\Chess\OldChess.Designer.cs">
       <DependentUpon>OldChess.cs</DependentUpon>
     </Compile>
-    <Compile Include="MyChessLibrary\Common\Chess\GameFinishedChecker.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\PlayerHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\GameFinishedChecker.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\PlayerHandler.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\GameOverEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessGameDetails.cs" />
     <Compile Include="MyChessLibrary\DataClasses\ChessMoves\PieceRemoval.cs" />
@@ -87,15 +89,16 @@
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionSelectedEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\SquareClickedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IChessEventManager.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\ICoordSelectionHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IChessInputController.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IGameFinishedChecker.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IGameHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IMoveHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IPlayerHandler.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\IPromotionHandler.cs" />
-    <Compile Include="MyChessLibrary\Common\Chess\PromotionHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\ICoordSelectionHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IChessInputController.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IGameFinishedChecker.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IGameHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IMoveHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IPlayerHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IPromotionHandler.cs" />
+    <Compile Include="MyChessLibrary\Common\Chess\Game\PromotionHandler.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\CastlingRulebook.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\NormalMovesRulebook.cs" />
     <Compile Include="MyChessLibrary\Common\Rulebook\EnPassantRulebook.cs" />
@@ -106,8 +109,8 @@
     <Compile Include="MyChessLibrary\Interfaces\Board\IBoardCreator.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Board\IMoveMaker.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Board\IPieceProvider.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\Chess\ITimeManager.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\UserInterface\IChessChangesObserver.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\Chess\Game\ITimeManager.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\UserInterface\IChessObserver.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IChessMove.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPiece.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IPlayer.cs" />

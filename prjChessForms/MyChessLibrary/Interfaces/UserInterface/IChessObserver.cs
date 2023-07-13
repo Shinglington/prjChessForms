@@ -1,16 +1,9 @@
-﻿using prjChessForms.PresentationUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace prjChessForms.MyChessLibrary.Interfaces.Chess
+﻿namespace prjChessForms.MyChessLibrary
 {
-    public interface IChessChangesObserver
+    public interface IChessObserver
     {
         void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e);
-        void OnPieceSelectionChanged(object sender, CoordsSelectionChangedEventArgs e);
+        void OnCoordSelectionChanged(object sender, CoordsSelectionChangedEventArgs e);
         void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e);
         void OnPromotion(object sender, PromotionEventArgs e);
         void OnGameOver(object sender, GameOverEventArgs e);

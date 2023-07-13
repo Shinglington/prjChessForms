@@ -1,13 +1,17 @@
-﻿namespace prjChessForms.MyChessLibrary
+﻿using System.Diagnostics;
+using System.Threading;
+
+namespace prjChessForms.MyChessLibrary
 {
     class PromotionHandler : IPromotionHandler
     {
         private bool _awaitingPromotionInput;
+        private SemaphoreSlim _semaphoreReceiveClick;
         private PromotionOption _selectedPromotion;
-
         public PromotionHandler()
         {
             _awaitingPromotionInput = false;
+            _semaphoreReceiveClick = new SemaphoreSlim(0, 1);
         }
         public bool PromotionNeeded(IChessMove move)
         {

@@ -6,8 +6,7 @@ namespace prjChessForms.MyChessLibrary
     public interface IMoveHandler
     {
         void ReceiveMoveInput(Coords clickedCoords);
-        Task<IChessMove> GetChessMove(CancellationToken cToken);
+        Task<IChessMove> GetChessMove(PieceColour colourOfMover, CancellationToken cToken);
         void AttemptMakeMove(IBoard board, IChessMove move);
-
     }
 }

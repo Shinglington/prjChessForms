@@ -7,13 +7,11 @@ namespace prjChessForms.MyChessLibrary
     {
         private IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
-        private readonly IPiecePlacer _piecePlacer;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
-        public BoardCreator(IStartingPositionSetup startingPositionSetup, IPiecePlacer piecePlacer)
+        public BoardCreator(IStartingPositionSetup startingPositionSetup)
         {
             _startingPositionSetup = startingPositionSetup;
-            _piecePlacer = piecePlacer;
         }
         public void SetBoard(IBoard board) => _board = board;
         public void CreateBoard()

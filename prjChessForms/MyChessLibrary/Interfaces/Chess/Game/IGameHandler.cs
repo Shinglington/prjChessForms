@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace prjChessForms.MyChessLibrary
 {
-    public interface IChess
+    public interface IGameHandler
     {
         Task<GameOverEventArgs> PlayGame(TimeSpan playerTime);
     }

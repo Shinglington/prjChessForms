@@ -18,18 +18,6 @@ namespace prjChessForms.MyChessLibrary
             _currentPlayerIndex = 0;
         }
 
-        public IPlayer GetPlayer(PieceColour colour)
-        {
-            foreach (IPlayer player in _players)
-            {
-                if (player.Colour == colour)
-                {
-                    return player;
-                }
-            }
-            throw new ArgumentException(string.Format("Player of Colour {0} not found", colour));
-        }
-
         public IPlayer GetCurrentPlayer() => _players[_currentPlayerIndex];
 
         public void NextPlayerTurn() => _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;

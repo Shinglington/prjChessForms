@@ -31,7 +31,7 @@ namespace prjChessForms.PresentationUI
 
         public void OnPieceSelectionChanged(object sender, CoordsSelectionChangedEventArgs e)
         {
-            _boardPanel.UpdateHighlights(e.SelectedPiece, e.SelectedPieceCoords, e.PossibleEndCoords);
+            _boardPanel.UpdateHighlights(e.SelectedPiece, e.SelectedCoords, e.PossibleEndCoords);
         }
 
         public void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)

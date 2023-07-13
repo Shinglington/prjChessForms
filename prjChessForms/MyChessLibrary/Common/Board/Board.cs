@@ -11,7 +11,6 @@ namespace prjChessForms.MyChessLibrary
         private readonly IPieceProvider _pieceProvider;
         private readonly IMoveMaker _moveMaker;
 
-
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
@@ -37,6 +36,7 @@ namespace prjChessForms.MyChessLibrary
         public void SetSquares(ISquare[,] squares) => _squares = squares;
         public ISquare GetSquareAt(Coords coords) => _squareProvider.GetSquareAt(coords);
         public ICollection<IPiece> GetPieces(PieceColour colour) => _pieceProvider.GetPieces(colour);
+        public Coords GetCoordsOfPiece(IPiece piece) => _pieceProvider.GetCoordsOfPiece(piece);
         public void MakeMove(IChessMove move) => _moveMaker.MakeMove(move);
         public IChessMove GetPreviousMove() => _moveMaker.GetLastMove();
         public void UndoLastMove() => _moveMaker.UndoLastMove();
@@ -55,34 +55,6 @@ namespace prjChessForms.MyChessLibrary
             return king;
         }
 
-        public Coords GetCoordsOfPiece(IPiece piece)
-        {
-            if (piece == null)
-            {
-                throw new ArgumentNullException();
-            }
-            foreach (Square s in GetSquares())
-            {
-                if (s.Piece == piece)
-                {
-                    return s.Coords;
-                }
-            }
-            throw new Exception("Piece could not be located");
-        }
-
-
-        public void RemoveGhostPawns()
-        {
-            foreach (Square s in GetSquares())
-            {
-                if (s.GetGhostPawn() != null)
-                {
-                    s.Piece = null;
-                }
-            }
-        }
-
         public bool CheckMoveInCheck(PieceColour colour, PieceMovement move)
         {
             Coords start = move.StartCoords;
@@ -99,8 +71,5 @@ namespace prjChessForms.MyChessLibrary
 
             return SelfCheck;
         }
-
-
-
     }
 }

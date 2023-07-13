@@ -1,6 +1,4 @@
-﻿using prjChessForms.MyChessLibrary.DataClasses.ChessMoves;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,9 +35,7 @@ namespace prjChessForms.MyChessLibrary
         public async Task<IChessMove> GetChessMove(PieceColour colourOfMover, CancellationToken cToken)
         {
             Coords fromCoords = Coords.Null;
-
             IChessMove chessMove = null;
-            bool completeInput = false;
             _awaitingClick = true;
             while (chessMove == null)
             {
