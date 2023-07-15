@@ -1,14 +1,13 @@
-﻿using prjChessForms.Controller;
-using prjChessForms.MyChessLibrary;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.MyChessLibrary.UserInterface
 {
-    partial class ChessForm : Form, IModelObserver
+    partial class ChessForm : Form, IChessInterface, IChessObserver, IBoardObserver
     {
-        public EventHandler<SquareClickedEventArgs> SquareClicked;
-        public EventHandler<PromotionSelectedEventArgs> PromotionSelected;
+
+        public event EventHandler<SquareClickedEventArgs> SquareClicked;
+        public event EventHandler<PromotionSelectedEventArgs> PromotionSelected;
 
         private TableLayoutPanel _layoutPanel;
         private BoardTableLayoutPanel _boardPanel;
@@ -22,16 +21,17 @@ namespace prjChessForms.PresentationUI
             InitializeComponent();
             SetupControls();
         }
-        public ChessController Controller { get; set; }
+
+
 
         public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
         {
             _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece);
         }
 
-        public void OnPieceSelectionChanged(object sender, CoordsSelectionChangedEventArgs e)
+        public void OnCoordsSelectionChanged(object sender, CoordsSelectionChangedEventArgs e)
         {
-            _boardPanel.UpdateHighlights(e.SelectedPiece, e.SelectedCoords, e.PossibleEndCoords);
+            _boardPanel.UpdateHighlights(e.SelectedCoords);
         }
 
         public void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e)
@@ -148,6 +148,11 @@ namespace prjChessForms.PresentationUI
                 _promotionPanel = null;
                 PromotionSelected.Invoke(this, e);
             }
+        }
+
+        public void OnCoordSelectionChanged(object sender, CoordsSelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

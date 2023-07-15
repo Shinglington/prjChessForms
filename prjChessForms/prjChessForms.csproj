@@ -90,6 +90,7 @@
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionSelectedEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\SquareClickedEventArgs.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\UserInterface\IBoardObserver.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IChessEventManager.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\Game\ICoordSelectionHandler.cs" />
@@ -129,22 +130,22 @@
     <Compile Include="MyChessLibrary\Common\Board\SquareProvider.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IRulebook.cs" />
     <Compile Include="MyChessLibrary\Interfaces\UserInterface\IChessInterface.cs" />
-    <Compile Include="UserInterface\BoardTableLayoutPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserInterface\CapturedPiecesPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserInterface\ChessForm.cs">
+    <Compile Include="MyChessLibrary\UserInterface\ChessForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\ChessForm.Designer.cs">
+    <Compile Include="MyChessLibrary\UserInterface\ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\PlayerInformationPanel.cs">
+    <Compile Include="MyChessLibrary\UserInterface\BoardTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserInterface\PromotionSelectionPanel.cs">
+    <Compile Include="MyChessLibrary\UserInterface\CapturedPiecesPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyChessLibrary\UserInterface\PlayerInformationPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyChessLibrary\UserInterface\PromotionSelectionPanel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -153,7 +154,7 @@
     <EmbeddedResource Include="MyChessLibrary\Common\Chess\OldChess.resx">
       <DependentUpon>OldChess.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\ChessForm.resx">
+    <EmbeddedResource Include="MyChessLibrary\UserInterface\ChessForm.resx">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

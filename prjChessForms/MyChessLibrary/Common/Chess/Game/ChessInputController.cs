@@ -1,6 +1,4 @@
 ﻿using prjChessForms.MyChessLibrary;
-using prjChessForms.PresentationUI;
-
 namespace prjChessForms.Controller
 {
     class ChessInputController : IChessInputController

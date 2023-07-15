@@ -7,9 +7,10 @@ namespace prjChessForms.MyChessLibrary
     {
         private IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
+        private readonly IBoardObserver _boardObserver;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
-        public BoardCreator(IStartingPositionSetup startingPositionSetup)
+        public BoardCreator(IStartingPositionSetup startingPositionSetup, IBoardObserver boardObserver)
         {
             _startingPositionSetup = startingPositionSetup;
         }
@@ -23,18 +24,11 @@ namespace prjChessForms.MyChessLibrary
                 for (int x = 0; x < _board.ColumnCount; x++)
                 {
                     s = new Square(x, y);
-                    s.PieceChanged += OnPieceInSquareChanged;
+                    s.PieceChanged += _boardObserver.OnPieceInSquareChanged;
                     _board.GetSquares()[x, y] = s;
                 }
             }
             _startingPositionSetup.PlaceStartingPieces();
-        }
-        private void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
-        {
-            if (PieceInSquareChanged != null)
-            {
-                PieceInSquareChanged.Invoke(this, e);
-            }
         }
     }
 

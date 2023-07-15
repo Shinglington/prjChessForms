@@ -2,7 +2,6 @@
 {
     public interface IChessObserver
     {
-        void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e);
         void OnCoordSelectionChanged(object sender, CoordsSelectionChangedEventArgs e);
         void OnPlayerCapturedPiecesChanged(object sender, PlayerCapturedPiecesChangedEventArgs e);
         void OnPromotion(object sender, PromotionEventArgs e);

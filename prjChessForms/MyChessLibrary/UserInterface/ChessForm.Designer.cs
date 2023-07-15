@@ -1,4 +1,4 @@
-﻿namespace prjChessForms.PresentationUI
+﻿namespace prjChessForms.MyChessLibrary.UserInterface
 {
     partial class ChessForm
     {

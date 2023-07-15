@@ -15,10 +15,6 @@ namespace prjChessForms.MyChessLibrary
         {
             get
             {
-                if (_piece != null && _piece.GetType() == typeof(GhostPawn))
-                {
-                    return null;
-                }
                 return _piece;
             }
             set
@@ -31,10 +27,5 @@ namespace prjChessForms.MyChessLibrary
             }
         }
         public Coords Coords { get; }
-
-        public GhostPawn GetGhostPawn()
-        {
-            return (_piece != null && _piece.GetType() == typeof(GhostPawn)) ? (GhostPawn)_piece : null;
-        }
     }
 }

@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.MyChessLibrary.UserInterface
 {
     class PromotionSelectionPanel : Form
     {

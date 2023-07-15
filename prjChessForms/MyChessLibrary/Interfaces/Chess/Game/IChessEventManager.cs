@@ -3,6 +3,6 @@
     public interface IChessEventManager
     {
         void ConnectEvents(IChessObserver chessChangesObserver,
-            ICoordSelectionHandler coordSelectionHandler, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker)
+            ICoordSelectionHandler coordSelectionHandler, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker);
     }
 }

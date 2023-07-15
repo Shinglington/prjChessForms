@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.MyChessLibrary.UserInterface
 {
     class PlayerInformationPanel : TableLayoutPanel
     {
@@ -31,7 +31,7 @@ namespace prjChessForms.PresentationUI
             }
         }
 
-        public void UpdateCapturedPieces(Piece capturedPiece)
+        public void UpdateCapturedPieces(IPiece capturedPiece)
         {
             _capturedPieces.AddCapturedPiece(capturedPiece);
         }

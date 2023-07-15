@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.MyChessLibrary.UserInterface
 {
     internal class CapturedPiecesPanel : TableLayoutPanel
     {
@@ -32,7 +32,7 @@ namespace prjChessForms.PresentationUI
 
         public PieceColour CapturedPieceColour { get; }
 
-        public void AddCapturedPiece(Piece piece)
+        public void AddCapturedPiece(IPiece piece)
         {
             _capturedPieceCounts[piece.Name]++;
             UpdateDisplayPanel();

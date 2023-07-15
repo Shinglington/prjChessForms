@@ -1,10 +1,9 @@
-﻿using prjChessForms.MyChessLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace prjChessForms.PresentationUI
+namespace prjChessForms.MyChessLibrary.UserInterface
 {
     class BoardTableLayoutPanel : TableLayoutPanel
     {
@@ -56,13 +55,13 @@ namespace prjChessForms.PresentationUI
             throw new ArgumentException("Button could not be found");
         }
 
-        public void UpdateSquares(Square[,] squares, Piece selectedPiece, List<Coords> possibleMoves)
+        public void UpdateSquares(ISquare[,] squares, Piece selectedPiece, List<Coords> possibleMoves)
         {
             for (int y = 0; y < squares.GetLength(1); y++)
             {
                 for (int x = 0; x < squares.GetLength(0); x++)
                 {
-                    Piece piece = squares[x, y].Piece;
+                    IPiece piece = squares[x, y].Piece;
                     Button button = _buttons[x, y];
                     if (piece != null)
                     {
@@ -88,30 +87,22 @@ namespace prjChessForms.PresentationUI
             }
         }
 
-        public void UpdateHighlights(Piece selectedPiece, Coords selectedCoords, List<Coords> possibleMoves)
+        public void UpdateHighlights(Coords selectedCoords)
         {
             for (int y = 0; y < _buttons.GetLength(1); y++)
             {
                 for (int x = 0; x < _buttons.GetLength(0); x++)
                 {
                     Button button = _buttons[x, y];
-                    if (selectedPiece != null && selectedCoords.Equals(new Coords(x, y)))
+                    if (selectedCoords.Equals(new Coords(x, y)))
                     {
                         button.BackColor = Color.Blue;
-                    }
-                    else if (possibleMoves.Contains(new Coords(x, y)))
-                    {
-                        button.BackColor = Color.Green;
-                    }
-                    else
-                    {
-                        button.BackColor = DefaultBackColor;
                     }
                 }
             }
         }
 
-        public void UpdateSquare(Coords coords, Piece piece)
+        public void UpdateSquare(Coords coords, IPiece piece)
         {
             _buttons[coords.X, coords.Y].Image = piece != null ? piece.Image : null;
         }
