@@ -13,15 +13,17 @@ namespace prjChessForms.MyChessLibrary
 
         private readonly IBoard _board;
         private readonly IPlayerHandler _playerHandler;
-        private readonly ITimeManager _timeManager;
         private readonly IRulebook _rulebook;
+        private readonly ICheckHandler _checkHandler;
+
 
         private CancellationTokenSource cts = new CancellationTokenSource();
-        public GameFinishedChecker(IBoard board, IPlayerHandler playerHandler, IRulebook rulebook, ITimeManager timeManager)
+        public GameFinishedChecker(IBoard board, IPlayerHandler playerHandler, ITimeManager timeManager, IRulebook rulebook, ICheckHandler checkHandler)
         {
             _board = board;
             _playerHandler = playerHandler;
-            _timeManager = timeManager;
+            _rulebook = rulebook;
+            _checkHandler = checkHandler;
 
             GameOver += (sender, e) => cts.Cancel();
             timeManager.TimeExpired += HandleTimeExpiration;
@@ -68,26 +70,17 @@ namespace prjChessForms.MyChessLibrary
         private bool IsInCheckmate(IPlayer player)
         {
             PieceColour colour = player.Colour;
-            if (!_rulebook.IsInCheck(player))
-            {
-                return false;
-            }
-            return !CheckIfThereAreRemainingLegalMoves(player);
+            return !CheckIfThereAreRemainingLegalMoves(colour);
         }
 
         private bool IsInStalemate(IPlayer player)
         {
             PieceColour colour = player.Colour;
-            if (_rulebook.IsInCheck(player))
-            {
-                return false;
-            }
-            return !CheckIfThereAreRemainingLegalMoves(player);
+            return !_checkHandler.IsInCheck(colour) && !CheckIfThereAreRemainingLegalMoves(colour);
         }
 
-        private bool CheckIfThereAreRemainingLegalMoves(IPlayer player)
+        private bool CheckIfThereAreRemainingLegalMoves(PieceColour colour)
         {
-            PieceColour colour = player.Colour;
             bool anyLegalMoves = false;
             foreach (Piece p in _board.GetPieces(colour))
             {

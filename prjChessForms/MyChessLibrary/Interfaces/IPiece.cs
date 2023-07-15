@@ -3,7 +3,8 @@ namespace prjChessForms.MyChessLibrary
 {
     public interface IPiece
     {
-        bool HasMoved { get; set; }
+        int TimesMoved { get; set; }
+        bool HasMoved { get; }
         Image Image { get; }
         PieceColour Colour { get; }
         string Name { get; }

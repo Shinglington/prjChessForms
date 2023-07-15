@@ -1,5 +1,4 @@
 ﻿using prjChessForms.MyChessLibrary.Pieces;
-using System;
 using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
@@ -9,24 +8,26 @@ namespace prjChessForms.MyChessLibrary
     {
         private readonly IBoard _board;
         private readonly ICollection<IRulebook> _rulebooks;
-        public FullRulebook(IBoard board, ICollection<IRulebook> rulebooks)
+        private readonly ICheckHandler _checkHandler;
+        public FullRulebook(IBoard board, ICollection<IRulebook> rulebooks, ICheckHandler checkHandler)
         {
             _board = board;
             _rulebooks = rulebooks;
+            _checkHandler = checkHandler;
+            _checkHandler.AddRulebook(this);
         }
 
         public IChessMove ProcessChessMove(PieceColour colourOfMover, Coords startCoords, Coords endCoords)
         {
-            IChessMove processedMove = null;
             foreach (IRulebook rulebook in _rulebooks)
             {
-                processedMove = rulebook.ProcessChessMove(colourOfMover, startCoords, endCoords);
-                if (processedMove != null)
+                IChessMove processedMove = rulebook.ProcessChessMove(colourOfMover, startCoords, endCoords);
+                if (processedMove != null && !MovePutsPlayerInCheck(colourOfMover, processedMove))
                 {
-                    break;
+                    return processedMove;
                 }
             }
-            return processedMove;
+            return null;
         }
 
         public ICollection<IChessMove> GetPossibleMovesForPiece(IPiece piece)
@@ -56,6 +57,13 @@ namespace prjChessForms.MyChessLibrary
             return validFirstSelection;
         }
 
+        private bool MovePutsPlayerInCheck(PieceColour colourOfMover, IChessMove chessMove)
+        {
+            chessMove.ExecuteMove(_board);
+            bool putsPlayerInCheck = _checkHandler.IsInCheck(colourOfMover);
+            chessMove.ReverseMove(_board);
+            return putsPlayerInCheck;
+        }
 
         public bool RequiresPromotion(Coords pieceCoords)
         {
@@ -69,29 +77,6 @@ namespace prjChessForms.MyChessLibrary
                 }
             }
             return requiresPromotion;
-        }
-
-        public bool IsInCheck(IBoard board, PieceColour colour)
-        {
-            bool check = false;
-            King king = board.GetKing(colour);
-            if (king == null)
-            {
-                return true;
-            }
-            Coords kingCoords = board.GetCoordsOfPiece(king);
-            foreach (Square square in board.GetSquares())
-            {
-                if (square.Piece != null && square.Piece.Colour != colour)
-                {
-                    if (ProcessChessMove(square.Coords, kingCoords) != null)
-                    {
-                        check = true;
-                        break;
-                    }
-                }
-            }
-            return check;
         }
     }
 }

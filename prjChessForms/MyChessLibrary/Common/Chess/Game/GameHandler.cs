@@ -8,7 +8,7 @@ namespace prjChessForms.MyChessLibrary
     class GameHandler : IGameHandler
     {
         private readonly IBoard _board;
-        private readonly IChessObserver _chessChangesObserver;
+        private readonly IChessObserver _chessObserver;
 
         private readonly IChessEventManager _chessEventManager;
         private readonly IChessInputController _chessInputController;
@@ -23,13 +23,15 @@ namespace prjChessForms.MyChessLibrary
 
         public GameHandler(IBoard board,
             IChessEventManager chessEventManager, IChessInputController chessInputController,
-            IPlayerHandler playerManager, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker, ICoordSelectionHandler coordSelectionHandler,
-            IPromotionHandler promotionHandler, IMoveHandler moveHandler)
+            IPlayerHandler playerManager, ITimeManager timeManager, IGameFinishedChecker gameFinishedChecker, 
+            ICoordSelectionHandler coordSelectionHandler, IPromotionHandler promotionHandler, IMoveHandler moveHandler,
+            IChessObserver chessObserver)
         {
             _board = board;
 
             _chessEventManager = chessEventManager;
             _chessInputController = chessInputController;
+            _chessObserver = chessObserver;
 
             _gameFinishedChecker = gameFinishedChecker;
             _timeManager = timeManager;
@@ -40,7 +42,7 @@ namespace prjChessForms.MyChessLibrary
             _promotionHandler = promotionHandler;
 
             _chessInputController.ConnectHandlers(_moveHandler, _promotionHandler);
-            _chessEventManager.ConnectEvents(_chessChangesObserver, _coordsSelectionHandler, _timeManager, _gameFinishedChecker);
+            _chessEventManager.ConnectEvents(_chessObserver, _coordsSelectionHandler, _timeManager, _gameFinishedChecker, _board);
         }
 
         public async Task<GameOverEventArgs> PlayGame(TimeSpan playerTime)

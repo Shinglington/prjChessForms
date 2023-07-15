@@ -20,29 +20,30 @@ namespace prjChessForms
 
 
             ChessForm form = (ChessForm)CreateInterface();
-            IBoard board = CreateBoard((IBoardObserver)form);
+            IBoard board = CreateBoard();
             IChess chess = CreateChessGame(board, (IChessObserver)form);
-
+            chess.PlayGame(new TimeSpan(0, 3, 0));
             Application.Run(form);
+
         }
 
 
-        private static IChessInterface CreateInterface()
+        private static IChessObserver CreateInterface()
         {
-            IChessInterface chessInterface = new ChessForm();
+            IChessObserver chessObserver = new ChessForm();
 
-            return chessInterface;
+            return chessObserver;
         }
 
-        private static IBoard CreateBoard(IBoardObserver boardObserver)
+        private static IBoard CreateBoard()
         {
             IPiecePlacer piecePlacer = new PiecePlacer();
             IStartingPositionSetup startingPositionSetup = new StartingPositionSetup(piecePlacer);
-            IBoardCreator boardCreator = new BoardCreator(startingPositionSetup, boardObserver);
+            IBoardCreator boardCreator = new BoardCreator(startingPositionSetup);
             ISquareProvider squareProvider = new SquareProvider();
             IMoveMaker moveMaker = new MoveMaker();
             IPieceProvider pieceProvider = new PieceProvider();
-            IBoard board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker, boardObserver);
+            IBoard board = new Board(boardCreator, squareProvider, pieceProvider, moveMaker);
             return board;
 
         }
@@ -55,14 +56,15 @@ namespace prjChessForms
                 new CastlingRulebook(board),
                 new EnPassantRulebook(board)
             };
-            IRulebook fullRulebook = new FullRulebook(board, subRulebooks);
+            ICheckHandler checkHandler = new CheckHandler(board);
+            IRulebook fullRulebook = new FullRulebook(board, subRulebooks, checkHandler);
 
             IPlayerHandler playerHandler = new PlayerHandler();
             ITimeManager timeManager = new TimeManager(playerHandler, 1000);
             ICoordSelectionHandler coordSelectionHandler = new CoordsSelectionHandler();
             IMoveHandler moveInputHandler = new MoveHandler(fullRulebook, coordSelectionHandler);
             IChessEventManager chessEventManager = new ChessEventManager();
-            IGameFinishedChecker gameFinishedChecker = new GameFinishedChecker(board, playerHandler, fullRulebook, timeManager);
+            IGameFinishedChecker gameFinishedChecker = new GameFinishedChecker(board, playerHandler, timeManager, fullRulebook, checkHandler);
             IChessInputController chessInputController = new ChessInputController();
             IPromotionHandler promotionHandler = new PromotionHandler();
             IMoveHandler moveHandler = new MoveHandler(fullRulebook, coordSelectionHandler);
@@ -70,7 +72,7 @@ namespace prjChessForms
             IGameHandler gameHandler = new GameHandler(
                 board, chessEventManager, chessInputController,
                 playerHandler, timeManager, gameFinishedChecker,
-                coordSelectionHandler, promotionHandler, moveHandler);
+                coordSelectionHandler, promotionHandler, moveHandler, chessObserver);
 
 
             IChess chess = new Chess(gameHandler, chessObserver);

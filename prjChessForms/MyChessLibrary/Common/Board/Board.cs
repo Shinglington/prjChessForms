@@ -1,4 +1,5 @@
 ﻿using prjChessForms.MyChessLibrary.Pieces;
+using System;
 using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
@@ -9,20 +10,25 @@ namespace prjChessForms.MyChessLibrary
         private readonly ISquareProvider _squareProvider;
         private readonly IPieceProvider _pieceProvider;
         private readonly IMoveMaker _moveMaker;
-        private readonly IBoardObserver _boardObserver;
 
 
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
         private ISquare[,] _squares;
-        private IEnumerable<PieceMovement> _moveStack;
-        public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IPieceProvider pieceProvider, IMoveMaker moveMaker, IBoardObserver boardObserver)
+
+        public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged
+        {
+            add { _boardCreator.PieceInSquareChanged += value; }
+            remove { _boardCreator.PieceInSquareChanged -= value; }
+        }
+
+
+        public Board(IBoardCreator boardCreator, ISquareProvider squareProvider, IPieceProvider pieceProvider, IMoveMaker moveMaker)
         {
             _boardCreator = boardCreator;
             _squareProvider = squareProvider;
             _pieceProvider = pieceProvider;
             _moveMaker = moveMaker;
-            _boardObserver = boardObserver;
 
             _boardCreator.SetBoard(this);
             _squareProvider.SetBoard(this);
@@ -42,36 +48,5 @@ namespace prjChessForms.MyChessLibrary
         public void MakeMove(IChessMove move) => _moveMaker.MakeMove(move);
         public IChessMove GetPreviousMove() => _moveMaker.GetLastMove();
         public void UndoLastMove() => _moveMaker.UndoLastMove();
-
-    //    public King GetKing(PieceColour colour)
-    //    {
-    //        King king = null;
-    //        foreach (Piece p in GetPieces(colour))
-    //        {
-    //            if (p.GetType() == typeof(King))
-    //            {
-    //                king = (King)p;
-    //                break;
-    //            }
-    //        }
-    //        return king;
-    //    }
-
-    //    public bool CheckMoveInCheck(PieceColour colour, PieceMovement move)
-    //    {
-    //        Coords start = move.StartCoords;
-    //        Coords end = move.EndCoords;
-    //        bool startPieceHasMoved = GetSquareAt(start).Piece.HasMoved;
-    //        IPiece originalEndPiece = GetSquareAt(end).Piece;
-
-    //        MakeMove(move);
-    //        bool SelfCheck = FullRulebook.IsInCheck(this, colour);
-    //        MakeMove(new ChessMove(end, start));
-
-    //        GetSquareAt(start).Piece.HasMoved = startPieceHasMoved;
-    //        GetSquareAt(end).Piece = originalEndPiece;
-
-    //        return SelfCheck;
-    //    }
     }
 }

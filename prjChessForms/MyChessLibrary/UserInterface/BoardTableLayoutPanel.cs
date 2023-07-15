@@ -133,7 +133,9 @@ namespace prjChessForms.MyChessLibrary.UserInterface
         private void OnSquareClicked(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            SquareClicked.Invoke(this, new SquareClickedEventArgs(GetCoordsOf(button)));
+            Coords coords = GetCoordsOf(button);
+            Console.WriteLine(coords);
+            SquareClicked.Invoke(this, new SquareClickedEventArgs(coords));
         }
     }
 }

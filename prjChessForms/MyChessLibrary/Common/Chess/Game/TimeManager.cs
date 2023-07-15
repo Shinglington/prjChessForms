@@ -14,7 +14,7 @@ namespace prjChessForms.MyChessLibrary
         public TimeManager(IPlayerHandler playerHandler, int tickInterval)
         {
             _playerHandler = playerHandler;
-            _interval = new TimeSpan(tickInterval);
+            _interval = new TimeSpan(tickInterval * 10000);
             _timer = new Timer(tickInterval);
             _timer.Elapsed += TickCurrentPlayer;
         }

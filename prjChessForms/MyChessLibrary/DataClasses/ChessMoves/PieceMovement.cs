@@ -22,6 +22,7 @@ namespace prjChessForms.MyChessLibrary
             }
             board.GetSquareAt(StartCoords).Piece = null;
             board.GetSquareAt(EndCoords).Piece = MovedPiece;
+            MovedPiece.TimesMoved++;
         }
 
         public void ReverseMove(IBoard board)
@@ -32,6 +33,7 @@ namespace prjChessForms.MyChessLibrary
             }
             board.GetSquareAt(EndCoords).Piece = null;
             board.GetSquareAt(StartCoords).Piece = MovedPiece;
+            MovedPiece.TimesMoved--;
         }
 
         public override string ToString()

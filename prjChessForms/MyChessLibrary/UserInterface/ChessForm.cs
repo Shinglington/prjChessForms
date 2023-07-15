@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace prjChessForms.MyChessLibrary.UserInterface
 {
-    partial class ChessForm : Form, IChessInterface, IChessObserver, IBoardObserver
+    partial class ChessForm : Form, IChessObserver
     {
 
         public event EventHandler<SquareClickedEventArgs> SquareClicked;
@@ -26,6 +26,7 @@ namespace prjChessForms.MyChessLibrary.UserInterface
 
         public void OnPieceInSquareChanged(object sender, PieceChangedEventArgs e)
         {
+            Console.WriteLine($"Updating square in coords {e.Square.Coords}");
             _boardPanel.UpdateSquare(e.Square.Coords, e.NewPiece);
         }
 

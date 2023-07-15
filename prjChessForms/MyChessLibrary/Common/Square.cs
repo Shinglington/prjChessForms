@@ -1,10 +1,9 @@
 ﻿using System;
-using prjChessForms.MyChessLibrary.Pieces;
 namespace prjChessForms.MyChessLibrary
 {
     class Square : ISquare
     {
-        public EventHandler<PieceChangedEventArgs> PieceChanged;
+        public event EventHandler<PieceChangedEventArgs> PieceChanged;
         private IPiece _piece;
         public Square(int x, int y)
         {

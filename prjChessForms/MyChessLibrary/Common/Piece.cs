@@ -16,8 +16,10 @@ namespace prjChessForms.MyChessLibrary
             {
                 Image = null;
             }
+            TimesMoved = 0;
         }
-        public bool HasMoved { get; set; }
+        public int TimesMoved { get; set; }
+        public bool HasMoved { get { return TimesMoved > 0; } }
         public Image Image { get; }
         public PieceColour Colour { get; }
         public string Name { get { return GetType().Name; } }

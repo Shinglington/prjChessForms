@@ -90,7 +90,8 @@
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\PromotionSelectedEventArgs.cs" />
     <Compile Include="MyChessLibrary\DataClasses\EventArgs\SquareClickedEventArgs.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\UserInterface\IBoardObserver.cs" />
+    <Compile Include="MyChessLibrary\Common\CheckHandler.cs" />
+    <Compile Include="MyChessLibrary\Interfaces\ICheckHandler.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\Game\IChessEventManager.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\IChess.cs" />
     <Compile Include="MyChessLibrary\Interfaces\Chess\Game\ICoordSelectionHandler.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="MyChessLibrary\Common\Square.cs" />
     <Compile Include="MyChessLibrary\Common\Board\SquareProvider.cs" />
     <Compile Include="MyChessLibrary\Interfaces\IRulebook.cs" />
-    <Compile Include="MyChessLibrary\Interfaces\UserInterface\IChessInterface.cs" />
     <Compile Include="MyChessLibrary\UserInterface\ChessForm.cs">
       <SubType>Form</SubType>
     </Compile>

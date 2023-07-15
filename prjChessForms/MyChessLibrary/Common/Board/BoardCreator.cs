@@ -7,28 +7,43 @@ namespace prjChessForms.MyChessLibrary
     {
         private IBoard _board;
         private readonly IStartingPositionSetup _startingPositionSetup;
-        private readonly IBoardObserver _boardObserver;
 
         public event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
-        public BoardCreator(IStartingPositionSetup startingPositionSetup, IBoardObserver boardObserver)
+        public BoardCreator(IStartingPositionSetup startingPositionSetup)
         {
             _startingPositionSetup = startingPositionSetup;
         }
-        public void SetBoard(IBoard board) => _board = board;
+        public void SetBoard(IBoard board)
+        {
+            _board = board;
+            _startingPositionSetup.SetBoard(board);
+        }
         public void CreateBoard()
         {
             _board.SetSquares(new Square[_board.ColumnCount, _board.RowCount]);
-            Square s;
+            ISquare s;
             for (int y = 0; y < _board.RowCount; y++)
             {
                 for (int x = 0; x < _board.ColumnCount; x++)
                 {
                     s = new Square(x, y);
-                    s.PieceChanged += _boardObserver.OnPieceInSquareChanged;
+                    s.PieceChanged += InvokePieceInSquareChanged;
                     _board.GetSquares()[x, y] = s;
                 }
             }
             _startingPositionSetup.PlaceStartingPieces();
+            foreach (ISquare square in _board.GetSquares())
+            {
+                InvokePieceInSquareChanged(this, new PieceChangedEventArgs(square, square.Piece));
+            }
+        }
+
+        private void InvokePieceInSquareChanged(object sender, PieceChangedEventArgs e)
+        {
+            if (PieceInSquareChanged != null)
+            {
+                PieceInSquareChanged.Invoke(sender, e);
+            }
         }
     }
 

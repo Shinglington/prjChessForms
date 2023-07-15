@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace prjChessForms.MyChessLibrary
 {
     public interface IBoard
     {
+        event EventHandler<PieceChangedEventArgs> PieceInSquareChanged;
         int ColumnCount { get; }
         int RowCount { get; }
         ISquare[,] GetSquares();
